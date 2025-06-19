@@ -21,11 +21,12 @@ class ResponsiveHelper {
   static double get paddingSmall => _screenWidth * 0.02; // ~8px on 400px screen
   static double get paddingMedium => _screenWidth * 0.04; // ~16px
   static double get paddingLarge => _screenWidth * 0.06; // ~24px
+  static double get paddingXLarge => _screenWidth * 0.1; // ~24px
 
   // Font sizes (scaling based on width)
   static double get fontExtraSmall => _screenWidth * 0.025; // ~10px
   static double get fontSmall => _screenWidth * 0.03; // ~14px
-  static double get fontMedium => _screenWidth * 0.045; // ~16px
+  static double get fontMedium => _screenWidth * 0.042; // ~16px
   static double get fontRegular => _screenWidth * 0.05; // ~18px
   static double get fontLarge => _screenWidth * 0.055; // ~20px
   static double get fontXLarge => _screenWidth * 0.07; // ~28px
@@ -36,6 +37,7 @@ class ResponsiveHelper {
 
   static double get borderRadiusMedium => _screenWidth * 0.04; // ~16px
   static double get borderRadiusLarge => _screenWidth * 0.06; // ~24px
+  static double get borderRadiusXLarge => _screenWidth * 0.1; // ~24px
 
   // static bool isTablet() {
   //   return _shortSide >= 600; // standard breakpoint for tablets

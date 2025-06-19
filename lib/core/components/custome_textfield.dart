@@ -12,7 +12,8 @@ class CustomeTextField extends StatelessWidget {
   final Widget? prefix;
   final bool? isObsecure;
   final TextInputAction? textInputAction;
-  final TextInputType ?keyboardType;
+  final TextInputType? keyboardType;
+  final double? width;
   const CustomeTextField({
     super.key,
     this.title,
@@ -23,13 +24,14 @@ class CustomeTextField extends StatelessWidget {
     this.prefix,
     this.isObsecure,
     this.textInputAction,
-    this.keyboardType
+    this.keyboardType,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: ResponsiveHelper.wp * .85,
+      width: width ?? ResponsiveHelper.wp * .85,
       child: Column(
         children: [
           title != null ? Text(title!) : SizedBox.shrink(),
@@ -56,7 +58,11 @@ class CustomeTextField extends StatelessWidget {
               prefixIconColor: AppColors.kGrey,
               suffixIconColor: AppColors.kGrey,
               labelText: lebelText,
-              labelStyle: AppStyle.normalStyle(color: AppColors.kGrey),
+              labelStyle: AppStyle.normalStyle(
+                color: AppColors.kGrey,
+                fontSize: ResponsiveHelper.fontSmall,
+              ),
+              floatingLabelStyle: AppStyle.normalStyle(color: AppColors.kGrey),
               enabledBorder: border(),
               focusedBorder: border(),
               errorBorder: border(color: AppColors.kRed),

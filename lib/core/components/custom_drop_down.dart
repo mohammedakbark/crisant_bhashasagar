@@ -10,6 +10,10 @@ class CustomDropDown extends StatelessWidget {
   final dynamic value;
   final String? selectedValue;
   final String? lebelText;
+  final String? hinText;
+  final double? width;
+  final bool enableTextLetter;
+  final Widget? prefix;
 
   const CustomDropDown({
     super.key,
@@ -19,28 +23,68 @@ class CustomDropDown extends StatelessWidget {
     this.value,
     this.selectedValue,
     this.lebelText,
+    this.enableTextLetter = false,
+    this.width,
+    this.prefix,
+    this.hinText,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: ResponsiveHelper.wp * .85,
+      width: width ?? ResponsiveHelper.wp * .85,
       child: Column(
         children: [
           title != null ? Text(title!) : SizedBox.shrink(),
-          DropdownButtonFormField(
+          DropdownButtonFormField<Map<String, dynamic>>(
             items:
-                items
-                    .map(
-                      (e) => DropdownMenuItem(
-                        value: e['value'],
-                        child: Text(e['title']),
-                      ),
-                    )
-                    .toList(),
+                items.map((item) {
+                  final value = item['value'];
+                  final title = item['title'] as String;
+                  return DropdownMenuItem(
+                    value: item,
+                    child: Row(
+                      children: [
+                        enableTextLetter
+                            ? Container(
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.kGrey,
+                                borderRadius: BorderRadius.circular(
+                                  ResponsiveHelper.borderRadiusXSmall,
+                                ),
+                              ),
+                              child: Text(
+                                title[0].toUpperCase(),
+                                style: AppStyle.largeStyle(
+                                  color: AppColors.kWhite,
+                                ),
+                              ),
+                            )
+                            : SizedBox.shrink(),
+                        Text(
+                          title,
+                          style: AppStyle.normalStyle(color: AppColors.kBlack),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
             hint:
                 selectedValue != null
-                    ? Text(selectedValue!, style: AppStyle.normalStyle())
+                    ? Text(
+                      selectedValue!,
+                      style: AppStyle.normalStyle(color: AppColors.kBlack),
+                    )
+                    : hinText != null
+                    ? Text(
+                      hinText!,
+                      style: AppStyle.normalStyle(color: AppColors.kGrey),
+                    )
                     : null,
             value: value,
             onChanged: onChanged,
@@ -48,11 +92,17 @@ class CustomDropDown extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               ResponsiveHelper.borderRadiusMedium,
             ),
-            style: AppStyle.normalStyle(),
+            style: AppStyle.normalStyle(color: AppColors.kBlack),
+
             decoration: InputDecoration(
+              prefixIcon: prefix,
               suffixIcon: Icon(Icons.arrow_drop_down, color: AppColors.kGrey),
               labelText: lebelText,
-              labelStyle: AppStyle.normalStyle(color: AppColors.kGrey),
+              labelStyle: AppStyle.normalStyle(
+                color: AppColors.kGrey,
+                fontSize: ResponsiveHelper.fontSmall,
+              ),
+              floatingLabelStyle: AppStyle.normalStyle(color: AppColors.kGrey),
               enabledBorder: border(),
               focusedBorder: border(),
               errorBorder: border(color: AppColors.kRed),

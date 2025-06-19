@@ -3,23 +3,27 @@ import 'package:bashasagar/core/components/app_custom_button.dart';
 import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/enums/auth_tab.dart';
+import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class AuthSuccessScreen extends StatelessWidget {
   final String successTitle;
   final String successMessage;
   final String buttonTitle;
-  final String nextScreen;
+  final AuthTab nextAuthTab;
   const AuthSuccessScreen({
     super.key,
     required this.successTitle,
     required this.successMessage,
     required this.buttonTitle,
-    required this.nextScreen,
+    required this.nextAuthTab,
   });
 
   @override
@@ -61,7 +65,7 @@ class AuthSuccessScreen extends StatelessWidget {
                         ),
                         AppSpacer(hp: .03),
                         Icon(
-                          FluentIcons.checkmark_underline_circle_16_regular,
+                          SolarIconsOutline.checkCircle,
                           size: 200,
                           color: AppColors.kPrimaryColor,
                         ),
@@ -77,7 +81,8 @@ class AuthSuccessScreen extends StatelessWidget {
                         AppCustomButton(
                           title: buttonTitle,
                           onTap: (){
-                            context.go(nextScreen);
+                            context.read<AuthStateControllerCubit>().onChangeAuthTab(nextAuthTab);
+                            context.go(authScreen);
                           },
                         ),
 

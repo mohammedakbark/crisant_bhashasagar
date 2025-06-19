@@ -9,11 +9,11 @@ import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/theme/app_theme.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/core/utils/validators.dart';
-import 'package:bashasagar/features/auth/data/bloc/cubit/auth_state_controller_cubit.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
+import 'package:solar_icons/solar_icons.dart';
 
 class ForgetPassword extends StatelessWidget {
   ForgetPassword({super.key});
@@ -45,7 +45,7 @@ class ForgetPassword extends StatelessWidget {
 
               CustomeTextField(
                 keyboardType: TextInputType.number,
-                prefix: Icon(FluentIcons.phone_32_regular),
+                prefix: Icon(SolarIconsOutline.phone),
                 lebelText: 'Mobile number',
                 controller: _mobileNumberController,
                 validator: AppValidator.mobileNumberValidator,

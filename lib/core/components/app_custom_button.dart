@@ -13,6 +13,7 @@ class AppCustomButton extends StatelessWidget {
   final double? radius;
   final void Function()? onTap;
   final bool isLoading;
+  final double ?width;
 
   const AppCustomButton({
     super.key,
@@ -24,6 +25,7 @@ class AppCustomButton extends StatelessWidget {
     this.titleColor,
     this.onTap,
     this.isLoading = false,
+    this.width
   });
 
   @override
@@ -38,7 +40,7 @@ class AppCustomButton extends StatelessWidget {
           child: Container(
             alignment: Alignment.center,
 
-            width: ResponsiveHelper.wp * .85,
+            width:width?? ResponsiveHelper.wp * .85,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(

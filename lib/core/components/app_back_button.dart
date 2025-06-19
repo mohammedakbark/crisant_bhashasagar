@@ -1,4 +1,5 @@
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class AppBackButton extends StatelessWidget {
@@ -18,11 +19,11 @@ class AppBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: goBack ?? () => Navigator.pop(context),
-      icon: Icon(
-        Icons.arrow_back_ios_new_rounded,
-        color: AppColors.kWhite,
+    return GestureDetector(
+      onTap: goBack ?? () => Navigator.pop(context),
+      child: Padding(
+        padding: EdgeInsets.all(ResponsiveHelper.paddingSmall),
+        child: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.kWhite),
       ),
     );
   }

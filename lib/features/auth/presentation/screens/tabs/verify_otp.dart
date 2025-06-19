@@ -8,7 +8,7 @@ import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/theme/app_theme.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
-import 'package:bashasagar/features/auth/data/bloc/cubit/auth_state_controller_cubit.dart';
+import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -92,7 +92,8 @@ class VerifyOtp extends StatelessWidget {
                       "successMessage":
                           "Your account has been created successfully.",
                       "buttonTitle": "LOGIN",
-                      "nextScreen":routeScreen
+                      "nextAuthTab":AuthTab.LOGIN,
+                      // "nextScreen":authScreen
                     },
                   );
                 },

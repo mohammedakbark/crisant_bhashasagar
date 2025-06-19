@@ -2,7 +2,7 @@
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
 
-import 'package:bashasagar/features/auth/data/bloc/cubit/auth_state_controller_cubit.dart';
+import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:bashasagar/features/auth/presentation/screens/tabs/forget_password.dart';
 import 'package:bashasagar/features/auth/presentation/screens/tabs/login.dart';
 import 'package:bashasagar/features/auth/presentation/screens/tabs/register.dart';

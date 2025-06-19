@@ -1,7 +1,12 @@
+import 'package:bashasagar/core/enums/auth_tab.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/features/auth/presentation/screens/get_start_screen.dart';
 import 'package:bashasagar/features/auth/presentation/screens/auth_screen.dart';
-import 'package:bashasagar/features/auth/presentation/screens/registration_screen.dart';
+import 'package:bashasagar/features/auth/presentation/screens/auth_success_screen.dart';
+import 'package:bashasagar/features/auth/presentation/screens/welcome_screen.dart';
+import 'package:bashasagar/features/home/presentation/screens/learning_path_screen.dart';
+import 'package:bashasagar/features/home/presentation/screens/topic_list_screen.dart';
+import 'package:bashasagar/features/home/presentation/screens/visual_learning_screen.dart';
 import 'package:bashasagar/features/navigation_screen.dart';
 import 'package:bashasagar/features/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +21,7 @@ class RouteProvider {
     routes: [
       GoRoute(
         path: initilaScreen,
-        builder: (context, state) => GetStartScreen(),
+        builder: (context, state) => NavigationScreen(),
       ),
       GoRoute(
         path: getStartScreen,
@@ -31,9 +36,9 @@ class RouteProvider {
           final String successTitle = params['successTitle'];
           final String successMessage = params['successMessage'];
           final String buttonTitle = params['buttonTitle'];
-          final String buttonAction = params['nextScreen'];
+          final AuthTab nextAuthTab = params['nextAuthTab'];
           return AuthSuccessScreen(
-            nextScreen: buttonAction,
+            nextAuthTab: nextAuthTab,
             buttonTitle: buttonTitle,
             successMessage: successMessage,
             successTitle: successTitle,
@@ -41,7 +46,40 @@ class RouteProvider {
         },
       ),
 
-        GoRoute(path: routeScreen, builder: (context, state) => NavigationScreen()),
+      GoRoute(
+        path: welcomeScreen,
+        builder: (context, state) => WelcomeScreen(),
+      ),
+      //---D A S H B O R D
+      GoRoute(
+        path: routeScreen,
+        builder: (context, state) => NavigationScreen(),
+      ),
+      //--- --- --- ---
+      GoRoute(
+        path: learningPathScreen,
+        builder: (context, state) {
+          final body = state.extra as Map<String, dynamic>;
+          final language = body['language'];
+          return LearningPathScreen(language: language);
+        },
+      ),
+      GoRoute(
+        path: topicListScreen,
+        builder: (context, state) {
+          final body = state.extra as Map<String, dynamic>;
+          final language = body['language'];
+          return TopicListScreen(language: language);
+        },
+      ),
+      GoRoute(
+        path: visualLearningScreen,
+       builder: (context, state) {
+          final body = state.extra as Map<String, dynamic>;
+          final language = body['language'];
+          return VisualLearningScreen(language: language);
+        },
+      ),
     ],
   );
 }
