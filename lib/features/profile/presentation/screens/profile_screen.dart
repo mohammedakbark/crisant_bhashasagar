@@ -2,9 +2,16 @@ import 'package:bashasagar/core/components/app_custom_button.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custome_textfield.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/controller/localization/localization_controller_cubit.dart';
+import 'package:bashasagar/core/controller/nav%20controller/nav_controller_dart_cubit.dart';
+import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
+import 'package:bashasagar/features/profile/presentation/widgets/logout_sheet.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -26,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
 
         Text(
           textAlign: TextAlign.center,
-          "If you do not wish to change your password\nleave the below fields empty",
+          "profile_hint".tr(),
           style: AppStyle.mediumStyle(color: AppColors.kOrange),
         ),
         AppSpacer(hp: .02),
@@ -49,6 +56,27 @@ class ProfileScreen extends StatelessWidget {
           width: ResponsiveHelper.wp,
           title: "UPDATE",
           onTap: () {},
+        ),
+
+        AppSpacer(hp: .02),
+        AppCustomButton(
+          bgColor: AppColors.kRed,
+          width: ResponsiveHelper.wp,
+          title: "LOGOUT",
+          onTap: () {
+            LogoutBottomSheetHelper.show(
+              context,
+              onConfirm: () {
+              
+                context.read<NavControllerDartCubit>().onChangeNavTab(0);
+                context.read<LocalizationControllerCubit>().onchangeLangauge(context, {"title":"English","value":"en"});
+                context.go(initilaScreen);
+              },
+              onCancel: () {
+                context.pop();
+              },
+            );
+          },
         ),
       ],
     );

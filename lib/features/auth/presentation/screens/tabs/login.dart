@@ -5,12 +5,14 @@ import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custome_textfield.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
+import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/core/utils/validators.dart';
 import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class Login extends StatelessWidget {
@@ -71,7 +73,9 @@ class Login extends StatelessWidget {
                 ],
               ),
               AppSpacer(hp: .01),
-              AppCustomButton(title: "LOGIN"),
+              AppCustomButton(title: "LOGIN",onTap: () {
+                context.go(routeScreen);
+              },),
               AppSpacer(hp: .02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

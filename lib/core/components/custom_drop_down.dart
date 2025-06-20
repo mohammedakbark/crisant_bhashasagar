@@ -9,8 +9,8 @@ class CustomDropDown extends StatelessWidget {
   final void Function(dynamic)? onChanged;
   final dynamic value;
   final String? selectedValue;
-  final String? lebelText;
-  final String? hinText;
+  final String? labelText;
+  final String? hintText;
   final double? width;
   final bool enableTextLetter;
   final Widget? prefix;
@@ -22,11 +22,11 @@ class CustomDropDown extends StatelessWidget {
     required this.onChanged,
     this.value,
     this.selectedValue,
-    this.lebelText,
+    this.labelText,
     this.enableTextLetter = false,
     this.width,
     this.prefix,
-    this.hinText,
+    this.hintText,
   });
 
   @override
@@ -36,7 +36,7 @@ class CustomDropDown extends StatelessWidget {
       child: Column(
         children: [
           title != null ? Text(title!) : SizedBox.shrink(),
-          DropdownButtonFormField<Map<String, dynamic>>(
+            DropdownButtonFormField<Map<String, dynamic>>(
             items:
                 items.map((item) {
                   final value = item['value'];
@@ -80,9 +80,9 @@ class CustomDropDown extends StatelessWidget {
                       selectedValue!,
                       style: AppStyle.normalStyle(color: AppColors.kBlack),
                     )
-                    : hinText != null
+                    : hintText != null
                     ? Text(
-                      hinText!,
+                      hintText!,
                       style: AppStyle.normalStyle(color: AppColors.kGrey),
                     )
                     : null,
@@ -97,7 +97,7 @@ class CustomDropDown extends StatelessWidget {
             decoration: InputDecoration(
               prefixIcon: prefix,
               suffixIcon: Icon(Icons.arrow_drop_down, color: AppColors.kGrey),
-              labelText: lebelText,
+              labelText: labelText,
               labelStyle: AppStyle.normalStyle(
                 color: AppColors.kGrey,
                 fontSize: ResponsiveHelper.fontSmall,

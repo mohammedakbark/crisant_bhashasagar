@@ -3,6 +3,7 @@ import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -27,14 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Welcome, Dr. Narayan",
+                "${'welcome'.tr()}, Dr. Narayan",
                 style: AppStyle.mediumStyle(
                   color: AppColors.kGrey,
                   fontSize: ResponsiveHelper.fontSmall,
                 ),
               ),
               Text(
-                "What would you like to learn today ?",
+                "what_would_you_like_to_learn_today".tr(),
                 style: AppStyle.boldStyle(
                   fontSize: ResponsiveHelper.fontMedium,
                 ),
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
               vertical: ResponsiveHelper.paddingSmall,
             ),
             prefixIcon: Icon(CupertinoIcons.search, color: AppColors.kGrey),
-            hintText: "Search",
+            hintText: 'search'.tr(),
             hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
             border: _searchBorder(),
             errorBorder: _searchBorder(),
@@ -97,14 +98,15 @@ class _HomeScreenState extends State<HomeScreen> {
           horizontal: ResponsiveHelper.paddingXLarge,
         ),
         decoration: BoxDecoration(
+          border: Border.all(color: bgColor),
           boxShadow: [
             BoxShadow(
               blurRadius: 10,
-              spreadRadius: 3,
+              spreadRadius: 1,
               color: bgColor.withAlpha(120),
             ),
           ],
-          color: bgColor,
+          color: bgColor.withAlpha(50),
           borderRadius: BorderRadius.circular(
             ResponsiveHelper.borderRadiusXLarge,
           ),
@@ -129,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Text(
-                      "7 Lessons",
+                      "7 ${'lessons'.tr()}",
                       style: AppStyle.smallStyle(
                         // fontSize: ResponsiveHelper.fontRegular,
                       ),

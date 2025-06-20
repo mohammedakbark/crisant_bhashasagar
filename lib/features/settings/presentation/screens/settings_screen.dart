@@ -1,11 +1,14 @@
-import 'package:bashasagar/core/components/app_back_button.dart';
+import 'dart:developer';
+
 import 'package:bashasagar/core/components/app_custom_button.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/controller/localization/localization_controller_cubit.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/settings/data/bloc/language%20selection%20controller/language_selection_controller_cubit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,42 +20,51 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final List<Map<String, String>> languages = [
-    {"title": "English", "value": "en"},
-    {"title": "Hindi", "value": "hi"},
-    {"title": "Kannada", "value": "kn"},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<LocalizationControllerCubit>().initCurrentLan(context);
+    });
+  }
 
-  String selectedValue = "English";
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildChangeLangForAppViw(),
-          AppSpacer(hp: .04),
-          _buildLearnLangView(),
-        ],
-      ),
+      child:
+          BlocBuilder<LocalizationControllerCubit, LocalizationControllerState>(
+            builder: (context, state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildChangeLangForAppViw(state),
+                  AppSpacer(hp: .04),
+                  _buildLearnLangView(),
+                ],
+              );
+            },
+          ),
     );
   }
 
-  Widget _buildChangeLangForAppViw() {
+  Widget _buildChangeLangForAppViw(LocalizationControllerState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Change languge for App",
+          "change_lan_for_app".tr(),
           style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
         ),
         AppSpacer(hp: .02),
         CustomDropDown(
           width: ResponsiveHelper.wp,
-          selectedValue: selectedValue,
-          items: languages,
+          selectedValue: state.language['title'],
+          items: context.read<LocalizationControllerCubit>().languages,
           onChanged: (map) {
-            selectedValue = map['title'];
+            context.read<LocalizationControllerCubit>().onchangeLangauge(
+              context,
+              map,
+            );
           },
           enableTextLetter: true,
         ),
@@ -67,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Choose languages to learn",
+          "choose_lang_to_learn".tr(),
           style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
         ),
         AppSpacer(hp: .02),

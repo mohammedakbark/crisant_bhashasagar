@@ -5,10 +5,12 @@ import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/controller/localization/localization_controller_cubit.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -33,6 +35,14 @@ class _GetStartScreenState extends State<GetStartScreen> {
 
   @override
   void initState() {
+
+Future.microtask(() {
+      context.read<LocalizationControllerCubit>().initCurrentLan(
+      context,
+    );
+
+},);
+
     super.initState();
 
     _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
@@ -56,65 +66,79 @@ class _GetStartScreenState extends State<GetStartScreen> {
     super.dispose();
   }
 
+  String? selectedLang;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AppMargin(
         child: SafeArea(
-          child: Column(
-            children: [
-              AppSpacer(hp: .01),
+          child: BlocBuilder<
+            LocalizationControllerCubit,
+            LocalizationControllerState
+          >(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  AppSpacer(hp: .01),
 
-              Expanded(
-                child: PageView.builder(
-                  controller: controller,
-                  itemCount: _totalPages,
-                  onPageChanged: (index) {
-                    _currentPage = index;
-                  },
-                  itemBuilder: (context, index) => _pageView(),
-                ),
-              ),
+                  Expanded(
+                    child: PageView.builder(
+                      controller: controller,
+                      itemCount: _totalPages,
+                      onPageChanged: (index) {
+                        _currentPage = index;
+                      },
+                      itemBuilder: (context, index) => _pageView(),
+                    ),
+                  ),
 
-              AppSpacer(hp: .03),
+                  AppSpacer(hp: .03),
 
-              SmoothPageIndicator(
-                controller: controller,
-                count: _totalPages,
-                effect: ExpandingDotsEffect(
-                  dotColor: AppColors.kOrange.withAlpha(100),
-                  activeDotColor: AppColors.kOrange,
-                ),
-                onDotClicked: (index) {
-                  controller.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
+                  SmoothPageIndicator(
+                    controller: controller,
+                    count: _totalPages,
+                    effect: ExpandingDotsEffect(
+                      dotColor: AppColors.kOrange.withAlpha(100),
+                      activeDotColor: AppColors.kOrange,
+                    ),
+                    onDotClicked: (index) {
+                      controller.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                  ),
 
-              AppSpacer(hp: .05),
+                  AppSpacer(hp: .05),
 
-              CustomDropDown(
-                lebelText: "Choose language for app",
-                items: languages,
-                onChanged: (value) {
-                  print("Selected: $value");
-                },
-              ),
+                  CustomDropDown(
+                    selectedValue: state.language['title'],
+                    enableTextLetter: true,
+                    labelText: "Choose language for app",
+                    items:
+                        context.read<LocalizationControllerCubit>().languages,
+                    onChanged: (value) {
+                      context
+                          .read<LocalizationControllerCubit>()
+                          .onchangeLangauge(context, value);
+                    },
+                  ),
 
-              AppSpacer(hp: .02),
+                  AppSpacer(hp: .02),
 
-              AppCustomButton(
-                title: "GET STARTED",
-                onTap: () {
-                  context.go(authScreen);
-                },
-              ),
+                  AppCustomButton(
+                    title: "GET STARTED",
+                    onTap: () {
+                      context.go(authScreen);
+                    },
+                  ),
 
-              AppSpacer(hp: .05),
-            ],
+                  AppSpacer(hp: .05),
+                ],
+              );
+            },
           ),
         ),
       ),

@@ -4,9 +4,9 @@ import 'package:bashasagar/features/auth/presentation/screens/get_start_screen.d
 import 'package:bashasagar/features/auth/presentation/screens/auth_screen.dart';
 import 'package:bashasagar/features/auth/presentation/screens/auth_success_screen.dart';
 import 'package:bashasagar/features/auth/presentation/screens/welcome_screen.dart';
-import 'package:bashasagar/features/home/presentation/screens/learning_path_screen.dart';
-import 'package:bashasagar/features/home/presentation/screens/topic_list_screen.dart';
-import 'package:bashasagar/features/home/presentation/screens/visual_learning_screen.dart';
+import 'package:bashasagar/features/session/presentation/screens/learning_path_screen.dart';
+import 'package:bashasagar/features/session/presentation/screens/topic_list_screen.dart';
+import 'package:bashasagar/features/session/presentation/screens/visual_learning_screen.dart';
 import 'package:bashasagar/features/navigation_screen.dart';
 import 'package:bashasagar/features/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class RouteProvider {
     routes: [
       GoRoute(
         path: initilaScreen,
-        builder: (context, state) => NavigationScreen(),
+        builder: (context, state) => GetStartScreen(),
       ),
       GoRoute(
         path: getStartScreen,

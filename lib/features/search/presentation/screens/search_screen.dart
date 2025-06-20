@@ -3,9 +3,9 @@ import 'package:bashasagar/core/components/custom_drop_down.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:solar_icons/solar_icons.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
@@ -14,19 +14,20 @@ class SearchScreen extends StatelessWidget {
     {"title": "Hindi", "value": "hi"},
     {"title": "Kannada", "value": "kn"},
   ];
-  String? selectedValue;
   final _searchController = TextEditingController();
+  Map<String, dynamic> selectedValue= {"title": "English", "value": "en"};
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         CustomDropDown(
-          hinText: "Choose language",
-          prefix: Icon(CupertinoIcons.globe, color: AppColors.kBlack),
-          selectedValue: selectedValue,
           width: ResponsiveHelper.wp,
+          hintText: "choose_language".tr(),
+          prefix: Icon(CupertinoIcons.globe, color: AppColors.kBlack),
           items: languages,
-          onChanged: (value) {},
+          onChanged: (value) {
+            selectedValue=value;
+          },
         ),
         AppSpacer(hp: .02),
         TextFormField(
@@ -38,7 +39,7 @@ class SearchScreen extends StatelessWidget {
               vertical: ResponsiveHelper.paddingSmall,
             ),
             prefixIcon: Icon(CupertinoIcons.search, color: AppColors.kBlack),
-            hintText: "Search",
+            hintText: "search".tr(),
             hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
             border: _searchBorder(),
             errorBorder: _searchBorder(),

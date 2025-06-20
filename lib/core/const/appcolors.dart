@@ -11,7 +11,7 @@ class AppColors {
   static const kPrimaryDark = Color(0xFF1a3030);
   static const kSecondary = Color(0xFFe8c6a5);
 
-  static const kRed = Colors.red;
+  static const kRed = Color.fromARGB(255, 186, 47, 37);
   static const kGreen = Colors.green;
   static const kOrange = Color(0xFFd8884b);
 

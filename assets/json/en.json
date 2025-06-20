@@ -1,0 +1,16 @@
+{
+    "home": "Home",
+    "profile": "Profile",
+    "quick_search": "Quick Search",
+    "settings": "Settings",
+    "welcome": "Welcome",
+    "what_would_you_like_to_learn_today": "What would you like to learn today ?",
+    "search": "Search",
+    "lessons": "Lessons",
+    "choose_language": "Choose language",
+    "change_lan_for_app": "Change language for App",
+    "choose_lang_to_learn": "Choose language to learn",
+    "profile_hint":"If you do not wish to change your password\nleave the below fields empty",
+    "update_button_text": "UPDATE",
+    "logout_button_text": "LOGOUT"
+}

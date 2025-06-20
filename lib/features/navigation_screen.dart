@@ -8,9 +8,9 @@ import 'package:bashasagar/features/nav_bar.dart';
 import 'package:bashasagar/features/profile/presentation/screens/profile_screen.dart';
 import 'package:bashasagar/features/search/presentation/screens/search_screen.dart';
 import 'package:bashasagar/features/settings/presentation/screens/settings_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:solar_icons/solar_icons.dart';
 
 class NavigationScreen extends StatelessWidget {
   NavigationScreen({super.key});
@@ -27,7 +27,7 @@ class NavigationScreen extends StatelessWidget {
       body: BlocBuilder<NavControllerDartCubit, NavControllerDartState>(
         builder: (context, state) {
           return Padding(
-            padding: EdgeInsets.only(left: 15,right: 15, top: 15),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 15),
             child: _pages[state.currentIndex],
           );
         },
@@ -38,10 +38,11 @@ class NavigationScreen extends StatelessWidget {
 
   appBar() {
     return PreferredSize(
-      preferredSize: Size.fromHeight(100),
+      preferredSize: Size.fromHeight(50),
       child: SlideInDown(
         child: SafeArea(
           child: Container(
+            height: ResponsiveHelper.hp,
             decoration: BoxDecoration(
               color: AppColors.kWhite,
               boxShadow: [
@@ -54,27 +55,27 @@ class NavigationScreen extends StatelessWidget {
               ],
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    SolarIconsOutline.hamburgerMenu,
-                    color: AppColors.kBlack,
-                  ),
-                ),
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: Icon(
+                //     SolarIconsOutline.hamburgerMenu,
+                //     color: AppColors.kBlack,
+                //   ),
+                // ),
                 BlocBuilder<NavControllerDartCubit, NavControllerDartState>(
                   builder: (context, state) {
                     String? title;
                     switch (state.currentIndex) {
                       case 0:
-                        title = "Home";
+                        title = "home".tr();
                       case 1:
-                        title = "Quick Search";
+                        title = "quick_search".tr();
                       case 2:
-                        title = "Settings";
+                        title = "settings".tr();
                       case 3:
-                        title = "Profile";
+                        title = "profile".tr();
                     }
                     return Text(
                       title!,
@@ -83,13 +84,13 @@ class NavigationScreen extends StatelessWidget {
                   },
                 ),
 
-                IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    SolarIconsOutline.hamburgerMenu,
-                    color: AppColors.kWhite,
-                  ),
-                ),
+                // IconButton(
+                //   onPressed: null,
+                //   icon: Icon(
+                //     SolarIconsOutline.hamburgerMenu,
+                //     color: AppColors.kWhite,
+                //   ),
+                // ),
               ],
             ),
           ),
