@@ -3,7 +3,6 @@ import 'package:bashasagar/core/components/custom_drop_down.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +21,7 @@ class SearchScreen extends StatelessWidget {
       children: [
         CustomDropDown(
           width: ResponsiveHelper.wp,
-          hintText: "choose_language".tr(),
+          hintText: "choose_language",
           prefix: Icon(CupertinoIcons.globe, color: AppColors.kBlack),
           items: languages,
           onChanged: (value) {
@@ -39,7 +38,7 @@ class SearchScreen extends StatelessWidget {
               vertical: ResponsiveHelper.paddingSmall,
             ),
             prefixIcon: Icon(CupertinoIcons.search, color: AppColors.kBlack),
-            hintText: "search".tr(),
+            hintText: "search",
             hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
             border: _searchBorder(),
             errorBorder: _searchBorder(),

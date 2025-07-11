@@ -1,6 +1,6 @@
-
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
+import 'package:bashasagar/core/utils/responsive_helper.dart';
 
 import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:bashasagar/features/auth/presentation/screens/tabs/forget_password.dart';
@@ -33,23 +33,30 @@ class AuthScreen extends StatelessWidget {
 
               BlocBuilder<AuthStateControllerCubit, AuthStateControllerState>(
                 builder: (context, state) {
-                  switch(state.authTab){
-                    case AuthTab.LOGIN:{
-                      return Login();
-                    }case AuthTab.REGISTER:{
-                      return Register();
-                    }case AuthTab.VERIFYOTP:{
-                      return VerifyOtp();
-                    }case AuthTab.FORGETPASSWORD:{
-                      return ForgetPassword();
-                    }case AuthTab.RESETPASSWORD:{
-                      return ResentPassword();
-                    }
+                  switch (state.authTab) {
+                    case AuthTab.LOGIN:
+                      {
+                        return Login();
+                      }
+                    case AuthTab.REGISTER:
+                      {
+                        return Register();
+                      }
+                    case AuthTab.VERIFYOTP:
+                      {
+                        return VerifyOtp();
+                      }
+                    case AuthTab.FORGETPASSWORD:
+                      {
+                        return ForgetPassword();
+                      }
+                    case AuthTab.RESETPASSWORD:
+                      {
+                        return ResentPassword();
+                      }
                   }
                 },
               ),
-
-             
             ],
           ),
         ),

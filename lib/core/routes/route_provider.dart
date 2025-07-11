@@ -21,7 +21,7 @@ class RouteProvider {
     routes: [
       GoRoute(
         path: initilaScreen,
-        builder: (context, state) => GetStartScreen(),
+        builder: (context, state) => SplashScreen(),
       ),
       GoRoute(
         path: getStartScreen,

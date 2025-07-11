@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-
 import 'package:bashasagar/core/const/api_const.dart';
 import 'package:bashasagar/core/models/response_model.dart';
 import 'package:dio/dio.dart';
@@ -14,7 +13,7 @@ class ApiConfig {
     ),
   );
 
-  static Future<ResponseModel> postRequest({
+  static Future<DioResponseModel> postRequest({
     required String endpoint,
     required Map<String, dynamic> header,
     Object? body,
@@ -26,18 +25,18 @@ class ApiConfig {
         options: Options(headers: header),
       );
 
-      return ResponseModel.fromJson(response.data);
+      return DioResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
         try {
           log("response 401  (No Error) POST");
           log(e.response!.data['message'].toString());
-            // _checkTokenExpired(e.response!.data);
-          return ResponseModel.fromJson(e.response!.data);
+          // _checkTokenExpired(e.response!.data);
+          return DioResponseModel.fromJson(e.response!.data);
         } catch (_) {
           log("response 401  (Error) POST");
 
-          return ResponseModel(
+          return DioResponseModel(
             data: null,
             error: true,
             message: "Failed to parse error response",
@@ -48,7 +47,7 @@ class ApiConfig {
       if (e.type == DioExceptionType.connectionError ||
           e.type == DioExceptionType.unknown) {
         log("Connection Error ! POST");
-        return ResponseModel(
+        return DioResponseModel(
           data: null,
           error: true,
           message: "No Internet Connection!",
@@ -56,7 +55,7 @@ class ApiConfig {
         );
       }
       log("Dio Error POST");
-      return ResponseModel(
+      return DioResponseModel(
         data: null,
         error: true,
         message: "Dio Error: ${e.message}",
@@ -64,7 +63,7 @@ class ApiConfig {
       );
     } catch (e) {
       log("Unexpected Error POST");
-      return ResponseModel(
+      return DioResponseModel(
         data: null,
         error: true,
         message: "Unexpected Error: $e",
@@ -75,7 +74,7 @@ class ApiConfig {
 
   //---------------------------GET
 
-  static Future<ResponseModel> getRequest({
+  static Future<DioResponseModel> getRequest({
     required String endpoint,
     required Map<String, dynamic> header,
     Object? body,
@@ -90,19 +89,18 @@ class ApiConfig {
       // Directly use response.data instead of decoding again
       // log(response.data.toString());
 
-    
-      return ResponseModel.fromJson(response.data);
+      return DioResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
         try {
           log("response 401  (No Error)");
-            log(e.response!.data['message'].toString());
-            // _checkTokenExpired(e.response!.data);
-          return ResponseModel.fromJson(e.response!.data);
+          log(e.response!.data['message'].toString());
+          // _checkTokenExpired(e.response!.data);
+          return DioResponseModel.fromJson(e.response!.data);
         } catch (_) {
           log("response 401  (Error)");
 
-          return ResponseModel(
+          return DioResponseModel(
             data: null,
             error: true,
             message: "Failed to parse error response",
@@ -115,7 +113,7 @@ class ApiConfig {
           e.type == DioExceptionType.unknown) {
         log("Connection Error !");
 
-        return ResponseModel(
+        return DioResponseModel(
           data: null,
           error: true,
           message: "No Internet Connection!",
@@ -126,7 +124,7 @@ class ApiConfig {
       // 🧾 If server returned a valid response (like 401), parse that
       log("Dio Error");
 
-      return ResponseModel(
+      return DioResponseModel(
         data: null,
         error: true,
         message: "Dio Error: ${e.message}",
@@ -135,7 +133,7 @@ class ApiConfig {
     } catch (e) {
       log("Unexpected Error");
 
-      return ResponseModel(
+      return DioResponseModel(
         data: null,
         error: true,
         message: "Unexpected Error: $e",
@@ -144,10 +142,9 @@ class ApiConfig {
     }
   }
 
-
-//  static void _checkTokenExpired(data)async{
-//      if(data['error']==true && data['message']=="jwt expired"){
-//        await  ProfilePage.logout(rootNavigatorKey.currentContext!);
-//       }
-//   }
+  //  static void _checkTokenExpired(data)async{
+  //      if(data['error']==true && data['message']=="jwt expired"){
+  //        await  ProfilePage.logout(rootNavigatorKey.currentContext!);
+  //       }
+  //   }
 }

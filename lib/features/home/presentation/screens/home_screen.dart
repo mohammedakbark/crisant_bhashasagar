@@ -3,7 +3,6 @@ import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -28,14 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${'welcome'.tr()}, Dr. Narayan",
+                "Name",
                 style: AppStyle.mediumStyle(
                   color: AppColors.kGrey,
                   fontSize: ResponsiveHelper.fontSmall,
                 ),
               ),
               Text(
-                "what_would_you_like_to_learn_today".tr(),
+                "",
                 style: AppStyle.boldStyle(
                   fontSize: ResponsiveHelper.fontMedium,
                 ),
@@ -54,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               vertical: ResponsiveHelper.paddingSmall,
             ),
             prefixIcon: Icon(CupertinoIcons.search, color: AppColors.kGrey),
-            hintText: 'search'.tr(),
+            hintText: 'search',
             hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
             border: _searchBorder(),
             errorBorder: _searchBorder(),
@@ -131,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Text(
-                      "7 ${'lessons'.tr()}",
+                      "7 ${'lessons'}",
                       style: AppStyle.smallStyle(
                         // fontSize: ResponsiveHelper.fontRegular,
                       ),

@@ -1,5 +1,6 @@
 import 'package:bashasagar/core/controller/localization/localization_controller_cubit.dart';
 import 'package:bashasagar/core/controller/nav%20controller/nav_controller_dart_cubit.dart';
+import 'package:bashasagar/features/auth/data/bloc/auth%20api%20controller/auth_api_controller_bloc.dart';
 import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:bashasagar/features/settings/data/bloc/language%20selection%20controller/language_selection_controller_cubit.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,11 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider<NavControllerDartCubit>(
           create: (context) => NavControllerDartCubit(),
         ),
-        BlocProvider<LocalizationControllerCubit>(
-          create: (context) => LocalizationControllerCubit(),
+        // BlocProvider<LocalizationControllerCubit>(
+        //   create: (context) => LocalizationControllerCubit(),
+        // ),
+        BlocProvider<AuthApiControllerBloc>(
+          create: (context) => AuthApiControllerBloc(),
         ),
       ],
       child: child,

@@ -64,7 +64,6 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
   void _handleCancel() async {
     await _animationController.reverse();
     if (mounted) {
-      Navigator.of(context).pop();
       widget.onCancel?.call();
     }
   }

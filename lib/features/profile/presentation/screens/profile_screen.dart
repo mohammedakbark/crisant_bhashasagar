@@ -2,13 +2,13 @@ import 'package:bashasagar/core/components/app_custom_button.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custome_textfield.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/controller/localization/localization_controller_cubit.dart';
 import 'package:bashasagar/core/controller/nav%20controller/nav_controller_dart_cubit.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/profile/presentation/widgets/logout_sheet.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
 
         Text(
           textAlign: TextAlign.center,
-          "profile_hint".tr(),
+          "profile_hint",
           style: AppStyle.mediumStyle(color: AppColors.kOrange),
         ),
         AppSpacer(hp: .02),
@@ -66,11 +66,11 @@ class ProfileScreen extends StatelessWidget {
           onTap: () {
             LogoutBottomSheetHelper.show(
               context,
-              onConfirm: () {
-              
-                context.read<NavControllerDartCubit>().onChangeNavTab(0);
-                context.read<LocalizationControllerCubit>().onchangeLangauge(context, {"title":"English","value":"en"});
+              onConfirm: () async {
                 context.go(initilaScreen);
+
+                context.read<NavControllerDartCubit>().onChangeNavTab(0);
+                await CurrentUserPref.clearPref();
               },
               onCancel: () {
                 context.pop();

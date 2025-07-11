@@ -9,6 +9,8 @@ import 'package:bashasagar/core/controller/localization/localization_controller_
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
+import 'package:bashasagar/features/auth/data/bloc/auth%20api%20controller/auth_api_controller_bloc.dart';
+import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,13 +37,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
 
   @override
   void initState() {
-
-Future.microtask(() {
-      context.read<LocalizationControllerCubit>().initCurrentLan(
-      context,
-    );
-
-},);
+    Future.microtask(() {});
 
     super.initState();
 
@@ -73,72 +69,64 @@ Future.microtask(() {
     return Scaffold(
       body: AppMargin(
         child: SafeArea(
-          child: BlocBuilder<
-            LocalizationControllerCubit,
-            LocalizationControllerState
-          >(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  AppSpacer(hp: .01),
+          child: Column(
+            children: [
+              AppSpacer(hp: .01),
 
-                  Expanded(
-                    child: PageView.builder(
-                      controller: controller,
-                      itemCount: _totalPages,
-                      onPageChanged: (index) {
-                        _currentPage = index;
-                      },
-                      itemBuilder: (context, index) => _pageView(),
-                    ),
-                  ),
+              Expanded(
+                child: PageView.builder(
+                  controller: controller,
+                  itemCount: _totalPages,
+                  onPageChanged: (index) {
+                    _currentPage = index;
+                  },
+                  itemBuilder: (context, index) => _pageView(),
+                ),
+              ),
 
-                  AppSpacer(hp: .03),
+              AppSpacer(hp: .03),
 
-                  SmoothPageIndicator(
-                    controller: controller,
-                    count: _totalPages,
-                    effect: ExpandingDotsEffect(
-                      dotColor: AppColors.kOrange.withAlpha(100),
-                      activeDotColor: AppColors.kOrange,
-                    ),
-                    onDotClicked: (index) {
-                      controller.animateToPage(
-                        index,
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                  ),
+              SmoothPageIndicator(
+                controller: controller,
+                count: _totalPages,
+                effect: ExpandingDotsEffect(
+                  dotColor: AppColors.kOrange.withAlpha(100),
+                  activeDotColor: AppColors.kOrange,
+                ),
+                onDotClicked: (index) {
+                  controller.animateToPage(
+                    index,
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
 
-                  AppSpacer(hp: .05),
+              AppSpacer(hp: .05),
 
-                  CustomDropDown(
-                    selectedValue: state.language['title'],
-                    enableTextLetter: true,
-                    labelText: "Choose language for app",
-                    items:
-                        context.read<LocalizationControllerCubit>().languages,
-                    onChanged: (value) {
-                      context
-                          .read<LocalizationControllerCubit>()
-                          .onchangeLangauge(context, value);
-                    },
-                  ),
+              CustomDropDown(
+                // selectedValue: state.language['title'],
+                enableTextLetter: true,
+                labelText: "Choose language for app",
+                items: [],
+                onChanged: (value) {
+                  // context
+                  //     .read<LocalizationControllerCubit>()
+                  //     .onchangeLangauge(context, value);
+                },
+              ),
 
-                  AppSpacer(hp: .02),
+              AppSpacer(hp: .02),
+              
+              AppCustomButton(
+                title: "GET STARTED",
+                onTap: () {
+                  context.go(authScreen);
+                },
+              ),
 
-                  AppCustomButton(
-                    title: "GET STARTED",
-                    onTap: () {
-                      context.go(authScreen);
-                    },
-                  ),
-
-                  AppSpacer(hp: .05),
-                ],
-              );
-            },
+              AppSpacer(hp: .05),
+            ],
           ),
         ),
       ),

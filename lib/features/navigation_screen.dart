@@ -8,7 +8,6 @@ import 'package:bashasagar/features/nav_bar.dart';
 import 'package:bashasagar/features/profile/presentation/screens/profile_screen.dart';
 import 'package:bashasagar/features/search/presentation/screens/search_screen.dart';
 import 'package:bashasagar/features/settings/presentation/screens/settings_screen.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -69,13 +68,13 @@ class NavigationScreen extends StatelessWidget {
                     String? title;
                     switch (state.currentIndex) {
                       case 0:
-                        title = "home".tr();
+                        title = "home";
                       case 1:
-                        title = "quick_search".tr();
+                        title = "quick_search";
                       case 2:
-                        title = "settings".tr();
+                        title = "settings";
                       case 3:
-                        title = "profile".tr();
+                        title = "profile";
                     }
                     return Text(
                       title!,

@@ -37,7 +37,7 @@ class CustomeTextField extends StatelessWidget {
           title != null ? Text(title!) : SizedBox.shrink(),
           TextFormField(
             keyboardType: keyboardType,
-            textInputAction: textInputAction ?? TextInputAction.done,
+            textInputAction: textInputAction ?? TextInputAction.next,
             controller: controller,
             validator: validator,
             style: AppStyle.normalStyle(),

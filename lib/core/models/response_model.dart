@@ -1,13 +1,13 @@
 import 'package:bashasagar/core/models/pagination_model.dart';
 
-class ResponseModel {
+class DioResponseModel {
   int status;
   String message;
   bool error;
   Object? data;
   PaginationModel? pagination;
 
-  ResponseModel({
+  DioResponseModel({
     required this.data,
     required this.error,
     required this.message,
@@ -15,23 +15,20 @@ class ResponseModel {
     this.pagination,
   });
 
-  // Map<String, dynamic> toJson() => {
-  //   'status': status,
-  //   'message': message,
-  //   'error': error,
-  //   'data': data,
-  //   'pagination': pagination.toJson(),
-  // };
+  
 
-  factory ResponseModel.fromJson(Map<String, dynamic> json) {
-    return ResponseModel(
+  factory DioResponseModel.fromJson(Map<String, dynamic> json) {
+    final message = json['message'];
+
+    return DioResponseModel(
       data: json['data'],
       error: json['error'],
-      message: json['message'] ?? "",
+      message: message.toString(),
       status: json['status'],
-      pagination: json['pagination'] != null
-          ? PaginationModel.fromJson(json['pagination'])
-          : null,
+      pagination:
+          json['pagination'] != null
+              ? PaginationModel.fromJson(json['pagination'])
+              : null,
     );
   }
 }
