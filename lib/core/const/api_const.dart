@@ -8,8 +8,13 @@ class ApiConst {
 
   static const forgetPassword = "api/profile/forgotPassword";
   static const forgetPasswordVerify = "api/profile/forgotVerifyOTP";
-  static const foregetPasswordRensend = "api/profile/forgotOTPResend";
+  static const foregetPasswordResend = "api/profile/forgotOTPResend";
 
   static const resetPassword = "api/profile/setNewPassword";
   static const userProfile = "api/profile/userProfile";
+
+  static const getUiLang = "api/masters/uiLanguages";
+  static const setUiLangugae = "api/profile/customerUIPreference";
+
+  static const getInstruction = "api/masters/instructions";
 }

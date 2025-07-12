@@ -1,18 +1,20 @@
+import 'package:bashasagar/core/components/custom_network_img.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class CustomDropDown extends StatelessWidget {
+class CustomDropDown extends StatefulWidget {
   final String? title;
   final List<Map<String, dynamic>> items;
   final void Function(dynamic)? onChanged;
-  final dynamic value;
-  final String? selectedValue;
+  // final dynamic value;
+  final Map<String, dynamic>? selectedValue;
   final String? labelText;
   final String? hintText;
   final double? width;
-  final bool enableTextLetter;
+
   final Widget? prefix;
 
   const CustomDropDown({
@@ -20,33 +22,47 @@ class CustomDropDown extends StatelessWidget {
     this.title,
     required this.items,
     required this.onChanged,
-    this.value,
-    this.selectedValue,
+    // this.value,
+    required this.selectedValue,
     this.labelText,
-    this.enableTextLetter = false,
+
     this.width,
     this.prefix,
     this.hintText,
   });
 
   @override
+  State<CustomDropDown> createState() => _CustomDropDownState();
+}
+
+class _CustomDropDownState extends State<CustomDropDown> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? ResponsiveHelper.wp * .85,
+      width: widget.width ?? ResponsiveHelper.wp * .85,
       child: Column(
         children: [
-          title != null ? Text(title!) : SizedBox.shrink(),
-            DropdownButtonFormField<Map<String, dynamic>>(
+          widget.title != null ? Text(widget.title!) : SizedBox.shrink(),
+          DropdownButtonFormField<Map<String, dynamic>>(
+            value:
+                widget.selectedValue != null
+                    ? widget.items.firstWhere(
+                      (item) => item['value'] == widget.selectedValue!['value'],
+                    )
+                    : null,
             items:
-                items.map((item) {
+                widget.items.map((item) {
                   final value = item['value'];
                   final title = item['title'] as String;
+                  final langIcon = item['icon'] as String?;
                   return DropdownMenuItem(
                     value: item,
                     child: Row(
                       children: [
-                        enableTextLetter
+                        langIcon != null
                             ? Container(
+                              height: 30,
+                              width: 30,
                               margin: EdgeInsets.only(right: 10),
                               padding: EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -58,12 +74,7 @@ class CustomDropDown extends StatelessWidget {
                                   ResponsiveHelper.borderRadiusXSmall,
                                 ),
                               ),
-                              child: Text(
-                                title[0].toUpperCase(),
-                                style: AppStyle.largeStyle(
-                                  color: AppColors.kWhite,
-                                ),
-                              ),
+                              child: CustomNetworkImg(path: langIcon),
                             )
                             : SizedBox.shrink(),
                         Text(
@@ -75,19 +86,18 @@ class CustomDropDown extends StatelessWidget {
                   );
                 }).toList(),
             hint:
-                selectedValue != null
+                // selectedValue != null
+                //     ? Text(
+                //       selectedValue!,
+                //       style: AppStyle.normalStyle(color: AppColors.kBlack),
+                //     )
+                widget.hintText != null
                     ? Text(
-                      selectedValue!,
-                      style: AppStyle.normalStyle(color: AppColors.kBlack),
-                    )
-                    : hintText != null
-                    ? Text(
-                      hintText!,
+                      widget.hintText!,
                       style: AppStyle.normalStyle(color: AppColors.kGrey),
                     )
                     : null,
-            value: value,
-            onChanged: onChanged,
+            onChanged: widget.onChanged,
             dropdownColor: AppColors.kWhite,
             borderRadius: BorderRadius.circular(
               ResponsiveHelper.borderRadiusMedium,
@@ -95,9 +105,9 @@ class CustomDropDown extends StatelessWidget {
             style: AppStyle.normalStyle(color: AppColors.kBlack),
 
             decoration: InputDecoration(
-              prefixIcon: prefix,
+              prefixIcon: widget.prefix,
               suffixIcon: Icon(Icons.arrow_drop_down, color: AppColors.kGrey),
-              labelText: labelText,
+              labelText: widget.labelText,
               labelStyle: AppStyle.normalStyle(
                 color: AppColors.kGrey,
                 fontSize: ResponsiveHelper.fontSmall,

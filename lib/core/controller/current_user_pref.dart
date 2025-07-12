@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bashasagar/core/models/current_user_model.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ class CurrentUserPref {
   static const _APPLANG = "APPLANG";
 
   static Future<void> setUserData(CurrentUserModel userModel) async {
+    log("name is :=${userModel.name}");
     final existingData = await getUserData;
     final pref = await SharedPreferences.getInstance();
     await pref.setString(_TOKEN, userModel.token ?? existingData.token ?? '');
@@ -26,7 +29,7 @@ class CurrentUserPref {
     );
     await pref.setString(
       _APPLANG,
-      userModel.appLang ?? existingData.appLang ?? '',
+      userModel.uiLangId ?? existingData.uiLangId ?? '',
     );
   }
 
@@ -37,8 +40,6 @@ class CurrentUserPref {
     await pref.remove(_MOBILE);
     await pref.remove(_PASSWORD);
     await pref.remove(_APPLANG);
-
-    
   }
 
   static Future<CurrentUserModel> get getUserData async {
@@ -51,7 +52,7 @@ class CurrentUserPref {
     final appLang = pref.getString(_APPLANG);
 
     return CurrentUserModel(
-      appLang: appLang ?? '',
+      uiLangId: appLang ?? '',
       mobile: mobile ?? '',
       name: name ?? '',
       password: pasword ?? '',

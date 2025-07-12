@@ -4,28 +4,27 @@ import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/models/api_data_model.dart';
 import 'package:bashasagar/core/utils/show_messages.dart';
 
-class RegisterVerifyOtpRepo {
+class ForegetPasswordVerifyOtpRepo {
   static Future<ApiDataModel> onVerifyOTP({
-    required int customerId,
+    required String customerId,
     required String otp,
   }) async {
     try {
       final userData = await CurrentUserPref.getUserData;
 
       final response = await ApiConfig.postRequest(
-        endpoint: ApiConst.regVerifyOTP,
+        endpoint: ApiConst.forgetPasswordVerify,
         body: {
           "customerId": customerId,
           "customerOTP": otp,
-          "uiLanguageId": userData.uiLangId, // Hindi & This is optional
+          "uiLanguageId": userData.uiLangId,
         },
         header: {"Content-Type": "application/json"},
       );
 
       if (response.status == 200) {
         showToast(response.message);
-        final data = response.data as Map<String, dynamic>;
-        return ApiDataModel(isError: false, data: data);
+        return ApiDataModel(isError: false, data: response.message);
       } else {
         return ApiDataModel(isError: true, data: response.message);
       }

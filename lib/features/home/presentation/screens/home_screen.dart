@@ -1,5 +1,7 @@
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/controller/current_user_pref.dart';
+import 'package:bashasagar/core/models/current_user_model.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
@@ -16,32 +18,46 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _searchController = TextEditingController();
+  bool isLoadingProfile = true;
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  late CurrentUserModel userModel;
+  void getUserData() async {
+    userModel = await CurrentUserPref.getUserData;
+    isLoadingProfile = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Name",
-                style: AppStyle.mediumStyle(
-                  color: AppColors.kGrey,
-                  fontSize: ResponsiveHelper.fontSmall,
+        if (!isLoadingProfile)
+          Align(
+            alignment: Alignment.topLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Name",
+                  style: AppStyle.mediumStyle(
+                    color: AppColors.kGrey,
+                    fontSize: ResponsiveHelper.fontSmall,
+                  ),
                 ),
-              ),
-              Text(
-                "",
-                style: AppStyle.boldStyle(
-                  fontSize: ResponsiveHelper.fontMedium,
+                Text(
+                  userModel.name!,
+                  style: AppStyle.boldStyle(
+                    fontSize: ResponsiveHelper.fontMedium,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         AppSpacer(hp: .02),
 
         TextFormField(

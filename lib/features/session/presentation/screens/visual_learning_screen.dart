@@ -100,6 +100,7 @@ class VisualLearningScreen extends StatelessWidget {
 
             AppSpacer(hp: .02),
             CustomDropDown(
+              selectedValue: languages.first,
               prefix: Icon(CupertinoIcons.globe, color: AppColors.kGrey),
               labelText: "Choose Script",
               width: ResponsiveHelper.wp,

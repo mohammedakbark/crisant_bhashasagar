@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:bashasagar/core/config/api_config.dart';
 import 'package:bashasagar/core/const/api_const.dart';
+import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/models/api_data_model.dart';
+import 'package:bashasagar/core/utils/show_messages.dart';
 
 class RegistrationRepo {
   static Future<ApiDataModel> onRegister({
@@ -10,33 +12,24 @@ class RegistrationRepo {
     required String mobileNumber,
     required String password,
     required String confirmPassword,
-    required String? uiLangId,
   }) async {
     try {
-      Map<String, dynamic> body = {};
-      if (uiLangId == null) {
-        body = {
-          "customerName": name,
-          "customerMobile": mobileNumber,
-          "customerPassword": password,
-          "password_confirmation": confirmPassword,
-        };
-      } else {
-        body = {
-          "customerName": name,
-          "customerMobile": mobileNumber,
-          "customerPassword": password,
-          "password_confirmation": confirmPassword,
-          "uiLanguageId": uiLangId,
-        };
-      }
+      final userData = await CurrentUserPref.getUserData;
+
       final response = await ApiConfig.postRequest(
         endpoint: ApiConst.register,
-        body: body,
+        body: {
+          "customerName": name,
+          "customerMobile": mobileNumber,
+          "customerPassword": password,
+          "password_confirmation": confirmPassword,
+          "uiLanguageId": userData.uiLangId,
+        },
         header: {"Content-Type": "application/json"},
       );
 
       if (response.status == 200) {
+        showToast(response.message);
         return ApiDataModel(isError: false, data: response.data ?? {});
       } else {
         log(response.message.toString());

@@ -8,11 +8,8 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MainConfig.lockOrientation();
-  runApp(
-    AppBlocProvider(
-      child: const MyApp() 
-    ),
-  );
+  await MainConfig.initHiveBox();
+  runApp(AppBlocProvider(child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

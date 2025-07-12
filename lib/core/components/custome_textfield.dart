@@ -10,12 +10,14 @@ class CustomeTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? sufix;
   final Widget? prefix;
+  final bool isReadOnly;
   final bool? isObsecure;
   final TextInputAction? textInputAction;
   final TextInputType? keyboardType;
   final double? width;
   const CustomeTextField({
     super.key,
+    this.isReadOnly=false,
     this.title,
     required this.controller,
     this.validator,
@@ -36,6 +38,7 @@ class CustomeTextField extends StatelessWidget {
         children: [
           title != null ? Text(title!) : SizedBox.shrink(),
           TextFormField(
+            readOnly: isReadOnly,
             keyboardType: keyboardType,
             textInputAction: textInputAction ?? TextInputAction.next,
             controller: controller,

@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bashasagar/core/components/app_custom_button.dart';
+import 'package:bashasagar/core/components/app_error_view.dart';
+import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
+import 'package:bashasagar/core/config/language/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
-import 'package:bashasagar/core/controller/localization/localization_controller_cubit.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
-import 'package:bashasagar/features/auth/data/bloc/auth%20api%20controller/auth_api_controller_bloc.dart';
-import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
+import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -37,22 +39,28 @@ class _GetStartScreenState extends State<GetStartScreen> {
 
   @override
   void initState() {
-    Future.microtask(() {});
-
     super.initState();
+    getUiLanguges();
+    if (controller.positions.isNotEmpty) {
+      _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+        if (_currentPage < _totalPages - 1) {
+          _currentPage++;
+          controller.animateToPage(
+            _currentPage,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeInOut,
+          );
+        } else {
+          _timer?.cancel(); // Stop auto-scrolling at last page
+        }
+      });
+    }
+  }
 
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      if (_currentPage < _totalPages - 1) {
-        _currentPage++;
-        controller.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.easeInOut,
-        );
-      } else {
-        _timer?.cancel(); // Stop auto-scrolling at last page
-      }
-    });
+  late GetUiLanguage getUilang;
+  void getUiLanguges() async {
+    context.read<UiLanguageControllerCubit>().initGetStartScreen();
+    getUilang = await GetUiLanguage.create("INTRO");
   }
 
   @override
@@ -67,68 +75,113 @@ class _GetStartScreenState extends State<GetStartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppMargin(
-        child: SafeArea(
-          child: Column(
-            children: [
-              AppSpacer(hp: .01),
+      body: BlocConsumer<UiLanguageControllerCubit, UiLanguageControllerState>(
+        listener: (context, state) async {
+          getUilang = await GetUiLanguage.create("INTRO");
+        },
+        builder: (context, state) {
+          switch (state) {
+            case UiLanguageControllerSuccessState():
+              {
+                return AppMargin(
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        AppSpacer(hp: .01),
 
-              Expanded(
-                child: PageView.builder(
-                  controller: controller,
-                  itemCount: _totalPages,
-                  onPageChanged: (index) {
-                    _currentPage = index;
-                  },
-                  itemBuilder: (context, index) => _pageView(),
-                ),
-              ),
+                        Expanded(
+                          child: PageView.builder(
+                            controller: controller,
+                            itemCount: _totalPages,
+                            onPageChanged: (index) {
+                              _currentPage = index;
+                            },
+                            itemBuilder: (context, index) => _pageView(),
+                          ),
+                        ),
 
-              AppSpacer(hp: .03),
+                        AppSpacer(hp: .03),
 
-              SmoothPageIndicator(
-                controller: controller,
-                count: _totalPages,
-                effect: ExpandingDotsEffect(
-                  dotColor: AppColors.kOrange.withAlpha(100),
-                  activeDotColor: AppColors.kOrange,
-                ),
-                onDotClicked: (index) {
-                  controller.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
+                        SmoothPageIndicator(
+                          controller: controller,
+                          count: _totalPages,
+                          effect: ExpandingDotsEffect(
+                            dotColor: AppColors.kOrange.withAlpha(100),
+                            activeDotColor: AppColors.kOrange,
+                          ),
+                          onDotClicked: (index) {
+                            controller.animateToPage(
+                              index,
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                        ),
 
-              AppSpacer(hp: .05),
+                        AppSpacer(hp: .05),
 
-              CustomDropDown(
-                // selectedValue: state.language['title'],
-                enableTextLetter: true,
-                labelText: "Choose language for app",
-                items: [],
-                onChanged: (value) {
-                  // context
-                  //     .read<LocalizationControllerCubit>()
-                  //     .onchangeLangauge(context, value);
-                },
-              ),
+                        CustomDropDown(
+                          selectedValue: state.selectdLang,
+                          labelText: getUilang.uiText(placeHolder: "INT005"),
+                          items:
+                              state.uiLanguages
+                                  .map(
+                                    (e) => {
+                                      "title": e.uiLanguageName,
+                                      "value": e.uiLanguageId,
+                                      "icon": e.uiImageLight,
+                                    },
+                                  )
+                                  .toList(),
+                          onChanged: (value) async {
+                            log(value.toString());
+                            await context
+                                .read<UiLanguageControllerCubit>()
+                                .onSelectlanguage(lang: value);
+                          },
+                        ),
 
-              AppSpacer(hp: .02),
-              
-              AppCustomButton(
-                title: "GET STARTED",
-                onTap: () {
-                  context.go(authScreen);
-                },
-              ),
+                        AppSpacer(hp: .02),
 
-              AppSpacer(hp: .05),
-            ],
-          ),
-        ),
+                        AppCustomButton(
+                          title: getUilang.uiText(placeHolder: "INT006"),
+                          onTap: () {
+                            context.go(authScreen);
+                          },
+                        ),
+
+                        AppSpacer(hp: .05),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            case UiLanguageControllerErrorState():
+              {
+                return AppErrorView(error: state.errro);
+              }
+            case UiLanguageControllerLoadingState():
+              {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppLoading(),
+                    AppSpacer(hp: .02),
+                    Text(
+                      state.loadingFor,
+                      style: AppStyle.mediumStyle(
+                        color: AppColors.kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                );
+              }
+            default:
+              {
+                return SizedBox();
+              }
+          }
+        },
       ),
     );
   }
@@ -143,16 +196,20 @@ class _GetStartScreenState extends State<GetStartScreen> {
       ),
       AppSpacer(hp: .05),
       Text(
-        "WELCOME TO THE WORLD OF\nINDIAN LANGUAGES",
+        getUilang.uiText(placeHolder: "INT001"),
         textAlign: TextAlign.center,
         style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
       ),
       AppSpacer(hp: .02),
       Text(
-        """Lorem ipsum dolor sit amet, consectetuer
-adipiscing elit, sed diam nonummy
-nibh euismod tincidunt ut laoreet dolore
-magna aliquam exerci tation ullamcorper""",
+        getUilang.uiText(
+          placeHolder:
+              _currentPage == 0
+                  ? "INT002"
+                  : _currentPage == 1
+                  ? "INT003"
+                  : "INT004",
+        ),
         textAlign: TextAlign.center,
         style: AppStyle.smallStyle(color: AppColors.kGrey),
       ),

@@ -63,4 +63,48 @@ class OnVerifyOTP extends AuthApiControllerEvent {
   });
 }
 
-class OnForgetPassword extends AuthApiControllerEvent {}
+class OnForgetPassword extends AuthApiControllerEvent {
+  final BuildContext context;
+  final String customerMobile;
+
+  OnForgetPassword({required this.context, required this.customerMobile});
+}
+
+class OnForgetResendOTP extends AuthApiControllerEvent {
+  final String customerId;
+  final BuildContext context;
+
+  OnForgetResendOTP({required this.customerId, required this.context});
+}
+
+class OnForgetVerifyOTP extends AuthApiControllerEvent {
+  final BuildContext context;
+  final String customerId;
+  final String otp;
+
+  OnForgetVerifyOTP({
+    required this.customerId,
+    required this.otp,
+    required this.context,
+  });
+}
+
+class OnResetPassword extends AuthApiControllerEvent {
+  final BuildContext context;
+  final String customerId;
+  final String password;
+  final String confirmPassword;
+
+  OnResetPassword({
+    required this.context,
+    required this.customerId,
+    required this.password,
+    required this.confirmPassword,
+  });
+}
+
+class OnGetProfileInfo extends AuthApiControllerEvent {
+  final bool storeData;
+
+  OnGetProfileInfo({ this.storeData=false});
+}

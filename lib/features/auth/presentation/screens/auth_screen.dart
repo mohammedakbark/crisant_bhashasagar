@@ -18,46 +18,57 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: AppColors.kPrimaryColor,
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Container(
+          height: ResponsiveHelper.hp,
+          color: AppColors.kPrimaryColor,
+          child: SafeArea(
+            bottom: false,
+            child: Stack(
+              children: [
+                Container(
+                  height: 400,
+                  width: ResponsiveHelper.wp,
                   margin: EdgeInsets.symmetric(horizontal: 39, vertical: 30),
                   color: AppColors.kPrimaryLight,
                 ),
-              ),
 
-              BlocBuilder<AuthStateControllerCubit, AuthStateControllerState>(
-                builder: (context, state) {
-                  switch (state.authTab) {
-                    case AuthTab.LOGIN:
-                      {
-                        return Login();
+                // Spacer(),
+                Positioned(
+                  bottom: 0,
+                  child: BlocBuilder<
+                    AuthStateControllerCubit,
+                    AuthStateControllerState
+                  >(
+                    builder: (context, state) {
+                      switch (state.authTab) {
+                        case AuthTab.LOGIN:
+                          {
+                            return Login();
+                          }
+                        case AuthTab.REGISTER:
+                          {
+                            return Register();
+                          }
+                        case AuthTab.VERIFYOTP:
+                          {
+                            return VerifyOtp();
+                          }
+                        case AuthTab.FORGETPASSWORD:
+                          {
+                            return ForgetPassword();
+                          }
+                        case AuthTab.RESETPASSWORD:
+                          {
+                            return ResentPassword();
+                          }
                       }
-                    case AuthTab.REGISTER:
-                      {
-                        return Register();
-                      }
-                    case AuthTab.VERIFYOTP:
-                      {
-                        return VerifyOtp();
-                      }
-                    case AuthTab.FORGETPASSWORD:
-                      {
-                        return ForgetPassword();
-                      }
-                    case AuthTab.RESETPASSWORD:
-                      {
-                        return ResentPassword();
-                      }
-                  }
-                },
-              ),
-            ],
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

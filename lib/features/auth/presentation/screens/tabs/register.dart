@@ -4,6 +4,7 @@ import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_response_text.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custome_textfield.dart';
+import 'package:bashasagar/core/config/language/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
@@ -15,13 +16,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:solar_icons/solar_icons.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   Register({super.key});
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
   final _regNameController = TextEditingController();
+
   final _regMobileController = TextEditingController();
+
   final _passwordController = TextEditingController();
+
   final _confirmPasswordController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    initUi();
+    super.initState();
+  }
+
+  bool initializingUI = true;
+  late GetUiLanguage getUilang;
+
+  void initUi() async {
+    getUilang = await GetUiLanguage.create("LOGIN");
+    initializingUI = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SlideInUp(
@@ -30,9 +57,9 @@ class Register extends StatelessWidget {
         width: ResponsiveHelper.wp,
         decoration: BoxDecoration(
           color: AppColors.kWhite,
-          borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(ResponsiveHelper.borderRadiusLarge),
-            right: Radius.circular(ResponsiveHelper.borderRadiusLarge),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(ResponsiveHelper.borderRadiusLarge),
+            topRight: Radius.circular(ResponsiveHelper.borderRadiusLarge),
           ),
         ),
         child: Form(

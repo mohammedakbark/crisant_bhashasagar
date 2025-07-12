@@ -51,6 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         AppSpacer(hp: .02),
         CustomDropDown(
+          selectedValue: {},
           width: ResponsiveHelper.wp,
           // selectedValue: state.language['title'],
           items:[],
@@ -60,7 +61,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             //   map,
             // );
           },
-          enableTextLetter: true,
         ),
       ],
     );

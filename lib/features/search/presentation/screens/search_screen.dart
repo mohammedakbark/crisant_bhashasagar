@@ -20,6 +20,7 @@ class SearchScreen extends StatelessWidget {
     return Column(
       children: [
         CustomDropDown(
+          selectedValue: selectedValue,
           width: ResponsiveHelper.wp,
           hintText: "choose_language",
           prefix: Icon(CupertinoIcons.globe, color: AppColors.kBlack),

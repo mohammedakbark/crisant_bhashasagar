@@ -12,6 +12,7 @@ class AuthStateControllerCubit extends Cubit<AuthStateControllerState> {
     : super(AuthStateControllerInitial(AuthTab.LOGIN, {}, null));
 
   void onChangeAuthTab(AuthTab authTab, {Object? params}) {
+    _timer?.cancel();
     emit(AuthStateControllerInitial(authTab, params, null));
   }
 

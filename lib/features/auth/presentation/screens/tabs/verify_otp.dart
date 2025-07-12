@@ -3,6 +3,7 @@ import 'package:bashasagar/core/components/app_custom_button.dart';
 import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_response_text.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
+import 'package:bashasagar/core/config/language/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
@@ -13,14 +14,36 @@ import 'package:bashasagar/features/auth/data/bloc/auth%20api%20controller/auth_
 import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:path/path.dart';
+
 import 'package:pinput/pinput.dart';
 
-class VerifyOtp extends StatelessWidget {
-  VerifyOtp({super.key});
+class VerifyOtp extends StatefulWidget {
+  const VerifyOtp({super.key});
+
+  @override
+  State<VerifyOtp> createState() => _VerifyOtpState();
+}
+
+class _VerifyOtpState extends State<VerifyOtp> {
   final _otpController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    initUi();
+    super.initState();
+  }
+
+  bool initializingUI = true;
+  late GetUiLanguage getUilang;
+
+  void initUi() async {
+    getUilang = await GetUiLanguage.create("LOGIN");
+    initializingUI = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SlideInUp(
@@ -29,9 +52,9 @@ class VerifyOtp extends StatelessWidget {
         width: ResponsiveHelper.wp,
         decoration: BoxDecoration(
           color: AppColors.kWhite,
-          borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(ResponsiveHelper.borderRadiusLarge),
-            right: Radius.circular(ResponsiveHelper.borderRadiusLarge),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(ResponsiveHelper.borderRadiusLarge),
+            topRight: Radius.circular(ResponsiveHelper.borderRadiusLarge),
           ),
         ),
         child: Form(
