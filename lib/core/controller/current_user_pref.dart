@@ -14,7 +14,7 @@ class CurrentUserPref {
   static const _APPLANG = "APPLANG";
 
   static Future<void> setUserData(CurrentUserModel userModel) async {
-    log("name is :=${userModel.name}");
+    // log("name is :=${userModel.name}");
     final existingData = await getUserData;
     final pref = await SharedPreferences.getInstance();
     await pref.setString(_TOKEN, userModel.token ?? existingData.token ?? '');

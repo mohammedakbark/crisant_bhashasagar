@@ -6,6 +6,6 @@ const authSuccessScreen = "/authSuccessScreen";
 const welcomeScreen = "/welcomeScreen";
 const routeScreen = "/routeScreen";
 
-const learningPathScreen = "/learningPathScreen";
-const topicListScreen = "/topicListScreen";
+const primaryCategoryScreen = "/primaryCategoryScreen";
+const secondaryCategoryScreen = "/secondaryCategoryScreen";
 const visualLearningScreen = "/visualLearningScreen";

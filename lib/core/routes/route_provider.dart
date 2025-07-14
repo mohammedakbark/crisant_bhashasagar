@@ -4,8 +4,8 @@ import 'package:bashasagar/features/auth/presentation/screens/get_start_screen.d
 import 'package:bashasagar/features/auth/presentation/screens/auth_screen.dart';
 import 'package:bashasagar/features/auth/presentation/screens/auth_success_screen.dart';
 import 'package:bashasagar/features/auth/presentation/screens/welcome_screen.dart';
-import 'package:bashasagar/features/session/presentation/screens/learning_path_screen.dart';
-import 'package:bashasagar/features/session/presentation/screens/topic_list_screen.dart';
+import 'package:bashasagar/features/session/presentation/screens/primary_category_screen.dart';
+import 'package:bashasagar/features/session/presentation/screens/secondary_category_screen.dart';
 import 'package:bashasagar/features/session/presentation/screens/visual_learning_screen.dart';
 import 'package:bashasagar/features/navigation_screen.dart';
 import 'package:bashasagar/features/splash_screen.dart';
@@ -19,10 +19,7 @@ class RouteProvider {
     navigatorKey: rootNavigatorKey,
     initialLocation: initilaScreen,
     routes: [
-      GoRoute(
-        path: initilaScreen,
-        builder: (context, state) => SplashScreen(),
-      ),
+      GoRoute(path: initilaScreen, builder: (context, state) => SplashScreen()),
       GoRoute(
         path: getStartScreen,
         builder: (context, state) => GetStartScreen(),
@@ -57,24 +54,31 @@ class RouteProvider {
       ),
       //--- --- --- ---
       GoRoute(
-        path: learningPathScreen,
+        path: primaryCategoryScreen,
         builder: (context, state) {
           final body = state.extra as Map<String, dynamic>;
           final language = body['language'];
-          return LearningPathScreen(language: language);
+          final id = body['langaugeId'];
+          return PrimaryCategoryScreen(language: language, languageId: id);
         },
       ),
       GoRoute(
-        path: topicListScreen,
+        path: secondaryCategoryScreen,
         builder: (context, state) {
           final body = state.extra as Map<String, dynamic>;
           final language = body['language'];
-          return TopicListScreen(language: language);
+          final langId = body["languageId"];
+          final primaryCategoryId = body["primaryCategoryId"];
+          return SecondaryCategoryScreen(
+            language: language,
+            langId: langId,
+            primaryCategoryId: primaryCategoryId,
+          );
         },
       ),
       GoRoute(
         path: visualLearningScreen,
-       builder: (context, state) {
+        builder: (context, state) {
           final body = state.extra as Map<String, dynamic>;
           final language = body['language'];
           return VisualLearningScreen(language: language);

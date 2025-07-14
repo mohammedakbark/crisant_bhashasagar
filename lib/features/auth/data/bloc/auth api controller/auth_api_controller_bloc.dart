@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
 import 'package:bashasagar/core/models/current_user_model.dart';
@@ -16,6 +17,7 @@ import 'package:bashasagar/features/auth/data/repo/registration_repo.dart';
 import 'package:bashasagar/features/auth/data/repo/reset_password_repo.dart';
 import 'package:bashasagar/features/profile/data/models/profile_model.dart';
 import 'package:bashasagar/features/profile/data/repo/profile_repo.dart';
+import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -49,7 +51,6 @@ class AuthApiControllerBloc
     final response = await LoginRepo.onLogin(
       mobileNumber: event.mobileNumber,
       password: event.password,
-      
     );
     if (response.isError) {
       await _errorDisposer(emit, response.data.toString());
@@ -65,6 +66,12 @@ class AuthApiControllerBloc
           password: event.password,
         ),
       );
+
+      if (event.context.mounted) {
+        await event.context
+            .read<UiLanguageControllerCubit>()
+            .updateUiLanguageInServer();
+      }
       if (event.context.mounted) {
         event.context.go(routeScreen);
       }
@@ -82,7 +89,6 @@ class AuthApiControllerBloc
       name: event.customerName,
       mobileNumber: event.mobileNumber,
       password: event.password,
-      
     );
 
     if (response.isError) {
@@ -108,7 +114,6 @@ class AuthApiControllerBloc
     final response = await RegisterVerifyOtpRepo.onVerifyOTP(
       customerId: event.customerId,
       otp: event.otp,
-      
     );
 
     if (response.isError) {
@@ -116,13 +121,16 @@ class AuthApiControllerBloc
     } else {
       final data = response.data as Map<String, dynamic>;
       emit(AuthApiControllerSuccessState(previouseResponse: data));
+      final getUilang = await GetUiLanguage.create("REGISTEROTP");
+
       if (event.context.mounted) {
         event.context.go(
           authSuccessScreen,
           extra: {
-            "successTitle": "SIGN UP SUCCESSFULLY",
-            "successMessage": "Your account has been created successfully.",
-            "buttonTitle": "LOGIN",
+            "successTitle":
+                getUilang.uiText(placeHolder: "REGS001").toUpperCase(),
+            "successMessage": getUilang.uiText(placeHolder: "REGS002"),
+            "buttonTitle":getUilang.uiText(placeHolder: "REGS003"),
             "nextAuthTab": AuthTab.LOGIN,
             // "nextScreen":authScreen
           },
@@ -138,7 +146,6 @@ class AuthApiControllerBloc
     emit(AuthApiControllerLoadingState());
     final response = await RegisterResendOtpRepo.onResendOTP(
       customerId: event.customerId,
-      
     );
 
     if (response.isError) {
@@ -158,7 +165,6 @@ class AuthApiControllerBloc
   ) async {
     emit(AuthApiControllerLoadingState());
     final response = await ForegetPasswordRepo.onForgetPassword(
-      
       mobileNumber: event.customerMobile,
     );
 
@@ -190,7 +196,6 @@ class AuthApiControllerBloc
     final response = await ForegetPasswordVerifyOtpRepo.onVerifyOTP(
       customerId: event.customerId,
       otp: event.otp,
-      
     );
 
     if (response.isError) {
@@ -222,7 +227,6 @@ class AuthApiControllerBloc
     emit(AuthApiControllerLoadingState());
     final response = await ForgetPasswordResendOtpRepo.onResendOTP(
       customerId: event.customerId,
-      
     );
 
     if (response.isError) {
@@ -253,21 +257,20 @@ class AuthApiControllerBloc
       customerId: event.customerId,
       confirmPassword: event.confirmPassword,
       password: event.password,
-      
     );
 
     if (response.isError) {
       await _errorDisposer(emit, response.data.toString());
     } else {
       emit(AuthApiControllerSuccessState(previouseResponse: {}));
-
+      final getUilang = await GetUiLanguage.create("RESETPWDSUCCESS");
       if (event.context.mounted) {
         event.context.go(
           authSuccessScreen,
           extra: {
-            "successTitle": "RESET SUCCESSFULLY",
-            "successMessage": "Your password has been reset successfully.",
-            "buttonTitle": "CONTINUE",
+            "successTitle": getUilang.uiText(placeHolder: "RES001"),
+            "successMessage": getUilang.uiText(placeHolder: "RES002"),
+            "buttonTitle": getUilang.uiText(placeHolder: "RES003"),
             "nextAuthTab": AuthTab.LOGIN,
           },
         );

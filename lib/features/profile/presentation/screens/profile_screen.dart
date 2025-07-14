@@ -3,9 +3,9 @@ import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custome_textfield.dart';
+import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/controller/current_user_pref.dart';
-import 'package:bashasagar/core/controller/localization/localization_controller_cubit.dart';
 import 'package:bashasagar/core/controller/nav%20controller/nav_controller_dart_cubit.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
@@ -26,12 +26,18 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _genderController = TextEditingController();
+  final _ageController = TextEditingController();
+  final _addressController = TextEditingController();
 
   final _passwordController = TextEditingController();
 
   final _confirmPasswordController = TextEditingController();
   @override
   void initState() {
+    initUi();
+
     super.initState();
     Future.microtask(() {
       if (mounted) {
@@ -42,77 +48,126 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  bool initializingUI = true;
+  late GetUiLanguage getUilang;
+
+  void initUi() async {
+    getUilang = await GetUiLanguage.create("PROFILE");
+    initializingUI = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthApiControllerBloc, AuthApiControllerState>(
-      builder: (context, state) {
-        if (state is AuthApiFetchProfileState) {
-          _nameController.text = state.profileModel.userinfo.customerName;
-          return Column(
-            children: [
-              CustomeTextField(
-                prefix: Icon(SolarIconsOutline.iPhone),
-                lebelText: "Full name",
-                width: ResponsiveHelper.wp,
-                controller: _nameController,
-              ),
-              AppSpacer(hp: .02),
+    return initializingUI
+        ? AppLoading()
+        : BlocBuilder<AuthApiControllerBloc, AuthApiControllerState>(
+          builder: (context, state) {
+            if (state is AuthApiFetchProfileState) {
+              _nameController.text = state.profileModel.userinfo.customerName;
+              return Column(
+                children: [
+                  CustomeTextField(
+                    prefix: Icon(Icons.person_2),
+                    lebelText: getUilang.uiText(placeHolder: "PRO002"),
+                    width: ResponsiveHelper.wp,
+                    controller: _nameController,
+                  ),
+                  AppSpacer(hp: .02),
+                  CustomeTextField(
+                    prefix: Icon(Icons.mail),
+                    lebelText: getUilang.uiText(placeHolder: "PRO003"),
+                    width: ResponsiveHelper.wp,
+                    controller: _emailController,
+                  ),
+                  AppSpacer(hp: .02),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: CustomeTextField(
+                          prefix: Icon(Icons.person),
+                          lebelText: getUilang.uiText(placeHolder: "PRO004"),
+                          width: ResponsiveHelper.wp,
+                          controller: _genderController,
+                        ),
+                      ),
+                      AppSpacer(wp: .04),
+                      Flexible(
+                        child: CustomeTextField(
+                          prefix: Icon(Icons.cake),
+                          lebelText: getUilang.uiText(placeHolder: "PRO005"),
+                          width: ResponsiveHelper.wp,
+                          controller: _ageController,
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSpacer(hp: .02),
+                  CustomeTextField(
+                    prefix: Icon(Icons.location_on),
+                    lebelText: getUilang.uiText(placeHolder: "PRO006"),
+                    width: ResponsiveHelper.wp,
+                    controller: _addressController,
+                  ),
+                  AppSpacer(hp: .02),
 
-              Text(
-                textAlign: TextAlign.center,
-                "profile_hint",
-                style: AppStyle.mediumStyle(color: AppColors.kOrange),
-              ),
-              AppSpacer(hp: .02),
-              CustomeTextField(
-                prefix: Icon(SolarIconsOutline.lockKeyhole),
-                lebelText: "Password",
-                width: ResponsiveHelper.wp,
-                controller: _passwordController,
-              ),
-              AppSpacer(hp: .03),
-              CustomeTextField(
-                prefix: Icon(SolarIconsOutline.lockKeyhole),
-                lebelText: "Repeat Password",
-                width: ResponsiveHelper.wp,
-                controller: _confirmPasswordController,
-              ),
+                  Text(
+                    textAlign: TextAlign.center,
+                    getUilang.uiText(placeHolder: "PRO007"),
+                    style: AppStyle.mediumStyle(color: AppColors.kOrange),
+                  ),
+                  AppSpacer(hp: .02),
+                  CustomeTextField(
+                    prefix: Icon(SolarIconsOutline.lockKeyhole),
+                    lebelText: getUilang.uiText(placeHolder: "PRO008"),
+                    width: ResponsiveHelper.wp,
+                    controller: _passwordController,
+                  ),
+                  AppSpacer(hp: .03),
+                  CustomeTextField(
+                    prefix: Icon(SolarIconsOutline.lockKeyhole),
+                    lebelText: getUilang.uiText(placeHolder: "PRO009"),
+                    width: ResponsiveHelper.wp,
+                    controller: _confirmPasswordController,
+                  ),
 
-              AppSpacer(hp: .05),
-              AppCustomButton(
-                width: ResponsiveHelper.wp,
-                title: "UPDATE",
-                onTap: () {},
-              ),
+                  AppSpacer(hp: .05),
+                  AppCustomButton(
+                    width: ResponsiveHelper.wp,
+                    title: getUilang.uiText(placeHolder: "PRO010"),
+                    onTap: () {},
+                  ),
 
-              AppSpacer(hp: .02),
-              AppCustomButton(
-                bgColor: AppColors.kRed,
-                width: ResponsiveHelper.wp,
-                title: "LOGOUT",
-                onTap: () {
-                  LogoutBottomSheetHelper.show(
-                    context,
-                    onConfirm: () async {
-                      context.go(initilaScreen);
+                  AppSpacer(hp: .02),
+                  AppCustomButton(
+                    bgColor: AppColors.kRed,
+                    width: ResponsiveHelper.wp,
+                    title: "LOGOUT",
+                    onTap: () {
+                      LogoutBottomSheetHelper.show(
+                        context,
+                        onConfirm: () async {
+                          context.go(initilaScreen);
 
-                      context.read<NavControllerDartCubit>().onChangeNavTab(0);
-                      await CurrentUserPref.clearPref();
+                          context.read<NavControllerDartCubit>().onChangeNavTab(
+                            0,
+                          );
+                          await CurrentUserPref.clearPref();
+                        },
+                        onCancel: () {
+                          context.pop();
+                        },
+                      );
                     },
-                    onCancel: () {
-                      context.pop();
-                    },
-                  );
-                },
-              ),
-            ],
-          );
-        } else if (state is AuthApiControllerErrorState) {
-          return AppErrorView(error: state.error);
-        } else {
-          return AppLoading();
-        }
-      },
-    );
+                  ),
+                ],
+              );
+            } else if (state is AuthApiControllerErrorState) {
+              return AppErrorView(error: state.error);
+            } else {
+              return AppLoading();
+            }
+          },
+        );
   }
 }

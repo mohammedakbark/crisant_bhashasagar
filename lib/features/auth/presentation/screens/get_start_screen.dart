@@ -7,14 +7,16 @@ import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
-import 'package:bashasagar/core/config/language/get_ui_language.dart';
+import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/const/img_const.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -189,9 +191,10 @@ class _GetStartScreenState extends State<GetStartScreen> {
   Widget _pageView() => Column(
     children: [
       Expanded(
-        child: Container(
-          color: AppColors.kPrimaryColor,
+        child: SizedBox(
           width: ResponsiveHelper.wp * 0.8,
+          height: ResponsiveHelper.hp * .3,
+          child: Image.asset(ImgConst.getStartHead),
         ),
       ),
       AppSpacer(hp: .05),

@@ -1,4 +1,5 @@
 import 'package:bashasagar/core/const/appcolors.dart';
+import 'package:bashasagar/core/const/img_const.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 
@@ -27,11 +28,22 @@ class AuthScreen extends StatelessWidget {
             bottom: false,
             child: Stack(
               children: [
-                Container(
-                  height: 400,
-                  width: ResponsiveHelper.wp,
-                  margin: EdgeInsets.symmetric(horizontal: 39, vertical: 30),
-                  color: AppColors.kPrimaryLight,
+                BlocBuilder<AuthStateControllerCubit, AuthStateControllerState>(
+                  builder: (context, state) {
+                    return Container(
+                      width: ResponsiveHelper.wp,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 39,
+                        vertical: 30,
+                      ),
+
+                      child: Image.asset(
+                        state.authTab == AuthTab.VERIFYOTP
+                            ? ImgConst.verify
+                            : ImgConst.login,
+                      ),
+                    );
+                  },
                 ),
 
                 // Spacer(),

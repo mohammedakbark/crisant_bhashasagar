@@ -16,10 +16,12 @@ class CustomDropDown extends StatefulWidget {
   final double? width;
 
   final Widget? prefix;
+  final Widget? sufix;
 
   const CustomDropDown({
     super.key,
     this.title,
+    this.sufix,
     required this.items,
     required this.onChanged,
     // this.value,
@@ -53,7 +55,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
             items:
                 widget.items.map((item) {
                   final value = item['value'];
-                  final title = item['title'] as String;
+                  final title = item['title'].toString(); 
                   final langIcon = item['icon'] as String?;
                   return DropdownMenuItem(
                     value: item,
@@ -106,7 +108,9 @@ class _CustomDropDownState extends State<CustomDropDown> {
 
             decoration: InputDecoration(
               prefixIcon: widget.prefix,
-              suffixIcon: Icon(Icons.arrow_drop_down, color: AppColors.kGrey),
+              suffixIcon:
+                  widget.sufix ??
+                  Icon(Icons.arrow_drop_down, color: AppColors.kGrey),
               labelText: widget.labelText,
               labelStyle: AppStyle.normalStyle(
                 color: AppColors.kGrey,

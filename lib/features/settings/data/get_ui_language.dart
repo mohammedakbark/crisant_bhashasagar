@@ -13,14 +13,14 @@ class GetUiLanguage  {
   static Future<GetUiLanguage> create(String currentpage) async {
     _currentPage = currentpage;
     // Assuming this returns List<UiInstructionModel>
-    final instructions = await UiLanguageControllerCubit.getCurrentUILanguage;
+    final instructions = await UiLanguageControllerCubit.getCurrentUILanguageFromHive;
     if (instructions.isNotEmpty) {
       log("USED SELECTED LANGUGE");
       return GetUiLanguage._(instructions);
     } else {
       log("USED DEFAULT LANGUGE");
 
-      final instructions = await UiLanguageControllerCubit.getInstructions;
+      final instructions = await UiLanguageControllerCubit.getAllInstructionsFromHive;
       final englishInstructions =
           instructions.where((element) => element.uiLanguageId == "1").toList();
       return GetUiLanguage._(englishInstructions);
@@ -28,7 +28,7 @@ class GetUiLanguage  {
   }
 
   String uiText({required String placeHolder}) {
-    log(uiInstructions.length.toString());
+    // log(uiInstructions.length.toString());
     return uiInstructions
         .firstWhere(
           (element) =>

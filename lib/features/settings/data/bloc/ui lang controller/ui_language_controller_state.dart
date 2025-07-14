@@ -27,6 +27,7 @@ final class UiLanguageControllerLoadingState extends UiLanguageControllerState {
 final class UiLanguageControllerSuccessState extends UiLanguageControllerState {
   final List<UiLangModel> uiLanguages;
   final List<UiInstructionModel> instructions;
+  
 
   const UiLanguageControllerSuccessState({
     required this.uiLanguages,

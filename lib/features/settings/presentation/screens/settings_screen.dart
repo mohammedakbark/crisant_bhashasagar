@@ -1,11 +1,17 @@
+import 'dart:developer';
 
 import 'package:bashasagar/core/components/app_custom_button.dart';
+import 'package:bashasagar/core/components/app_error_view.dart';
+import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
+import 'package:bashasagar/core/components/custom_network_img.dart';
+import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
-import 'package:bashasagar/features/settings/data/bloc/language%20selection%20controller/language_selection_controller_cubit.dart';
+import 'package:bashasagar/features/settings/data/bloc/learn%20lang%20controller/learn_lang_selection_controller_cubit.dart';
+import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,152 +23,232 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool initializingUI = true;
+  late GetUiLanguage getUilang;
+
+  Future<void> initUi() async {
+    try {
+      if (mounted) {
+        await context.read<UiLanguageControllerCubit>().getLanguages();
+      }
+      if (mounted) {
+        await context.read<LearnLangControllerCubit>().onGetLearnLanguages();
+      }
+
+      getUilang = await GetUiLanguage.create("SETTINGS");
+      await loadLanguages();
+      initializingUI = false;
+      setState(() {});
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   @override
   void initState() {
-    super.initState();
-    Future.microtask(() {
-      // context.read<LocalizationControllerCubit>().initCurrentLan(context);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await initUi();
     });
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+  }
+
+  List<Map<String, dynamic>> newLanguages = [];
+  Future<void> loadLanguages() async {
+    if (mounted) {
+      final state = context.read<UiLanguageControllerCubit>().state;
+      if (state is UiLanguageControllerSuccessState) {
+        final languages = state.uiLanguages;
+        for (var lang in languages) {
+          final uiText = await context
+              .read<UiLanguageControllerCubit>()
+              .findText("LANGUAGE", lang.uiLanguageName);
+          newLanguages.add({
+            "title": uiText,
+            "value": lang.uiLanguageId,
+            "icon": lang.uiImageLight,
+          });
+        }
+        log(newLanguages.length.toString());
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child:
-         Column(
+    return initializingUI
+        ? AppLoading()
+        : BlocConsumer<UiLanguageControllerCubit, UiLanguageControllerState>(
+          listener: (context, state) async {
+            getUilang = await GetUiLanguage.create("SETTINGS");
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildChangeLangForAppViw(),
                   AppSpacer(hp: .04),
                   _buildLearnLangView(),
+                  AppSpacer(hp: .04),
+
+                  AppCustomButton(
+                    title: getUilang.uiText(placeHolder: "SET005"),
+                    width: ResponsiveHelper.wp,
+                    onTap: () async {
+                      await context
+                          .read<LearnLangControllerCubit>()
+                          .onSetLearningLanguages();
+                    },
+                  ),
+                  AppSpacer(hp: .04),
                 ],
-          
-          ),
-    );
+              ),
+            );
+          },
+        );
   }
 
   Widget _buildChangeLangForAppViw() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "change_lan_for_app",
-          style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
-        ),
-        AppSpacer(hp: .02),
-        CustomDropDown(
-          selectedValue: {},
-          width: ResponsiveHelper.wp,
-          // selectedValue: state.language['title'],
-          items:[],
-          onChanged: (map) {
-            // context.read<LocalizationControllerCubit>().onchangeLangauge(
-            //   context,
-            //   map,
-            // );
-          },
-        ),
-      ],
+    return BlocBuilder<UiLanguageControllerCubit, UiLanguageControllerState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              getUilang.uiText(placeHolder: "SET002"),
+              style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
+            ),
+            AppSpacer(hp: .02),
+            CustomDropDown(
+              sufix:
+                  state is UiLanguageControllerLoadingState
+                      ? AppLoading()
+                      : null,
+              hintText: getUilang.uiText(placeHolder: "SET003"),
+              selectedValue: state.selectdLang,
+              width: ResponsiveHelper.wp,
+              // selectedValue: state.language['title'],
+              items: newLanguages.map((e) => e).toList(),
+              onChanged: (value) async {
+                log(value.toString());
+                await context
+                    .read<UiLanguageControllerCubit>()
+                    .onSelectlanguage(lang: value);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
   Widget _buildLearnLangView() {
-    final controller = context.read<LanguageSelectionControllerCubit>();
+    final controller = context.read<LearnLangControllerCubit>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "choose_lang_to_learn",
+          getUilang.uiText(placeHolder: "SET004"),
           style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
         ),
         AppSpacer(hp: .02),
-        BlocBuilder<
-          LanguageSelectionControllerCubit,
-          LanguageSelectionControllerState
-        >(
+        BlocBuilder<LearnLangControllerCubit, LearnLangControllerState>(
           builder: (context, state) {
-            return GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: state.languages.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (context, index) {
-                final lang = state.languages[index];
-                bool isSelected = controller.isLanguageSelected(lang);
-                return InkWell(
-                  onTap: () => controller.onAddToLangauge(lang),
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(ResponsiveHelper.paddingMedium),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        ResponsiveHelper.borderRadiusMedium,
-                      ),
-                      border: Border.all(
-                        width: .5,
-                        color: AppColors.kPrimaryColor,
-                      ),
-                      color:
-                          isSelected
-                              ? AppColors.kPrimaryColor
-                              : AppColors.kWhite,
+            switch (state) {
+              case LearnLanguageSuccessState():
+                {
+                  return GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: state.languages.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
+                    itemBuilder: (context, index) {
+                      final lang = state.languages[index];
+                      bool isSelected = controller.isLanguageSelected(lang);
+                      return InkWell(
+                        onTap: () => controller.onAddToLangauge(lang),
+                        child: Container(
                           alignment: Alignment.center,
-                          width: ResponsiveHelper.wp * .13,
-                          height: ResponsiveHelper.wp * .12,
+                          padding: EdgeInsets.all(
+                            ResponsiveHelper.paddingMedium,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(
                               ResponsiveHelper.borderRadiusMedium,
                             ),
-                            color:
-                                isSelected
-                                    ? AppColors.kWhite
-                                    : AppColors.kGreyLight,
-                          ),
-                          child: Text(
-                            lang[0].toUpperCase(),
-                            style: AppStyle.mediumStyle(
-                              fontSize: ResponsiveHelper.fontLarge,
-                              color:
-                                  isSelected
-                                      ? AppColors.kPrimaryColor
-                                      : AppColors.kBlack,
+                            border: Border.all(
+                              width: .5,
+                              color: AppColors.kPrimaryColor,
                             ),
-                          ),
-                        ),
-                        AppSpacer(hp: .01),
-                        Text(
-                          lang,
-                          style: AppStyle.mediumStyle(
                             color:
                                 isSelected
-                                    ? AppColors.kWhite
-                                    : AppColors.kBlack,
+                                    ? AppColors.kPrimaryColor
+                                    : AppColors.kWhite,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 10,
+                                ),
+                                width: ResponsiveHelper.wp * .13,
+                                height: ResponsiveHelper.wp * .12,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    ResponsiveHelper.borderRadiusMedium,
+                                  ),
+                                  color:
+                                      isSelected
+                                          ? AppColors.kWhite
+                                          : AppColors.kGreyLight,
+                                ),
+                                child: CustomNetworkImg(
+                                  path: lang.lanuageImageDark,
+                                ),
+                              ),
+                              AppSpacer(hp: .01),
+                              Flexible(
+                                child: Text(
+                                  maxLines: 1,
+                                  lang.languageName,
+                                  style: AppStyle.mediumStyle(
+                                    color:
+                                        isSelected
+                                            ? AppColors.kWhite
+                                            : AppColors.kBlack,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
+                      );
+                    },
+                  );
+                }
+              case LearnLanguageErrorState():
+                {
+                  return AppErrorView(error: state.error);
+                }
+              default:
+                {
+                  return AppLoading();
+                }
+            }
           },
-        ),
-
-        AppSpacer(hp: .03),
-        AppCustomButton(
-          title: "UPDATE",
-          width: ResponsiveHelper.wp,
-          onTap: () {},
         ),
       ],
     );
