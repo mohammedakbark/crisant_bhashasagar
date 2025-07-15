@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bashasagar/core/utils/show_messages.dart';
 import 'package:bashasagar/features/settings/data/models/learn_language_model.dart';
+import 'package:bashasagar/features/settings/data/models/settings_language_model.dart';
 import 'package:bashasagar/features/settings/data/repo/get_learn_languages_repo.dart';
 import 'package:bashasagar/features/settings/data/repo/set_learn_lang_preference_repo.dart';
 import 'package:bloc/bloc.dart';
@@ -11,15 +12,18 @@ part 'learn_lang_selection_controller_state.dart';
 
 class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
   LearnLangControllerCubit() : super(LearnLangControllerInitial());
-  Future<void> onGetLearnLanguages() async {
+  Future<void> onGetSettingsLanguages() async {
     emit(LearnLangLoadingState());
-    final response = await GetLearnLanguagesRepo.onGetLearnLanguages();
+    final response = await GetLearnLanguagesRepo.onGetSettingsLanguages();
     if (response.isError) {
       emit(LearnLanguageErrorState(error: response.data as String));
     } else {
+      final langs = response.data as List<SettingsLanguageModel>;
       emit(
         LearnLanguageSuccessState(
-          languages: response.data as List<LearnLanguageModel>,
+          selectedLanguages:
+              langs.where((element) => element.selected == "YES").toList(),
+          languages: langs,
         ),
       );
     }
@@ -34,7 +38,7 @@ class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
             currentState.selectedLanguages.map((e) => e.languageId).toList(),
       );
       if (response.isError) {
-        showToast(response.data.toString(),isError: true);
+        showToast(response.data.toString(), isError: true);
         emit(currentState.copyWith(isLoadingButton: false));
       } else {
         log(response.data.toString());
@@ -44,7 +48,7 @@ class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
     }
   }
 
-  void onAddToLangauge(LearnLanguageModel language) {
+  void onAddToLangauge(SettingsLanguageModel language) {
     final currentState = state;
 
     if (currentState is LearnLanguageSuccessState) {
@@ -61,6 +65,6 @@ class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
     }
   }
 
-  bool isLanguageSelected(LearnLanguageModel lang) =>
+  bool isLanguageSelected(SettingsLanguageModel lang) =>
       state.selectedLanguages.contains(lang);
 }

@@ -47,8 +47,8 @@ class _SearchScreenState extends State<SearchScreen> {
         : Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(getUilang.uiText(placeHolder: "GLS001")),
-            AppSpacer(hp: .01),
+            // Text(getUilang.uiText(placeHolder: "GLS001")),
+            // AppSpacer(hp: .01),
             CustomDropDown(
               selectedValue: selectedValue,
               width: ResponsiveHelper.wp,

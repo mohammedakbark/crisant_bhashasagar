@@ -29,14 +29,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> initUi() async {
     try {
       if (mounted) {
-        await context.read<UiLanguageControllerCubit>().getLanguages();
+        await context
+            .read<UiLanguageControllerCubit>()
+            .getLanguagesForDropdown();
       }
       if (mounted) {
-        await context.read<LearnLangControllerCubit>().onGetLearnLanguages();
+        await context.read<LearnLangControllerCubit>().onGetSettingsLanguages();
       }
 
       getUilang = await GetUiLanguage.create("SETTINGS");
-      await loadLanguages();
+      // await loadLanguages();
       initializingUI = false;
       setState(() {});
     } catch (e) {
@@ -57,26 +59,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.dispose();
   }
 
-  List<Map<String, dynamic>> newLanguages = [];
-  Future<void> loadLanguages() async {
-    if (mounted) {
-      final state = context.read<UiLanguageControllerCubit>().state;
-      if (state is UiLanguageControllerSuccessState) {
-        final languages = state.uiLanguages;
-        for (var lang in languages) {
-          final uiText = await context
-              .read<UiLanguageControllerCubit>()
-              .findText("LANGUAGE", lang.uiLanguageName);
-          newLanguages.add({
-            "title": uiText,
-            "value": lang.uiLanguageId,
-            "icon": lang.uiImageLight,
-          });
-        }
-        log(newLanguages.length.toString());
-      }
-    }
-  }
+  // List<Map<String, dynamic>> newLanguages = [];
+  // Future<void> loadLanguages() async {
+  //   newLanguages = [];
+  //   if (mounted) {
+  //     final state = context.read<UiLanguageControllerCubit>().state;
+  //     if (state is UiLanguageControllerSuccessState) {
+  //       final languages = state.uiDropLanguages;
+  //       for (var lang in languages) {
+  //         final uiText = await context
+  //             .read<UiLanguageControllerCubit>()
+  //             .findText("LANGUAGE", lang.uiLanguageName);
+  //         newLanguages.add({
+  //           "title": uiText,
+  //           "value": lang.uiLanguageId,
+  //           "icon": lang.uiImageLight,
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -133,12 +135,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               selectedValue: state.selectdLang,
               width: ResponsiveHelper.wp,
               // selectedValue: state.language['title'],
-              items: newLanguages.map((e) => e).toList(),
+              items: state.convertedLangsToDropDown.map((e) => e).toList(),
               onChanged: (value) async {
                 log(value.toString());
                 await context
                     .read<UiLanguageControllerCubit>()
-                    .onSelectlanguage(lang: value);
+                    .onChangeEntireUiLanguage(lang: value);
+                await context
+                    .read<UiLanguageControllerCubit>()
+                    .updateUiLanguageInServer();
+
+                await context
+                    .read<LearnLangControllerCubit>()
+                    .onGetSettingsLanguages();
               },
             ),
           ],

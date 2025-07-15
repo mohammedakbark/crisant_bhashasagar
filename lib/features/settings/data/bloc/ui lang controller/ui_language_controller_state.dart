@@ -3,8 +3,12 @@ part of 'ui_language_controller_cubit.dart';
 @immutable
 sealed class UiLanguageControllerState {
   final Map<String, dynamic>? selectdLang;
+  final List<Map<String, dynamic>> convertedLangsToDropDown;
 
-  const UiLanguageControllerState({this.selectdLang});
+  const UiLanguageControllerState({
+    this.selectdLang,
+    this.convertedLangsToDropDown = const [],
+  });
 }
 
 final class UiLanguageControllerInitialState
@@ -19,30 +23,31 @@ final class UiLanguageControllerErrorState extends UiLanguageControllerState {
 final class UiLanguageControllerLoadingState extends UiLanguageControllerState {
   final String loadingFor;
 
-  const UiLanguageControllerLoadingState({
-    required this.loadingFor,
-  });
+  const UiLanguageControllerLoadingState({required this.loadingFor});
 }
 
 final class UiLanguageControllerSuccessState extends UiLanguageControllerState {
-  final List<UiLangModel> uiLanguages;
+  final List<UiDropLangModel> uiDropLanguages;
   final List<UiInstructionModel> instructions;
-  
 
   const UiLanguageControllerSuccessState({
-    required this.uiLanguages,
+    required this.uiDropLanguages,
     super.selectdLang,
     required this.instructions,
+    super.convertedLangsToDropDown,
   });
   UiLanguageControllerSuccessState copyWith({
     List<UiInstructionModel>? instructions,
-    List<UiLangModel>? uiLanguages,
+    List<UiDropLangModel>? uiDropLanguages,
     Map<String, dynamic>? uiLang,
+    List<Map<String, dynamic>>? convertedLangsToDropDown,
   }) {
     return UiLanguageControllerSuccessState(
       instructions: instructions ?? this.instructions,
-      uiLanguages: uiLanguages ?? this.uiLanguages,
+      uiDropLanguages: uiDropLanguages ?? this.uiDropLanguages,
       selectdLang: uiLang ?? super.selectdLang,
+      convertedLangsToDropDown:
+          convertedLangsToDropDown ?? this.convertedLangsToDropDown,
     );
   }
 }

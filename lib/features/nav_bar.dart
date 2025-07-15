@@ -9,7 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:solar_icons/solar_icons.dart';
 
 class AppNavBar extends StatefulWidget {
-  const AppNavBar({super.key});
+  final void Function(int)? onTap;
+  const AppNavBar({super.key, this.onTap});
 
   @override
   State<AppNavBar> createState() => _AppNavBarState();
@@ -66,20 +67,12 @@ class _AppNavBarState extends State<AppNavBar> {
                   UiLanguageControllerState
                 >(
                   listener: (context, state) async {
-                    // if (navState.currentIndex == 2) {
-                    //   initializingUI = true;
-                    //   setState(() {});
-                    //   getUilang = await GetUiLanguage.create("NAV");
-                    //   homeText = getUilang.uiText(placeHolder: "NAV001");
-                    //   profileText = getUilang.uiText(placeHolder: "NAV004");
-                    //   settingsText = getUilang.uiText(placeHolder: "NAV003");
-                    //   searchText = getUilang.uiText(placeHolder: "NAV002");
-                    //   initializingUI = false;
-                    //   setState(() {});
-                    // }
+                    // initUi();
                   },
                   builder: (context, state) {
                     return BottomNavigationBar(
+                      backgroundColor:
+                          AppColors.kWhite, // fixedColor: AppColors.kWhite,
                       currentIndex: navState.currentIndex,
                       showSelectedLabels: true,
                       showUnselectedLabels: false,
@@ -95,11 +88,22 @@ class _AppNavBarState extends State<AppNavBar> {
                       ),
                       selectedItemColor: AppColors.kPrimaryColor,
                       unselectedItemColor: AppColors.kGrey,
+
                       onTap:
-                          context.read<NavControllerDartCubit>().onChangeNavTab,
+                          widget.onTap == null
+                              ? context
+                                  .read<NavControllerDartCubit>()
+                                  .onChangeNavTab
+                              : (index) {
+                                widget.onTap!(index);
+                                context
+                                    .read<NavControllerDartCubit>()
+                                    .onChangeNavTab(index);
+                              },
                       items: [
                         BottomNavigationBarItem(
                           backgroundColor: AppColors.kWhite,
+
                           label: homeText,
                           activeIcon: _buildActiveIcon(
                             SolarIconsBold.homeAngle_2,
@@ -107,6 +111,8 @@ class _AppNavBarState extends State<AppNavBar> {
                           icon: Icon(SolarIconsOutline.homeAngle_2),
                         ),
                         BottomNavigationBarItem(
+                          backgroundColor: AppColors.kWhite,
+
                           label: searchText,
                           activeIcon: _buildActiveIcon(
                             SolarIconsBold.lightbulbBold,
@@ -114,11 +120,13 @@ class _AppNavBarState extends State<AppNavBar> {
                           icon: Icon(SolarIconsOutline.lightbulbBold),
                         ),
                         BottomNavigationBarItem(
+                          backgroundColor: AppColors.kWhite,
                           label: settingsText,
                           activeIcon: _buildActiveIcon(SolarIconsBold.tuning_4),
                           icon: Icon(SolarIconsOutline.tuning_4),
                         ),
                         BottomNavigationBarItem(
+                          backgroundColor: AppColors.kWhite,
                           label: profileText,
                           activeIcon: _buildActiveIcon(SolarIconsBold.user),
                           icon: Icon(SolarIconsOutline.user),

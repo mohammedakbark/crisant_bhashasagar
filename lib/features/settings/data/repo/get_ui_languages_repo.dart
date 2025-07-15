@@ -16,7 +16,7 @@ class GetUiLanguagesRepo {
       
         return ApiDataModel(
           isError: false,
-          data: data.map((e) => UiLangModel.fromJson(e)).toList(),
+          data: data.map((e) => UiDropLangModel.fromJson(e)).toList(),
         );
       } else {
         return ApiDataModel(isError: true, data: response.message);

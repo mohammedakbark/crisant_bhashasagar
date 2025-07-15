@@ -13,7 +13,7 @@ class GetUiLanguage  {
   static Future<GetUiLanguage> create(String currentpage) async {
     _currentPage = currentpage;
     // Assuming this returns List<UiInstructionModel>
-    final instructions = await UiLanguageControllerCubit.getCurrentUILanguageFromHive;
+    final instructions = await UiLanguageControllerCubit.getCurrentUILanguageInstructionsFromHive;
     if (instructions.isNotEmpty) {
       log("USED SELECTED LANGUGE");
       return GetUiLanguage._(instructions);

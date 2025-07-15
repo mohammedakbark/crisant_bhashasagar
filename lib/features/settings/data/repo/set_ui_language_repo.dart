@@ -12,7 +12,7 @@ class SetUiLanguageRepo {
       final userData = await CurrentUserPref.getUserData;
 
       final response = await ApiConfig.postRequest(
-        endpoint: ApiConst.setLearnLanguge,
+        endpoint: ApiConst.setUiLangugae,
         body: {"uiLanguageId": langId},
         header: {
           "Authorization": userData.token,

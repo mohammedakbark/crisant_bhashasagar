@@ -77,11 +77,17 @@ class RouteProvider {
         },
       ),
       GoRoute(
-        path: visualLearningScreen,
+        path: contentScreen,
         builder: (context, state) {
           final body = state.extra as Map<String, dynamic>;
           final language = body['language'];
-          return VisualLearningScreen(language: language);
+          final primaryCategoryId = body["primaryCategoryId"];
+          final seocndaryCategoryId = body["secondaryCategoryId"];
+          return ContentScreen(
+            language: language,
+            primaryCategoryId: primaryCategoryId,
+            secondaryCategoryId: seocndaryCategoryId,
+          );
         },
       ),
     ],

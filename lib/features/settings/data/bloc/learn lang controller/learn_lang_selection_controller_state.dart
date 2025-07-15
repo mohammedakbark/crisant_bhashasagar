@@ -2,7 +2,7 @@ part of 'learn_lang_selection_controller_cubit.dart';
 
 @immutable
 sealed class LearnLangControllerState {
-  final List<LearnLanguageModel> selectedLanguages;
+  final List<SettingsLanguageModel> selectedLanguages;
 
   const LearnLangControllerState({this.selectedLanguages = const []});
 }
@@ -23,7 +23,7 @@ final class LearnLangLoadingState extends LearnLangControllerState {
 }
 
 final class LearnLanguageSuccessState extends LearnLangControllerState {
-  final List<LearnLanguageModel> languages;
+  final List<SettingsLanguageModel> languages;
   final bool isLoadingButton;
 
   const LearnLanguageSuccessState({
@@ -33,8 +33,8 @@ final class LearnLanguageSuccessState extends LearnLangControllerState {
   });
 
   LearnLanguageSuccessState copyWith({
-    List<LearnLanguageModel>? languages,
-    List<LearnLanguageModel>? selectedLanguages,
+    List<SettingsLanguageModel>? languages,
+    List<SettingsLanguageModel>? selectedLanguages,
     bool? isLoadingButton,
   }) {
     return LearnLanguageSuccessState(

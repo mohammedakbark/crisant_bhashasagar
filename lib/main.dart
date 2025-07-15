@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MainConfig.lockOrientation();
+  await MainConfig.setToolBarColor();
   await MainConfig.initHiveBox();
   runApp(AppBlocProvider(child: const MyApp()));
 }

@@ -8,6 +8,7 @@ import 'package:bashasagar/features/settings/data/repo/get_instructions_repo.dar
 import 'package:bashasagar/features/settings/data/repo/get_ui_languages_repo.dart';
 import 'package:bashasagar/features/settings/data/repo/set_ui_language_repo.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:meta/meta.dart';
 
@@ -37,10 +38,10 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
 
         final uiLangRespo = await GetUiLanguagesRepo.onGetUiLangauge();
         if (!uiLangRespo.isError) {
-          final uiLangd = uiLangRespo.data as List<UiLangModel>;
+          final uiLangd = uiLangRespo.data as List<UiDropLangModel>;
           emit(
             UiLanguageControllerSuccessState(
-              uiLanguages: uiLangd,
+              uiDropLanguages: uiLangd,
               instructions: instructions,
             ),
           );
@@ -61,6 +62,47 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
     }
   }
 
+  //------------------------S E T T I N G S --------------------------
+
+  Future<void> getLanguagesForDropdown() async {
+    // GET CURRENT LANGUAGE FOR INTIALIZING
+    log("Initializing current language...");
+    final currrentUiLang = await getCurrentUILanguageInstructionsFromHive;
+    final getUserData = await CurrentUserPref.getUserData;
+    UiInstructionModel? currentLanguage;
+    currentLanguage = currrentUiLang.firstWhere(
+      (element) =>
+          element.page == "LANGUAGE" &&
+          element.uiLanguageId == getUserData.uiLangId,
+    );
+
+    log("Fetching languges for dropdown...");
+    final uiLangRespo = await GetUiLanguagesRepo.onGetUiLangauge();
+    if (!uiLangRespo.isError) {
+      final uiLangd = uiLangRespo.data as List<UiDropLangModel>;
+      // --------------Convert the drop langs to current language
+
+      final convertedLanguagesForDropdwn =
+          await _convertDropDownLanguagesToCurrentLanguage(uiLangd);
+      emit(
+        UiLanguageControllerSuccessState(
+          convertedLangsToDropDown: convertedLanguagesForDropdwn,
+          selectdLang:
+              currentLanguage != null
+                  ? {
+                    "value": currentLanguage.uiLanguageId,
+                    "title": currentLanguage.uiText,
+                  }
+                  : null,
+          uiDropLanguages: uiLangd,
+          instructions: [],
+        ),
+      );
+    } else {
+      emit(UiLanguageControllerErrorState(errro: uiLangRespo.data as String));
+    }
+  }
+
   Future<void> updateUiLanguageInServer() async {
     final getUserData = await CurrentUserPref.getUserData;
     log("Ui Lang ID to Store Server: ${getUserData.uiLangId} ");
@@ -76,29 +118,15 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
     }
   }
 
-  Future<void> getLanguages() async {
-    log("Fetching languges for dropdown...");
-
-    final uiLangRespo = await GetUiLanguagesRepo.onGetUiLangauge();
-    if (!uiLangRespo.isError) {
-      final uiLangd = uiLangRespo.data as List<UiLangModel>;
-      emit(
-        UiLanguageControllerSuccessState(
-          uiLanguages: uiLangd,
-          instructions: [],
-        ),
-      );
-    } else {
-      emit(UiLanguageControllerErrorState(errro: uiLangRespo.data as String));
-    }
-  }
-
   //   LANGUAGE CHANGER
 
-  Future<void> onSelectlanguage({required Map<String, dynamic> lang}) async {
+  Future<void> onChangeEntireUiLanguage({
+    required Map<String, dynamic> lang,
+  }) async {
     final currentState = state;
     log("My Current Lang Id :${lang['value']}");
     if (currentState is UiLanguageControllerSuccessState) {
+      log("taking the selected lang instruction from all instruction HIVE....");
       final instructions = await getAllInstructionsFromHive;
       final currentLanguageData =
           instructions
@@ -108,11 +136,22 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
         CurrentUserModel(uiLangId: lang['value']),
       );
       if (currentLanguageData.isEmpty) {
-        log("No Data From Selected Language");
+        log("Error -> No Data From Selected Language ---------");
       }
 
-      await _saveSelctedLanguagePreferen(currentLanguageData);
-      emit(currentState.copyWith(uiLang: lang));
+      await _saveSelctedUiLanguageInstructionPreferen(currentLanguageData);
+      final convertedLangFOrDropDown =
+          await _convertDropDownLanguagesToCurrentLanguage(
+            currentState.uiDropLanguages,
+          );
+
+      emit(
+        currentState.copyWith(
+          convertedLangsToDropDown: convertedLangFOrDropDown,
+          uiLang: lang,
+        ),
+      );
+     
     }
   }
 
@@ -143,9 +182,10 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
 
   //-------------------------------------------------------------
   // ---- Store currentLanguage
-  Future<void> _saveSelctedLanguagePreferen(
+  Future<void> _saveSelctedUiLanguageInstructionPreferen(
     List<UiInstructionModel> model,
   ) async {
+    log("Saving new instruction ....");
     final currentLangBox = await Hive.openBox<UiInstructionModel>(
       _currentlanguage,
     );
@@ -155,11 +195,12 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
           return UiInstructionModel.fromJson(e.toJson());
         }).toList();
     await currentLangBox.addAll(clonedList);
+    log("Saved new instruction ....");
   }
   // -----retrive current language
 
   static Future<List<UiInstructionModel>>
-  get getCurrentUILanguageFromHive async {
+  get getCurrentUILanguageInstructionsFromHive async {
     final currentLangBox = await Hive.openBox<UiInstructionModel>(
       _currentlanguage,
     );
@@ -197,18 +238,29 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
               element.uiLanguageId == userUiLangId,
         );
       } catch (e) {
-        // log(
-        //   "No translated data found for placeholderId=$palceHolderId and uiLanguageId=$userUiLangId",
-        // );
         return uiText;
       }
 
-      // log("-------------");
-      // log(newData.uiText);
       return newData.uiText;
     } else {
       log("isInBox is false, returning original text");
       return uiText;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> _convertDropDownLanguagesToCurrentLanguage(
+    List<UiDropLangModel> uiDropLanguages,
+  ) async {
+    List<Map<String, dynamic>> newLanguages = [];
+
+    for (var lang in uiDropLanguages) {
+      final uiText = await findText("LANGUAGE", lang.uiLanguageName);
+      newLanguages.add({
+        "title": uiText,
+        "value": lang.uiLanguageId,
+        "icon": lang.uiImageLight,
+      });
+    }
+    return newLanguages;
   }
 }

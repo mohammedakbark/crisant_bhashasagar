@@ -6,6 +6,8 @@ import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
+import 'package:bashasagar/features/nav_bar.dart';
+import 'package:bashasagar/features/session/data/bloc/content%20controller/content_controller_bloc.dart';
 import 'package:bashasagar/features/session/data/bloc/primary%20controller/primary_category_controller_cubit.dart';
 import 'package:bashasagar/features/session/data/bloc/secondary%20controller/secondary_category_controllr_cubit.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +45,11 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(15),
-          child: SizedBox.shrink(),
-        ),
+        toolbarHeight: 50,
+        // bottom: PreferredSize(
+        //   preferredSize: Size.fromHeight(15),
+        //   child: SizedBox.shrink(),
+        // ),
         titleSpacing: 0,
         centerTitle: false,
         backgroundColor: AppColors.kPrimaryColor,
@@ -64,35 +67,35 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
               ],
             ),
 
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: ResponsiveHelper.paddingSmall,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: ResponsiveHelper.wp / 2,
-                    child: LinearProgressIndicator(
-                      borderRadius: BorderRadius.circular(100),
-                      value: .6,
-                      color: Colors.amber,
-                      backgroundColor: AppColors.kWhite,
-                    ),
-                  ),
-                  AppSpacer(hp: .005),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(
+            //     vertical: ResponsiveHelper.paddingSmall,
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       SizedBox(
+            //         width: ResponsiveHelper.wp / 2,
+            //         child: LinearProgressIndicator(
+            //           borderRadius: BorderRadius.circular(100),
+            //           value: .6,
+            //           color: Colors.amber,
+            //           backgroundColor: AppColors.kWhite,
+            //         ),
+            //       ),
+            //       AppSpacer(hp: .005),
 
-                  Text(
-                    "60%",
-                    style: AppStyle.boldStyle(
-                      color: AppColors.kWhite,
-                      fontSize: ResponsiveHelper.fontExtraSmall,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            //       Text(
+            //         "60%",
+            //         style: AppStyle.boldStyle(
+            //           color: AppColors.kWhite,
+            //           fontSize: ResponsiveHelper.fontExtraSmall,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -118,38 +121,118 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                   ),
                   itemBuilder: (context, index) {
                     final category = state.secondaryCategories[index];
-                    return GestureDetector(
-                      onTap:
-                          () => context.push(
-                            visualLearningScreen,
-                            extra: {"language": widget.language},
-                          ),
+                    return BlocBuilder<
+                      ContentControllerBloc,
+                      ContentControllerState
+                    >(
+                      builder: (context, state) {
+                        return GestureDetector(
+                          onTap: () async {
+                            if (await context
+                                .read<ContentControllerBloc>()
+                                .checkAlreadyDowloadedOrNot(
+                                  widget.primaryCategoryId,
 
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.kGrey, width: 2),
-                          borderRadius: BorderRadius.circular(
-                            ResponsiveHelper.borderRadiusLarge,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 100,
-                              child: AppNetworkImage(
-                                imageFile: category.secondaryCategoryImage,
+                                  category.secondaryCategoryId,
+                                )) {
+                              // context.read<ContentControllerBloc>().add(
+                              //   LoadContentById(),
+                              // );\
+
+                              context.push(
+                                contentScreen,
+                                extra: {
+                                  "primaryCategoryId": widget.primaryCategoryId,
+                                  "secondaryCategoryId":
+                                      category.secondaryCategoryId,
+                                  "language": widget.language,
+                                },
+                              );
+                            }
+                            //   => context.push(
+                            //   visualLearningScreen,
+                            //   extra: {"language": widget.language},
+                            // ),
+                          },
+
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColors.kGrey,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                ResponsiveHelper.borderRadiusLarge,
                               ),
                             ),
-                            AppSpacer(hp: .02),
-                            Text(
-                              category.secondaryCategoryName,
-                              textAlign: TextAlign.center,
+                            child: Stack(
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 100,
+                                      child: AppNetworkImage(
+                                        imageFile:
+                                            category.secondaryCategoryImage,
+                                      ),
+                                    ),
+                                    AppSpacer(hp: .02),
+                                    Text(
+                                      category.secondaryCategoryName,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: FutureBuilder(
+                                    future: context
+                                        .read<ContentControllerBloc>()
+                                        .checkAlreadyDowloadedOrNot(
+                                          widget.primaryCategoryId,
+
+                                          category.secondaryCategoryId,
+                                        ),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return SizedBox();
+                                      }
+
+                                      return state
+                                                  is ContentDownloadProgressState &&
+                                              state.secondaryCategoryId ==
+                                                  category.secondaryCategoryId
+                                          ? Text(state.progress)
+                                          : snapshot.data!
+                                          ? Icon(Icons.check)
+                                          : InkWell(
+                                            onTap: () {
+                                              context
+                                                  .read<ContentControllerBloc>()
+                                                  .add(
+                                                    DownloadContentById(
+                                                      primaryCategoryId:
+                                                          widget
+                                                              .primaryCategoryId,
+                                                      secondaryCategoryId:
+                                                          category
+                                                              .secondaryCategoryId,
+                                                    ),
+                                                  );
+                                            },
+                                            child: Icon(Icons.download),
+                                          );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     );
                   },
                 );
@@ -159,6 +242,11 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                 return AppLoading();
               }
           }
+        },
+      ),
+      bottomNavigationBar: AppNavBar(
+        onTap: (p0) {
+          context.go(routeScreen);
         },
       ),
     );

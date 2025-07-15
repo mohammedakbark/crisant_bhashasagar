@@ -159,7 +159,9 @@ class _HomeScreenState extends State<HomeScreen> {
             "langaugeId": model.languageId,
             "language": model.details.languageName,
           },
-        );
+        ).then((value) async{
+           await GetUiLanguage.create("DASHBOARD");
+        },);
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -224,6 +226,10 @@ class _HomeScreenState extends State<HomeScreen> {
               color: AppColors.kPrimaryDark,
               backgroundColor: AppColors.kPrimaryDark.withAlpha(120),
             ),
+            AppSpacer(hp: .005),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text("${model.status.totalCompleted}%",style: AppStyle.smallStyle(),)),
           ],
         ),
       ),

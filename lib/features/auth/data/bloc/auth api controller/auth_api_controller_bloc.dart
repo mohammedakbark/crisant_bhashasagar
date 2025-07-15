@@ -121,7 +121,7 @@ class AuthApiControllerBloc
     } else {
       final data = response.data as Map<String, dynamic>;
       emit(AuthApiControllerSuccessState(previouseResponse: data));
-      final getUilang = await GetUiLanguage.create("REGISTEROTP");
+      final getUilang = await GetUiLanguage.create("REGISTERSUCCESS");
 
       if (event.context.mounted) {
         event.context.go(

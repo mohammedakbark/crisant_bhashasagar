@@ -6,6 +6,7 @@ import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
+import 'package:bashasagar/features/nav_bar.dart';
 import 'package:bashasagar/features/session/data/bloc/primary%20controller/primary_category_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,10 +38,12 @@ class _PrimaryCategoryScreenState extends State<PrimaryCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(15),
-          child: SizedBox.shrink(),
-        ),
+              toolbarHeight: 50,
+
+        // bottom: PreferredSize(
+        //   preferredSize: Size.fromHeight(15),
+        //   child: SizedBox.shrink(),
+        // ),
         titleSpacing: 0,
         centerTitle: false,
         backgroundColor: AppColors.kPrimaryColor,
@@ -58,35 +61,35 @@ class _PrimaryCategoryScreenState extends State<PrimaryCategoryScreen> {
               ],
             ),
 
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: ResponsiveHelper.paddingSmall,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: ResponsiveHelper.wp / 2,
-                    child: LinearProgressIndicator(
-                      borderRadius: BorderRadius.circular(100),
-                      value: .6,
-                      color: Colors.amber,
-                      backgroundColor: AppColors.kWhite,
-                    ),
-                  ),
-                  AppSpacer(hp: .005),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(
+            //     vertical: ResponsiveHelper.paddingSmall,
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       SizedBox(
+            //         width: ResponsiveHelper.wp / 2,
+            //         child: LinearProgressIndicator(
+            //           borderRadius: BorderRadius.circular(100),
+            //           value: .6,
+            //           color: Colors.amber,
+            //           backgroundColor: AppColors.kWhite,
+            //         ),
+            //       ),
+            //       // AppSpacer(hp: .005),
 
-                  Text(
-                    "60%",
-                    style: AppStyle.boldStyle(
-                      color: AppColors.kWhite,
-                      fontSize: ResponsiveHelper.fontExtraSmall,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            //       // Text(
+            //       //   "60%",
+            //       //   style: AppStyle.boldStyle(
+            //       //     color: AppColors.kWhite,
+            //       //     fontSize: ResponsiveHelper.fontExtraSmall,
+            //       //   ),
+            //       // ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -154,6 +157,11 @@ class _PrimaryCategoryScreenState extends State<PrimaryCategoryScreen> {
                 return AppLoading();
               }
           }
+        },
+      ),
+      bottomNavigationBar: AppNavBar(
+        onTap: (p0) {
+          context.go(routeScreen);
         },
       ),
     );

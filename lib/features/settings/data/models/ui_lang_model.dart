@@ -1,6 +1,6 @@
 import 'package:bashasagar/core/models/created_at_model.dart';
 
-class UiLangModel {
+class UiDropLangModel {
     String uiLanguageId;
     String uiLanguageCode;
     String uiLanguageName;
@@ -11,7 +11,7 @@ class UiLangModel {
     CreatedAt createdAt;
     DateTime modifiedAt;
 
-    UiLangModel({
+    UiDropLangModel({
         required this.uiLanguageId,
         required this.uiLanguageCode,
         required this.uiLanguageName,
@@ -23,7 +23,7 @@ class UiLangModel {
         required this.modifiedAt,
     });
 
-    factory UiLangModel.fromJson(Map<String, dynamic> json) => UiLangModel(
+    factory UiDropLangModel.fromJson(Map<String, dynamic> json) => UiDropLangModel(
         uiLanguageId: json["uiLanguageId"]??'',
         uiLanguageCode: json["uiLanguageCode"]??'',
         uiLanguageName: json["uiLanguageName"]??'',

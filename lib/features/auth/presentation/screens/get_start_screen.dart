@@ -61,7 +61,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
 
   late GetUiLanguage getUilang;
   void getUiLanguges() async {
-    context.read<UiLanguageControllerCubit>().initGetStartScreen();
+   await context.read<UiLanguageControllerCubit>().initGetStartScreen();
     getUilang = await GetUiLanguage.create("INTRO");
   }
 
@@ -126,7 +126,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
                           selectedValue: state.selectdLang,
                           labelText: getUilang.uiText(placeHolder: "INT005"),
                           items:
-                              state.uiLanguages
+                              state.uiDropLanguages
                                   .map(
                                     (e) => {
                                       "title": e.uiLanguageName,
@@ -139,9 +139,29 @@ class _GetStartScreenState extends State<GetStartScreen> {
                             log(value.toString());
                             await context
                                 .read<UiLanguageControllerCubit>()
-                                .onSelectlanguage(lang: value);
+                                .onChangeEntireUiLanguage(lang: value);
                           },
                         ),
+                        // CustomDropDown(
+                        //   sufix:
+                        //       state is UiLanguageControllerLoadingState
+                        //           ? AppLoading()
+                        //           : null,
+                        //   labelText: getUilang.uiText(placeHolder: "INT005"),
+                        //   selectedValue: state.selectdLang,
+                        //   width: ResponsiveHelper.wp,
+                        //   // selectedValue: state.language['title'],
+                        //   items:
+                        //       state.convertedLangsToDropDown
+                        //           .map((e) => e)
+                        //           .toList(),
+                        //   onChanged: (value) async {
+                        //     log(value.toString());
+                        //     await context
+                        //         .read<UiLanguageControllerCubit>()
+                        //         .onChangeEntireUiLanguage(lang: value);
+                        //   },
+                        // ),
 
                         AppSpacer(hp: .02),
 
