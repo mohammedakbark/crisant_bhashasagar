@@ -29,7 +29,7 @@ class CurrentUserPref {
     );
     await pref.setString(
       _APPLANG,
-      userModel.uiLangId ?? existingData.uiLangId ?? '',
+      userModel.uiLangId ?? existingData.uiLangId ?? '1',
     );
   }
 
@@ -52,7 +52,7 @@ class CurrentUserPref {
     final appLang = pref.getString(_APPLANG);
 
     return CurrentUserModel(
-      uiLangId: appLang ?? '',
+      uiLangId: appLang ?? '1',
       mobile: mobile ?? '',
       name: name ?? '',
       password: pasword ?? '',

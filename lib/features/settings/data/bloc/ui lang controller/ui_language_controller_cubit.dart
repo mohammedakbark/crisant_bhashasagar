@@ -68,13 +68,20 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
     // GET CURRENT LANGUAGE FOR INTIALIZING
     log("Initializing current language...");
     final currrentUiLang = await getCurrentUILanguageInstructionsFromHive;
+    final allLanguages = await getAllInstructionsFromHive;
+
     final getUserData = await CurrentUserPref.getUserData;
+    final id = getUserData.uiLangId;
     UiInstructionModel? currentLanguage;
-    currentLanguage = currrentUiLang.firstWhere(
-      (element) =>
-          element.page == "LANGUAGE" &&
-          element.uiLanguageId == getUserData.uiLangId,
-    );
+    if (currrentUiLang.isNotEmpty) {
+      currentLanguage = currrentUiLang.firstWhere(
+        (element) => element.page == "LANGUAGE" && element.uiLanguageId == id,
+      );
+    } else {
+      currentLanguage = allLanguages.firstWhere(
+        (element) => element.page == "LANGUAGE" && element.uiLanguageId == id,
+      );
+    }
 
     log("Fetching languges for dropdown...");
     final uiLangRespo = await GetUiLanguagesRepo.onGetUiLangauge();
@@ -151,7 +158,6 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
           uiLang: lang,
         ),
       );
-     
     }
   }
 
@@ -180,6 +186,13 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
     return instructionBox.values.toList();
   }
 
+  // delete entire instructions
+  static Future<void> _deleteEntireInstructions() async {
+    final instructionBox = await Hive.openBox<UiInstructionModel>(_instruction);
+
+    await instructionBox.clear();
+  }
+
   //-------------------------------------------------------------
   // ---- Store currentLanguage
   Future<void> _saveSelctedUiLanguageInstructionPreferen(
@@ -205,6 +218,15 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
       _currentlanguage,
     );
     return currentLangBox.values.toList();
+  }
+  // delete current lang instructions
+
+  static Future<void> _deleteUiInstructions() async {
+    final currentLangBox = await Hive.openBox<UiInstructionModel>(
+      _currentlanguage,
+    );
+
+    await currentLangBox.clear();
   }
 
   // F I N D LANG T E X T
@@ -262,5 +284,12 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
       });
     }
     return newLanguages;
+  }
+
+  // CLEAR ALL
+
+  static Future<void> clearAll() async {
+    await _deleteEntireInstructions();
+    await _deleteUiInstructions();
   }
 }

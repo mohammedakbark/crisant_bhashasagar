@@ -48,15 +48,15 @@ class Userinfo {
   });
 
   factory Userinfo.fromJson(Map<String, dynamic> json) => Userinfo(
-    customerId: json["customerId"] ?? "N/A",
-    customerName: json["customerName"] ?? "N/A",
-    customerMobile: json["customerMobile"] ?? "N/A",
-    customerEmailAddress: json["customerEmailAddress"] ?? "N/A",
-    customerAddress: json["customerAddress"] ?? "N/A",
-    customerGender: json["customerGender"] ?? "N/A",
-    customerAge: json["customerAge"] ?? "N/A",
-    customerOtp: json["customerOTP"] ?? "N/A",
-    customerStatus: json["customerStatus"] ?? "N/A",
+    customerId: json["customerId"] ?? "",
+    customerName: json["customerName"] ?? "",
+    customerMobile: json["customerMobile"] ?? "",
+    customerEmailAddress: json["customerEmailAddress"] ?? "",
+    customerAddress: json["customerAddress"] ?? "",
+    customerGender: json["customerGender"] ?? "",
+    customerAge: json["customerAge"] ?? "",
+    customerOtp: json["customerOTP"] ?? "",
+    customerStatus: json["customerStatus"] ?? "",
     createdAt: CreatedAt.fromJson(json["created_at"]),
     modifiedAt: DateTime.parse(json["modified_at"]),
   );

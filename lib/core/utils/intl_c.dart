@@ -5,6 +5,7 @@ class IntlC {
   static final _timeFormat = DateFormat('hh:mm a');
   static final _dateTimeFormat = DateFormat('dd-MM-yyyy HH:mm a');
   static final _monthDayYearFormat = DateFormat('MMMM dd, yyyy');
+  static final _apiFormate = DateFormat("yyyy-MM-dd HH:mm:ss");
 
   static String convertToDate(DateTime date) {
     return _dateFormat.format(date);
@@ -20,5 +21,9 @@ class IntlC {
 
   static String convertToDateTime(DateTime date) {
     return _dateTimeFormat.format(date);
+  }
+
+  static String convertTOApiDateTime(DateTime date) {
+    return _apiFormate.format(date);
   }
 }

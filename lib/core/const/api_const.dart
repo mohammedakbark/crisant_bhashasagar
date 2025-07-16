@@ -24,11 +24,13 @@ class ApiConst {
 
   static const setLearnLanguge = "api/profile/customerLanguagePreference";
 
-
   static const getDashboardData = "api/profile/dashboard";
 
   static const primaryCategory = "api/masters/primaryCategories";
   static const secondaryCategroy = "api/masters/secondaryCategories";
 
-  static const contentUrl="api/contents/downloadChapterZip";
+  static const contentUrl = "api/contents/downloadChapterZip";
+  static const transliterate = "api/contents/transliterate";
+
+  static const markcustomerProgress = "api/profile/customerProgress";
 }

@@ -57,7 +57,7 @@ class AuthApiControllerBloc
     } else {
       final data = response.data as Map<String, dynamic>;
       emit(AuthApiControllerSuccessState(previouseResponse: data));
-      add(OnGetProfileInfo(storeData: true));
+     
 
       await CurrentUserPref.setUserData(
         CurrentUserModel(
@@ -66,6 +66,8 @@ class AuthApiControllerBloc
           password: event.password,
         ),
       );
+
+       add(OnGetProfileInfo(storeData: true));
 
       if (event.context.mounted) {
         await event.context

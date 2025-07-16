@@ -7,19 +7,43 @@ import 'package:bashasagar/core/models/api_data_model.dart';
 import 'package:bashasagar/features/profile/data/models/profile_model.dart';
 
 class UpdateProfileRepo {
-  static Future<ApiDataModel> updateProfile({String ?name,}) async {
+  static Future<ApiDataModel> updateProfile({
+    required String name,
+    required String email,
+    required String gender,
+    required String age,
+    required String address,
+    String? password,
+    String? confirmPassword,
+  }) async {
     try {
       final getToken = await CurrentUserPref.getUserData;
+      Map<String, dynamic> json = {};
+      if (password != null && confirmPassword != null) {
+        json = {
+          "customerName": name,
+          "customerGender": gender,
+          "customerAge": age,
+          "customerEmailAddress": email,
+          "customerAddress": address,
+          "customerPassword": password,
+          "password_confirmation": confirmPassword,
+          "uiLanguageId": getToken.uiLangId, // Hindi & This is optional
+        };
+      } else {
+        json = {
+          "customerName": name,
+          "customerGender": gender,
+          "customerAge": age,
+          "customerEmailAddress": email,
+          "customerAddress": address,
 
+          "uiLanguageId": getToken.uiLangId, // Hindi & This is optional
+        };
+      }
       final response = await ApiConfig.postRequest(
         endpoint: ApiConst.updateProfile,
-        body: {
-          "customerName": "Anand API Test",
-          "customerMobile": "7756873424",
-          "customerPassword": "M@njula1105",
-          "password_confirmation": "M@njula1105",
-          "uiLanguageId": getToken.uiLangId, // Hindi & This is optional
-        },
+        body: json,
         header: {
           "Content-Type": "application/json",
           "Authorization": getToken.token,
@@ -27,10 +51,7 @@ class UpdateProfileRepo {
       );
 
       if (response.status == 200) {
-        final data = response.data as Map<String, dynamic>;
-        final user = data['user'] as Map<String, dynamic>;
-        log(user.toString());
-        return ApiDataModel(isError: false, data: ProfileModel.fromJson(user));
+        return ApiDataModel(isError: false, data: response.message);
       } else {
         return ApiDataModel(isError: true, data: response.message);
       }

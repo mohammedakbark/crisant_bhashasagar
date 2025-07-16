@@ -12,27 +12,13 @@ class DownloadContentById extends ContentControllerEvent {
   });
 }
 
-class LoadContentById extends ContentControllerEvent {
+class DeleteContentById extends ContentControllerEvent {
   final String primaryCategoryId;
 
   final String secondaryCategoryId;
-  LoadContentById({
+  DeleteContentById({
     required this.secondaryCategoryId,
     required this.primaryCategoryId,
   });
 }
 
-class OnChangeContent extends ContentControllerEvent {
-  final bool isForward;
-
-  OnChangeContent({required this.isForward});
-}
-
-// class CheckContentAlreadyDowloadedById extends ContentControllerEvent {
-//   final String primaryCategoryId;
-//   final String secondaryCategoryId;
-//   CheckContentAlreadyDowloadedById({
-//     required this.primaryCategoryId,
-//     required this.secondaryCategoryId,
-//   });
-// }

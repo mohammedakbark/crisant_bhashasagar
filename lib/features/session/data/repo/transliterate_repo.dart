@@ -1,28 +1,28 @@
-import 'dart:developer';
-
 import 'package:bashasagar/core/config/api_config.dart';
 import 'package:bashasagar/core/const/api_const.dart';
 import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/models/api_data_model.dart';
-import 'package:bashasagar/core/utils/show_messages.dart';
 
-class SetUiLanguageRepo {
-  static Future<ApiDataModel> setUiLang({required String langId}) async {
+
+class TransliterateRepo {
+  static Future<ApiDataModel> onTransliterate(
+    String targetLanguage,
+    String script,
+  ) async {
     try {
-      final userData = await CurrentUserPref.getUserData;
-log(langId);
+      final getData = await CurrentUserPref.getUserData;
       final response = await ApiConfig.postRequest(
-        endpoint: ApiConst.setUiLangugae,
-        body: {"uiLanguageId": langId},
+        endpoint: ApiConst.transliterate,
+        body: {"targetLanguage": targetLanguage, "string": script},
         header: {
-          "Authorization": userData.token,
+          "Authorization": getData.token,
           "Content-Type": "application/json",
         },
       );
-
       if (response.status == 200) {
-        showToast(response.message);
-        return ApiDataModel(isError: false, data: response.message);
+        final data = response.data as String;
+
+        return ApiDataModel(isError: false, data: data);
       } else {
         return ApiDataModel(isError: true, data: response.message);
       }

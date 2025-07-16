@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_network_image.dart';
@@ -8,11 +10,14 @@ import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/nav_bar.dart';
 import 'package:bashasagar/features/session/data/bloc/content%20controller/content_controller_bloc.dart';
+import 'package:bashasagar/features/session/data/bloc/content%20state%20controller/content_state_controller_bloc.dart';
 import 'package:bashasagar/features/session/data/bloc/primary%20controller/primary_category_controller_cubit.dart';
 import 'package:bashasagar/features/session/data/bloc/secondary%20controller/secondary_category_controllr_cubit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
 class SecondaryCategoryScreen extends StatefulWidget {
   final String language;
@@ -127,18 +132,25 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                     >(
                       builder: (context, state) {
                         return GestureDetector(
-                          onTap: () async {
+                          onLongPress: () async {
                             if (await context
-                                .read<ContentControllerBloc>()
+                                .read<ContentStateControllerBloc>()
                                 .checkAlreadyDowloadedOrNot(
                                   widget.primaryCategoryId,
 
                                   category.secondaryCategoryId,
                                 )) {
-                              // context.read<ContentControllerBloc>().add(
-                              //   LoadContentById(),
-                              // );\
+                              _showDeleteDiologe(category.secondaryCategoryId);
+                            }
+                          },
+                          onTap: () async {
+                            if (await context
+                                .read<ContentStateControllerBloc>()
+                                .checkAlreadyDowloadedOrNot(
+                                  widget.primaryCategoryId,
 
+                                  category.secondaryCategoryId,
+                                )) {
                               context.push(
                                 contentScreen,
                                 extra: {
@@ -148,7 +160,16 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                                   "language": widget.language,
                                 },
                               );
+                            } else {
+                              context.read<ContentControllerBloc>().add(
+                                DownloadContentById(
+                                  primaryCategoryId: widget.primaryCategoryId,
+                                  secondaryCategoryId:
+                                      category.secondaryCategoryId,
+                                ),
+                              );
                             }
+
                             //   => context.push(
                             //   visualLearningScreen,
                             //   extra: {"language": widget.language},
@@ -167,6 +188,7 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                               ),
                             ),
                             child: Stack(
+                              alignment: Alignment.center,
                               children: [
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -190,7 +212,7 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                                   top: 0,
                                   child: FutureBuilder(
                                     future: context
-                                        .read<ContentControllerBloc>()
+                                        .read<ContentStateControllerBloc>()
                                         .checkAlreadyDowloadedOrNot(
                                           widget.primaryCategoryId,
 
@@ -198,33 +220,85 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                                         ),
                                     builder: (context, snapshot) {
                                       if (!snapshot.hasData) {
-                                        return SizedBox();
+                                        return SizedBox.shrink();
                                       }
 
-                                      return state
-                                                  is ContentDownloadProgressState &&
-                                              state.secondaryCategoryId ==
-                                                  category.secondaryCategoryId
-                                          ? Text(state.progress)
-                                          : snapshot.data!
-                                          ? Icon(Icons.check)
-                                          : InkWell(
-                                            onTap: () {
-                                              context
-                                                  .read<ContentControllerBloc>()
-                                                  .add(
-                                                    DownloadContentById(
-                                                      primaryCategoryId:
-                                                          widget
-                                                              .primaryCategoryId,
-                                                      secondaryCategoryId:
-                                                          category
-                                                              .secondaryCategoryId,
+                                      return SizedBox(
+                                        width: 40,
+                                        height: 40,
+                                        child: Center(
+                                          child:
+                                              snapshot.data!
+                                                  ? Container(
+                                                    padding: EdgeInsets.all(3),
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          AppColors
+                                                              .kPrimaryColor,
+
+                                                      shape: BoxShape.circle,
                                                     ),
-                                                  );
-                                            },
-                                            child: Icon(Icons.download),
-                                          );
+                                                    child: Icon(
+                                                      Icons
+                                                          .download_done_rounded,
+                                                      color: AppColors.kWhite,
+                                                      size: 15,
+                                                    ),
+                                                  )
+                                                  : state
+                                                          is ContentDownloadProgressState &&
+                                                      state.progressingData.any(
+                                                        (element) =>
+                                                            element['secondaryCategoryId'] ==
+                                                            category
+                                                                .secondaryCategoryId,
+                                                      )
+                                                  // state.secondaryCategoryId ==
+                                                  //     category.secondaryCategoryId
+                                                  ? Lottie.asset(
+                                                    height: 50,
+                                                    width: 50,
+                                                    "assets/json/Downloading.json",
+                                                  )
+                                                  : InkWell(
+                                                    onTap: () {
+                                                      context
+                                                          .read<
+                                                            ContentControllerBloc
+                                                          >()
+                                                          .add(
+                                                            DownloadContentById(
+                                                              primaryCategoryId:
+                                                                  widget
+                                                                      .primaryCategoryId,
+                                                              secondaryCategoryId:
+                                                                  category
+                                                                      .secondaryCategoryId,
+                                                            ),
+                                                          );
+                                                    },
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(
+                                                        3,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                          width: 2,
+                                                          color:
+                                                              AppColors.kOrange,
+                                                        ),
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: Icon(
+                                                        size: 15,
+                                                        Icons.download_outlined,
+                                                        color:
+                                                            AppColors.kOrange,
+                                                      ),
+                                                    ),
+                                                  ),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),
@@ -249,6 +323,77 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
           context.go(routeScreen);
         },
       ),
+    );
+  }
+
+  void _showDeleteDiologe(String secondaryCategoryId) {
+    showDialog(
+      context: context,
+      builder:
+          (context) =>
+              Platform.isIOS
+                  ? CupertinoAlertDialog(
+                    // backgroundColor: AppColors.kWhite,
+                    title: Text("Delete data ?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: AppStyle.mediumStyle(color: AppColors.kGrey),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          context.read<ContentControllerBloc>().add(
+                            DeleteContentById(
+                              secondaryCategoryId: secondaryCategoryId,
+                              primaryCategoryId: widget.primaryCategoryId,
+                            ),
+                          );
+
+                          context.pop();
+                        },
+                        child: Text(
+                          "Delete",
+                          style: AppStyle.mediumStyle(color: AppColors.kRed),
+                        ),
+                      ),
+                    ],
+                  )
+                  : AlertDialog(
+                    backgroundColor: AppColors.kWhite,
+                    title: Text("Delete data ?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: AppStyle.mediumStyle(color: AppColors.kGrey),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          context.read<ContentControllerBloc>().add(
+                            DeleteContentById(
+                              secondaryCategoryId: secondaryCategoryId,
+                              primaryCategoryId: widget.primaryCategoryId,
+                            ),
+                          );
+
+                          context.pop();
+                        },
+                        child: Text(
+                          "Delete",
+                          style: AppStyle.mediumStyle(color: AppColors.kRed),
+                        ),
+                      ),
+                    ],
+                  ),
     );
   }
 }

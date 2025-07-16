@@ -1,41 +1,11 @@
-part of 'content_controller_bloc.dart';
+part of 'content_state_controller_bloc.dart';
 
 @immutable
-abstract class ContentControllerState {}
+sealed class ContentStateControllerState {}
 
-class ContentControllerInitialState extends ContentControllerState {}
+final class ContentStateControllerInitial extends ContentStateControllerState {}
 
-class ContentDownloadProgressState extends ContentControllerState {
-  // final String secondaryCategoryId;
-  // final String progress;
-  // ContentDownloadProgressState({
-  //   required this.secondaryCategoryId,
-  //   required this.progress,
-  // });
-  final List<Map<String, dynamic>> progressingData;
-
-  ContentDownloadProgressState({required this.progressingData});
-}
-
-class ContentDownloadErrorState extends ContentControllerState {
-  final String secondaryCategoryId;
-  final String error;
-  ContentDownloadErrorState({
-    required this.secondaryCategoryId,
-    required this.error,
-  });
-}
-
-class ContentLoadErrorState extends ContentControllerState {
-  final String secondaryCategoryId;
-  final String error;
-  ContentLoadErrorState({
-    required this.secondaryCategoryId,
-    required this.error,
-  });
-}
-
-class ContentLoadFromLocalState extends ContentControllerState {
+class ContentLoadFromLocalState extends ContentStateControllerState {
   final String secondaryCategoryId;
   final List<ContentJsonModel> jsonData;
   final ContentJsonModel currentFile;
@@ -76,5 +46,4 @@ class ContentLoadFromLocalState extends ContentControllerState {
           selectedLangToTransiliterate ?? this.selectedLangToTransiliterate,
       isAudioPlaying: isAudioPlaying ?? this.isAudioPlaying,
     );
-  }
-}
+  }}

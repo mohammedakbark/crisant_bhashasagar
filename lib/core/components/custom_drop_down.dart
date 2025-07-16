@@ -4,6 +4,8 @@ import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+
 
 class CustomDropDown extends StatefulWidget {
   final String? title;
@@ -45,7 +47,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
       child: Column(
         children: [
           widget.title != null ? Text(widget.title!) : SizedBox.shrink(),
-          DropdownButtonFormField<Map<String, dynamic>>(
+          DropdownButtonFormField2<Map<String, dynamic>>(
             value:
                 widget.selectedValue != null
                     ? widget.items.firstWhere(
@@ -100,10 +102,16 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     )
                     : null,
             onChanged: widget.onChanged,
-            dropdownColor: AppColors.kWhite,
-            borderRadius: BorderRadius.circular(
-              ResponsiveHelper.borderRadiusMedium,
+            dropdownStyleData: DropdownStyleData(
+              decoration: BoxDecoration(
+                color: AppColors.kWhite ,
+                borderRadius: BorderRadius.circular(10)
+              )
             ),
+            // dropdownColor: AppColors.kWhite,
+            // borderRadius: BorderRadius.circular(
+            //   ResponsiveHelper.borderRadiusMedium,
+            // ),
             style: AppStyle.normalStyle(color: AppColors.kBlack),
 
             decoration: InputDecoration(
