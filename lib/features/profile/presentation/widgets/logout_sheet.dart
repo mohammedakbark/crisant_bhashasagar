@@ -1,14 +1,12 @@
+import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:flutter/material.dart';
 
 class LogoutBottomSheet extends StatefulWidget {
   final VoidCallback? onConfirm;
   final VoidCallback? onCancel;
 
-  const LogoutBottomSheet({
-    Key? key,
-    this.onConfirm,
-    this.onCancel,
-  }) : super(key: key);
+  const LogoutBottomSheet({Key? key, this.onConfirm, this.onCancel})
+    : super(key: key);
 
   @override
   State<LogoutBottomSheet> createState() => _LogoutBottomSheetState();
@@ -28,21 +26,16 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
 
     _animationController.forward();
   }
@@ -84,7 +77,7 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: colorScheme.surface,
+                color: AppColors.kWhite,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(28),
                   topRight: Radius.circular(28),
@@ -110,9 +103,9 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Icon
                   Container(
                     height: 80,
@@ -124,23 +117,23 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
                     child: Icon(
                       Icons.logout_rounded,
                       size: 36,
-                      color: colorScheme.onErrorContainer,
+                      color: AppColors.kWhite,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Title
                   Text(
                     'Sign Out',
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: colorScheme.onSurface,
+                      color: AppColors.kBlack,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   // Description
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -148,14 +141,15 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
                       '''Are you sure you want to sign out? You'll need to sign in again to access your account.''',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface.withOpacity(0.7),
+                        color: AppColors.kBlack,
+
                         height: 1.4,
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Action buttons
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -179,25 +173,22 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.logout_rounded,
-                                  size: 20,
-                                ),
+                                Icon(Icons.logout_rounded, size: 20,color: AppColors.kWhite,),
                                 const SizedBox(width: 8),
                                 Text(
                                   'Sign Out',
                                   style: theme.textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    color: colorScheme.onError,
+                                    color: AppColors.kWhite,
                                   ),
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 12),
-                        
+
                         // Cancel button
                         SizedBox(
                           width: double.infinity,
@@ -205,7 +196,8 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
                           child: TextButton(
                             onPressed: _handleCancel,
                             style: TextButton.styleFrom(
-                              backgroundColor: colorScheme.surfaceVariant.withOpacity(0.5),
+                              backgroundColor: colorScheme.surfaceVariant
+                                  .withOpacity(0.5),
                               foregroundColor: colorScheme.onSurface,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -223,7 +215,7 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet>
                       ],
                     ),
                   ),
-                  
+
                   // Bottom padding (safe area)
                   SizedBox(height: MediaQuery.of(context).padding.bottom + 24),
                 ],
@@ -248,11 +240,9 @@ class LogoutBottomSheetHelper {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      builder: (context) => LogoutBottomSheet(
-        onConfirm: onConfirm,
-        onCancel: onCancel,
-      ),
+      builder:
+          (context) =>
+              LogoutBottomSheet(onConfirm: onConfirm, onCancel: onCancel),
     );
   }
 }
-

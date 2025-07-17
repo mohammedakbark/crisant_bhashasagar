@@ -1,5 +1,6 @@
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
+import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_network_image.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/features/home/data/bloc/dashboard%20controller/dashboard_controller_cubit.dart';
@@ -56,90 +57,93 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return initializingUI
         ? AppLoading()
-        : Column(
-          children: [
-            if (!isLoadingProfile)
-              Align(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${getUilang.uiText(placeHolder: "DAS002")}, ${userModel.name}",
-                      style: AppStyle.mediumStyle(
-                        color: AppColors.kGrey,
-                        fontSize: ResponsiveHelper.fontSmall,
+        : AppMargin(
+          child: Column(
+            children: [
+              AppSpacer(hp: .01,),
+              if (!isLoadingProfile)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${getUilang.uiText(placeHolder: "DAS002")}, ${userModel.name}",
+                        style: AppStyle.mediumStyle(
+                          color: AppColors.kGrey,
+                          fontSize: ResponsiveHelper.fontSmall,
+                        ),
                       ),
-                    ),
-                    Text(
-                      getUilang.uiText(placeHolder: "DAS003"),
-                      style: AppStyle.boldStyle(
-                        fontSize: ResponsiveHelper.fontMedium,
+                      Text(
+                        getUilang.uiText(placeHolder: "DAS003"),
+                        style: AppStyle.boldStyle(
+                          fontSize: ResponsiveHelper.fontMedium,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                ),
+              AppSpacer(hp: .02),
+          
+              TextFormField(
+                controller: _searchController,
+                cursorColor: AppColors.kBlack,
+                style: AppStyle.normalStyle(),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: ResponsiveHelper.paddingSmall,
+                  ),
+                  prefixIcon: Icon(CupertinoIcons.search, color: AppColors.kGrey),
+                  hintText: getUilang.uiText(placeHolder: "DAS004"),
+                  hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
+                  border: _searchBorder(),
+                  errorBorder: _searchBorder(),
+                  enabledBorder: _searchBorder(),
+                  focusedBorder: _searchBorder(),
+                  disabledBorder: _searchBorder(),
+                  focusedErrorBorder: _searchBorder(),
                 ),
               ),
-            AppSpacer(hp: .02),
-
-            TextFormField(
-              controller: _searchController,
-              cursorColor: AppColors.kBlack,
-              style: AppStyle.normalStyle(),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: ResponsiveHelper.paddingSmall,
+          
+              AppSpacer(hp: .01),
+              Expanded(
+                child: BlocBuilder<
+                  DashboardControllerCubit,
+                  DashboardControllerState
+                >(
+                  builder: (context, state) {
+                    switch (state) {
+                      case DashboardControllerErrorState():
+                        {
+                          return AppErrorView(error: state.error);
+                        }
+                      case DashboardControllerSuccessState():
+                        {
+                          return ListView.separated(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 10,
+                            ),
+                            shrinkWrap: true,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemBuilder:
+                                (context, index) =>
+                                    _buildItem(index, state.languages[index]),
+                            separatorBuilder:
+                                (context, index) => AppSpacer(hp: .01),
+                            itemCount: state.languages.length,
+                          );
+                        }
+                      default:
+                        {
+                          return AppLoading();
+                        }
+                    }
+                  },
                 ),
-                prefixIcon: Icon(CupertinoIcons.search, color: AppColors.kGrey),
-                hintText: getUilang.uiText(placeHolder: "DAS004"),
-                hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
-                border: _searchBorder(),
-                errorBorder: _searchBorder(),
-                enabledBorder: _searchBorder(),
-                focusedBorder: _searchBorder(),
-                disabledBorder: _searchBorder(),
-                focusedErrorBorder: _searchBorder(),
               ),
-            ),
-
-            AppSpacer(hp: .01),
-            Expanded(
-              child: BlocBuilder<
-                DashboardControllerCubit,
-                DashboardControllerState
-              >(
-                builder: (context, state) {
-                  switch (state) {
-                    case DashboardControllerErrorState():
-                      {
-                        return AppErrorView(error: state.error);
-                      }
-                    case DashboardControllerSuccessState():
-                      {
-                        return ListView.separated(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          ),
-                          shrinkWrap: true,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          itemBuilder:
-                              (context, index) =>
-                                  _buildItem(index, state.languages[index]),
-                          separatorBuilder:
-                              (context, index) => AppSpacer(hp: .01),
-                          itemCount: state.languages.length,
-                        );
-                      }
-                    default:
-                      {
-                        return AppLoading();
-                      }
-                  }
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         );
   }
 

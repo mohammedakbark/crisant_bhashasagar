@@ -4,7 +4,6 @@ import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/controller/nav%20controller/nav_controller_dart_cubit.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
-import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/home/presentation/screens/home_screen.dart';
 import 'package:bashasagar/features/nav_bar.dart';
 import 'package:bashasagar/features/profile/presentation/screens/profile_screen.dart';
@@ -12,9 +11,7 @@ import 'package:bashasagar/features/search/presentation/screens/search_screen.da
 import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:bashasagar/features/settings/presentation/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class NavigationScreen extends StatefulWidget {
   NavigationScreen({super.key});
@@ -69,10 +66,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   }
                 },
                 builder: (context, state) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-                    child: _pages[state.currentIndex],
-                  );
+                  return _pages[state.currentIndex];
                 },
               ),
       bottomNavigationBar: AppNavBar(),

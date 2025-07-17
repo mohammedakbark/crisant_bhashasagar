@@ -25,19 +25,23 @@ final class LearnLangLoadingState extends LearnLangControllerState {
 final class LearnLanguageSuccessState extends LearnLangControllerState {
   final List<SettingsLanguageModel> languages;
   final bool isLoadingButton;
+  final bool enableUpdateButton;
 
   const LearnLanguageSuccessState({
     required this.languages,
     super.selectedLanguages,
     this.isLoadingButton = false,
+    required this.enableUpdateButton,
   });
 
   LearnLanguageSuccessState copyWith({
     List<SettingsLanguageModel>? languages,
     List<SettingsLanguageModel>? selectedLanguages,
     bool? isLoadingButton,
+    bool?enableUpdateButton
   }) {
     return LearnLanguageSuccessState(
+      enableUpdateButton:enableUpdateButton??this.enableUpdateButton,
       isLoadingButton: isLoadingButton ?? this.isLoadingButton,
       languages: languages ?? this.languages,
       selectedLanguages: selectedLanguages ?? this.selectedLanguages,

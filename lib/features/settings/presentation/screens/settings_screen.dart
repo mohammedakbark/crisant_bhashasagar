@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bashasagar/core/components/app_custom_button.dart';
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
+import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
 import 'package:bashasagar/core/components/custom_network_img.dart';
@@ -36,7 +37,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (mounted) {
         await context.read<LearnLangControllerCubit>().onGetSettingsLanguages();
       }
-
       getUilang = await GetUiLanguage.create("SETTINGS");
       // await loadLanguages();
       initializingUI = false;
@@ -89,27 +89,62 @@ class _SettingsScreenState extends State<SettingsScreen> {
             getUilang = await GetUiLanguage.create("SETTINGS");
           },
           builder: (context, state) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildChangeLangForAppViw(),
-                  AppSpacer(hp: .04),
-                  _buildLearnLangView(),
-                  AppSpacer(hp: .04),
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  child: AppMargin(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppSpacer(hp: .01),
+                        _buildChangeLangForAppViw(),
+                        AppSpacer(hp: .02),
+                        _buildLearnLangView(),
+                        AppSpacer(hp: .1),
 
-                  AppCustomButton(
-                    title: getUilang.uiText(placeHolder: "SET005"),
-                    width: ResponsiveHelper.wp,
-                    onTap: () async {
-                      await context
-                          .read<LearnLangControllerCubit>()
-                          .onSetLearningLanguages();
+                        // AppSpacer(hp: .04),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  left: 15,
+                  right: 15,
+                  child: BlocBuilder<
+                    LearnLangControllerCubit,
+                    LearnLangControllerState
+                  >(
+                    builder: (context, buttonState) {
+                      return AppCustomButton(
+                        bgColor:
+                            buttonState is LearnLanguageSuccessState &&
+                                    buttonState.enableUpdateButton
+                                ? null
+                                : AppColors.kGrey,
+                        titleColor:
+                            buttonState is LearnLanguageSuccessState &&
+                                    buttonState.enableUpdateButton
+                                ? null
+                                : AppColors.kGreyLight,
+                        isLoading:
+                            buttonState is LearnLanguageSuccessState &&
+                            buttonState.isLoadingButton,
+                        title: getUilang.uiText(placeHolder: "SET005"),
+                        width: ResponsiveHelper.wp,
+                        onTap: () async {
+                          if (buttonState is LearnLanguageSuccessState &&
+                              buttonState.enableUpdateButton) {
+                            await context
+                                .read<LearnLangControllerCubit>()
+                                .onSetLearningLanguages(context);
+                          }
+                        },
+                      );
                     },
                   ),
-                  AppSpacer(hp: .04),
-                ],
-              ),
+                ),
+              ],
             );
           },
         );
@@ -125,7 +160,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               getUilang.uiText(placeHolder: "SET002"),
               style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
             ),
-            AppSpacer(hp: .02),
+            AppSpacer(hp: .01),
             CustomDropDown(
               sufix:
                   state is UiLanguageControllerLoadingState
@@ -166,7 +201,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           getUilang.uiText(placeHolder: "SET004"),
           style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
         ),
-        AppSpacer(hp: .02),
+        AppSpacer(hp: .01),
         BlocBuilder<LearnLangControllerCubit, LearnLangControllerState>(
           builder: (context, state) {
             switch (state) {
@@ -185,7 +220,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       final lang = state.languages[index];
                       bool isSelected = controller.isLanguageSelected(lang);
                       return InkWell(
-                        onTap: () => controller.onAddToLangauge(lang),
+                        onTap: () => controller.onAddToLanguage(lang),
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(

@@ -1,4 +1,5 @@
 import 'package:bashasagar/core/components/app_loading.dart';
+import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
 import 'package:bashasagar/features/settings/data/get_ui_language.dart';
@@ -44,45 +45,48 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return initializingUI
         ? AppLoading()
-        : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Text(getUilang.uiText(placeHolder: "GLS001")),
-            // AppSpacer(hp: .01),
-            CustomDropDown(
-              selectedValue: selectedValue,
-              width: ResponsiveHelper.wp,
-              hintText: getUilang.uiText(placeHolder: "GLS003"),
-              prefix: Icon(CupertinoIcons.globe, color: AppColors.kBlack),
-              items: languages,
-              onChanged: (value) {
-                selectedValue = value;
-              },
-            ),
-            AppSpacer(hp: .02),
-            TextFormField(
-              controller: _searchController,
-              cursorColor: AppColors.kBlack,
-              style: AppStyle.normalStyle(),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: ResponsiveHelper.paddingSmall,
-                ),
-                prefixIcon: Icon(
-                  CupertinoIcons.search,
-                  color: AppColors.kBlack,
-                ),
-                hintText: getUilang.uiText(placeHolder: "GLS004"),
-                hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
-                border: _searchBorder(),
-                errorBorder: _searchBorder(),
-                enabledBorder: _searchBorder(),
-                focusedBorder: _searchBorder(),
-                disabledBorder: _searchBorder(),
-                focusedErrorBorder: _searchBorder(),
+        : AppMargin(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppSpacer(hp: .01,),
+              // Text(getUilang.uiText(placeHolder: "GLS001")),
+              // AppSpacer(hp: .01),
+              CustomDropDown(
+                selectedValue: selectedValue,
+                width: ResponsiveHelper.wp,
+                hintText: getUilang.uiText(placeHolder: "GLS003"),
+                prefix: Icon(CupertinoIcons.globe, color: AppColors.kBlack),
+                items: languages,
+                onChanged: (value) {
+                  selectedValue = value;
+                },
               ),
-            ),
-          ],
+              AppSpacer(hp: .02),
+              TextFormField(
+                controller: _searchController,
+                cursorColor: AppColors.kBlack,
+                style: AppStyle.normalStyle(),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: ResponsiveHelper.paddingSmall,
+                  ),
+                  prefixIcon: Icon(
+                    CupertinoIcons.search,
+                    color: AppColors.kBlack,
+                  ),
+                  hintText: getUilang.uiText(placeHolder: "GLS004"),
+                  hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
+                  border: _searchBorder(),
+                  errorBorder: _searchBorder(),
+                  enabledBorder: _searchBorder(),
+                  focusedBorder: _searchBorder(),
+                  disabledBorder: _searchBorder(),
+                  focusedErrorBorder: _searchBorder(),
+                ),
+              ),
+            ],
+          ),
         );
   }
 

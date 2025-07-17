@@ -61,7 +61,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
 
   late GetUiLanguage getUilang;
   void getUiLanguges() async {
-   await context.read<UiLanguageControllerCubit>().initGetStartScreen();
+    await context.read<UiLanguageControllerCubit>().initGetStartScreen();
     getUilang = await GetUiLanguage.create("INTRO");
   }
 
@@ -122,38 +122,18 @@ class _GetStartScreenState extends State<GetStartScreen> {
 
                         AppSpacer(hp: .05),
 
-                        CustomDropDown(
-                          selectedValue: state.selectdLang,
-                          labelText: getUilang.uiText(placeHolder: "INT005"),
-                          items:
-                              state.uiDropLanguages
-                                  .map(
-                                    (e) => {
-                                      "title": e.uiLanguageName,
-                                      "value": e.uiLanguageId,
-                                      "icon": e.uiImageLight,
-                                    },
-                                  )
-                                  .toList(),
-                          onChanged: (value) async {
-                            log(value.toString());
-                            await context
-                                .read<UiLanguageControllerCubit>()
-                                .onChangeEntireUiLanguage(lang: value);
-                          },
-                        ),
                         // CustomDropDown(
-                        //   sufix:
-                        //       state is UiLanguageControllerLoadingState
-                        //           ? AppLoading()
-                        //           : null,
-                        //   labelText: getUilang.uiText(placeHolder: "INT005"),
                         //   selectedValue: state.selectdLang,
-                        //   width: ResponsiveHelper.wp,
-                        //   // selectedValue: state.language['title'],
+                        //   labelText: getUilang.uiText(placeHolder: "INT005"),
                         //   items:
-                        //       state.convertedLangsToDropDown
-                        //           .map((e) => e)
+                        //       state.uiDropLanguages
+                        //           .map(
+                        //             (e) => {
+                        //               "title": e.uiLanguageName,
+                        //               "value": e.uiLanguageId,
+                        //               "icon": e.uiImageLight,
+                        //             },
+                        //           )
                         //           .toList(),
                         //   onChanged: (value) async {
                         //     log(value.toString());
@@ -162,6 +142,26 @@ class _GetStartScreenState extends State<GetStartScreen> {
                         //         .onChangeEntireUiLanguage(lang: value);
                         //   },
                         // ),
+                        CustomDropDown(
+                          sufix:
+                              state is UiLanguageControllerLoadingState
+                                  ? AppLoading()
+                                  : null,
+                          labelText: getUilang.uiText(placeHolder: "INT005"),
+                          selectedValue: state.selectdLang,
+
+                          // selectedValue: state.language['title'],
+                          items:
+                              state.convertedLangsToDropDown
+                                  .map((e) => e)
+                                  .toList(),
+                          onChanged: (value) async {
+                            log(value.toString());
+                            await context
+                                .read<UiLanguageControllerCubit>()
+                                .onChangeEntireUiLanguage(lang: value);
+                          },
+                        ),
 
                         AppSpacer(hp: .02),
 

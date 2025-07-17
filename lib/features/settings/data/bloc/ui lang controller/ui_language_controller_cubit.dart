@@ -30,28 +30,35 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
         log("Store all app instructions .....");
         await _storeInstructions(insRespo.data as List<UiInstructionModel>);
         final instructions = await getAllInstructionsFromHive;
-
+        emit(
+          UiLanguageControllerSuccessState(
+            uiDropLanguages: [],
+            instructions: instructions,
+          ),
+        );
         emit(
           UiLanguageControllerLoadingState(loadingFor: "Fetching languages.."),
         );
         log("Fetching languges for dropdown...");
 
-        final uiLangRespo = await GetUiLanguagesRepo.onGetUiLangauge();
-        if (!uiLangRespo.isError) {
-          final uiLangd = uiLangRespo.data as List<UiDropLangModel>;
-          emit(
-            UiLanguageControllerSuccessState(
-              uiDropLanguages: uiLangd,
-              instructions: instructions,
-            ),
-          );
-        } else {
-          log("Error -> Fetching ui instruction");
+        await getLanguagesForDropdown();
 
-          emit(
-            UiLanguageControllerErrorState(errro: uiLangRespo.data as String),
-          );
-        }
+        // final uiLangRespo = await GetUiLanguagesRepo.onGetUiLangauge();
+        // if (!uiLangRespo.isError) {
+        //   final uiLangd = uiLangRespo.data as List<UiDropLangModel>;
+        //   emit(
+        //     UiLanguageControllerSuccessState(
+        //       uiDropLanguages: uiLangd,
+        //       instructions: instructions,
+        //     ),
+        //   );
+        // } else {
+        //   log("Error -> Fetching ui instruction");
+
+        //   emit(
+        //     UiLanguageControllerErrorState(errro: uiLangRespo.data as String),
+        //   );
+        // }
       } else {
         log("Error -> Fetching languges for dropdown...");
         emit(UiLanguageControllerErrorState(errro: insRespo.data as String));
