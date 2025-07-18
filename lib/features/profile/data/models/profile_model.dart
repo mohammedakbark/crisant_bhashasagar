@@ -1,26 +1,8 @@
 import 'package:bashasagar/core/models/created_at_model.dart';
 
+
+
 class ProfileModel {
-  int iat;
-  int nbf;
-  Userinfo userinfo;
-
-  ProfileModel({required this.iat, required this.nbf, required this.userinfo});
-
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
-    iat: json["iat"],
-    nbf: json["nbf"],
-    userinfo: Userinfo.fromJson(json["userinfo"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "iat": iat,
-    "nbf": nbf,
-    "userinfo": userinfo.toJson(),
-  };
-}
-
-class Userinfo {
   String customerId;
   String customerName;
   String customerMobile;
@@ -33,7 +15,7 @@ class Userinfo {
   CreatedAt createdAt;
   DateTime modifiedAt;
 
-  Userinfo({
+  ProfileModel({
     required this.customerId,
     required this.customerName,
     required this.customerMobile,
@@ -47,7 +29,7 @@ class Userinfo {
     required this.modifiedAt,
   });
 
-  factory Userinfo.fromJson(Map<String, dynamic> json) => Userinfo(
+  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
     customerId: json["customerId"] ?? "",
     customerName: json["customerName"] ?? "",
     customerMobile: json["customerMobile"] ?? "",

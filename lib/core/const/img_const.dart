@@ -4,5 +4,7 @@ class ImgConst {
   static const login = "assets/images/login.png";
   static const verify = "assets/images/verify.png";
 
+  static const appLogo="assets/images/logo.png";
+
   // static const
 }

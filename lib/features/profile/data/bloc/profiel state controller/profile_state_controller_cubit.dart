@@ -33,6 +33,7 @@ class ProfileStateControllerCubit extends Cubit<ProfileStateControllerState> {
     );
 
     if (response.isError) {
+      emit(ProfileStateControllerInitial());
       showToast(response.data.toString(), isError: true);
     } else {
       context.read<AuthApiControllerBloc>().add(

@@ -28,26 +28,34 @@ final class UiLanguageControllerLoadingState extends UiLanguageControllerState {
 
 final class UiLanguageControllerSuccessState extends UiLanguageControllerState {
   final List<UiDropLangModel> uiDropLanguages;
-  final List<UiInstructionModel> instructions;
+  final List<UiInstructionModel> allInstructions;
+  final bool enableUpdateButton;
+  final bool isLoading;
 
   const UiLanguageControllerSuccessState({
     required this.uiDropLanguages,
     super.selectdLang,
-    required this.instructions,
+    required this.allInstructions,
     super.convertedLangsToDropDown,
+    this.enableUpdateButton = false,
+    this.isLoading = false,
   });
   UiLanguageControllerSuccessState copyWith({
-    List<UiInstructionModel>? instructions,
+    List<UiInstructionModel>? allInstructions,
     List<UiDropLangModel>? uiDropLanguages,
     Map<String, dynamic>? uiLang,
     List<Map<String, dynamic>>? convertedLangsToDropDown,
+    bool? enableUpdateButton,
+    bool? isLoading,
   }) {
     return UiLanguageControllerSuccessState(
-      instructions: instructions ?? this.instructions,
+      allInstructions: allInstructions ?? this.allInstructions,
       uiDropLanguages: uiDropLanguages ?? this.uiDropLanguages,
       selectdLang: uiLang ?? super.selectdLang,
       convertedLangsToDropDown:
           convertedLangsToDropDown ?? this.convertedLangsToDropDown,
+      enableUpdateButton: enableUpdateButton ?? this.enableUpdateButton,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

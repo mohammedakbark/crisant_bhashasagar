@@ -36,6 +36,13 @@ class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
   Future<void> onSetLearningLanguages(BuildContext context) async {
     final currentState = state;
     if (currentState is LearnLanguageSuccessState) {
+      if (currentState.selectedLanguages.isEmpty) {
+        showSnackBar(
+          context,
+          "You should select atleast one language to proceed",
+        );
+        return;
+      }
       emit(currentState.copyWith(isLoadingButton: true));
       final response = await SetLearnLangPreferenceRepo.setLearnlanguages(
         langIds:
@@ -47,7 +54,6 @@ class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
       } else {
         log(response.data.toString());
         showToast(response.data.toString());
-        context.read<NavControllerDartCubit>().onChangeNavTab(0);
         emit(currentState.copyWith(isLoadingButton: false));
       }
     }
@@ -72,47 +78,49 @@ class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
   //   }
   // }]
 
-
   void onAddToLanguage(SettingsLanguageModel language) {
-  final currentState = state;
+    final currentState = state;
 
-  if (currentState is LearnLanguageSuccessState) {
-    // Server-side selected items
-    final serverItems = currentState.languages
-        .where((element) => element.selected == "YES")
-        .toList();
+    if (currentState is LearnLanguageSuccessState) {
+      // Server-side selected items
+      final serverItems =
+          currentState.languages
+              .where((element) => element.selected == "YES")
+              .toList();
 
-    // Create a new list from current selectedLanguages to avoid mutation
-    final updatedList = List<SettingsLanguageModel>.from(currentState.selectedLanguages);
+      // Create a new list from current selectedLanguages to avoid mutation
+      final updatedList = List<SettingsLanguageModel>.from(
+        currentState.selectedLanguages,
+      );
 
-    // Toggle logic: add if not present, remove if present
-    if (updatedList.contains(language)) {
-      updatedList.remove(language);
-    } else {
-      updatedList.add(language);
+      // Toggle logic: add if not present, remove if present
+      if (updatedList.contains(language)) {
+        updatedList.remove(language);
+      } else {
+        updatedList.add(language);
+      }
+
+      // Check if updatedList and serverItems have the same items
+      bool enableButton = !_areListsEqual(updatedList, serverItems);
+
+      emit(
+        currentState.copyWith(
+          selectedLanguages: updatedList,
+          enableUpdateButton: enableButton,
+        ),
+      );
     }
-
-    // Check if updatedList and serverItems have the same items
-    bool enableButton = !_areListsEqual(updatedList, serverItems);
-
-    emit(
-      currentState.copyWith(
-        selectedLanguages: updatedList,
-        enableUpdateButton: enableButton,
-      ),
-    );
   }
-}
 
+  bool _areListsEqual(
+    List<SettingsLanguageModel> list1,
+    List<SettingsLanguageModel> list2,
+  ) {
+    final set1 = Set.from(list1);
+    final set2 = Set.from(list2);
 
-  bool _areListsEqual(List<SettingsLanguageModel> list1, List<SettingsLanguageModel> list2) {
-  final set1 = Set.from(list1);
-  final set2 = Set.from(list2);
-
-  return set1.length == set2.length && set1.containsAll(set2);
-}
-
-  
+    return set1.length == set2.length && set1.containsAll(set2);
+  }
 
   bool isLanguageSelected(SettingsLanguageModel lang) =>
       state.selectedLanguages.contains(lang);

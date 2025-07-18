@@ -16,7 +16,6 @@ import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -28,12 +27,6 @@ class GetStartScreen extends StatefulWidget {
 }
 
 class _GetStartScreenState extends State<GetStartScreen> {
-  final List<Map<String, String>> languages = [
-    {"title": "English", "value": "en"},
-    {"title": "Hindi", "value": "hi"},
-    {"title": "Kannada", "value": "kn"},
-  ];
-
   final PageController controller = PageController();
   Timer? _timer;
   int _currentPage = 0;
@@ -60,9 +53,12 @@ class _GetStartScreenState extends State<GetStartScreen> {
   }
 
   late GetUiLanguage getUilang;
+  bool isInitialising = true;
   void getUiLanguges() async {
-    await context.read<UiLanguageControllerCubit>().initGetStartScreen();
+    // await context.read<UiLanguageControllerCubit>().initGetStartScreen();
     getUilang = await GetUiLanguage.create("INTRO");
+    isInitialising = false;
+    setState(() {});
   }
 
   @override
@@ -77,134 +73,147 @@ class _GetStartScreenState extends State<GetStartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<UiLanguageControllerCubit, UiLanguageControllerState>(
-        listener: (context, state) async {
-          getUilang = await GetUiLanguage.create("INTRO");
-        },
-        builder: (context, state) {
-          switch (state) {
-            case UiLanguageControllerSuccessState():
-              {
-                return AppMargin(
-                  child: SafeArea(
-                    child: Column(
-                      children: [
-                        AppSpacer(hp: .01),
+      body:
+          isInitialising
+              ? AppLoading()
+              : BlocConsumer<
+                UiLanguageControllerCubit,
+                UiLanguageControllerState
+              >(
+                listener: (context, state) async {
+                  getUilang = await GetUiLanguage.create("INTRO");
+                },
+                builder: (context, state) {
+                  switch (state) {
+                    case UiLanguageControllerSuccessState():
+                      {
+                        return AppMargin(
+                          child: SafeArea(
+                            child: Column(
+                              children: [
+                                AppSpacer(hp: .01),
 
-                        Expanded(
-                          child: PageView.builder(
-                            controller: controller,
-                            itemCount: _totalPages,
-                            onPageChanged: (index) {
-                              _currentPage = index;
-                            },
-                            itemBuilder: (context, index) => _pageView(),
+                                Expanded(
+                                  child: PageView.builder(
+                                    controller: controller,
+                                    itemCount: _totalPages,
+                                    onPageChanged: (index) {
+                                      _currentPage = index;
+                                    },
+                                    itemBuilder:
+                                        (context, index) => _pageView(),
+                                  ),
+                                ),
+
+                                AppSpacer(hp: .03),
+
+                                SmoothPageIndicator(
+                                  controller: controller,
+                                  count: _totalPages,
+                                  effect: ExpandingDotsEffect(
+                                    dotColor: AppColors.kOrange.withAlpha(100),
+                                    activeDotColor: AppColors.kOrange,
+                                  ),
+                                  onDotClicked: (index) {
+                                    controller.animateToPage(
+                                      index,
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  },
+                                ),
+
+                                AppSpacer(hp: .05),
+
+                                // CustomDropDown(
+                                //   selectedValue: state.selectdLang,
+                                //   labelText: getUilang.uiText(placeHolder: "INT005"),
+                                //   items:
+                                //       state.uiDropLanguages
+                                //           .map(
+                                //             (e) => {
+                                //               "title": e.uiLanguageName,
+                                //               "value": e.uiLanguageId,
+                                //               "icon": e.uiImageLight,
+                                //             },
+                                //           )
+                                //           .toList(),
+                                //   onChanged: (value) async {
+                                //     log(value.toString());
+                                //     await context
+                                //         .read<UiLanguageControllerCubit>()
+                                //         .onChangeEntireUiLanguage(lang: value);
+                                //   },
+                                // ),
+                                CustomDropDown(
+                                  sufix:
+                                      state is UiLanguageControllerLoadingState
+                                          ? AppLoading()
+                                          : null,
+                                  labelText: getUilang.uiText(
+                                    placeHolder: "INT005",
+                                  ),
+                                  selectedValue: state.selectdLang,
+
+                                  // selectedValue: state.language['title'],
+                                  items:
+                                      state.convertedLangsToDropDown
+                                          .map((e) => e)
+                                          .toList(),
+                                  onChanged: (value) async {
+                                    log(value.toString());
+                                    await context
+                                        .read<UiLanguageControllerCubit>()
+                                        .onChangeEntireUiLanguage(lang: value);
+                                  },
+                                ),
+
+                                AppSpacer(hp: .02),
+
+                                AppCustomButton(
+                                  title: getUilang.uiText(
+                                    placeHolder: "INT006",
+                                  ),
+                                  onTap: () {
+                                    context.go(authScreen);
+                                  },
+                                ),
+
+                                AppSpacer(hp: .05),
+                              ],
+                            ),
                           ),
-                        ),
-
-                        AppSpacer(hp: .03),
-
-                        SmoothPageIndicator(
-                          controller: controller,
-                          count: _totalPages,
-                          effect: ExpandingDotsEffect(
-                            dotColor: AppColors.kOrange.withAlpha(100),
-                            activeDotColor: AppColors.kOrange,
-                          ),
-                          onDotClicked: (index) {
-                            controller.animateToPage(
-                              index,
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
-                          },
-                        ),
-
-                        AppSpacer(hp: .05),
-
-                        // CustomDropDown(
-                        //   selectedValue: state.selectdLang,
-                        //   labelText: getUilang.uiText(placeHolder: "INT005"),
-                        //   items:
-                        //       state.uiDropLanguages
-                        //           .map(
-                        //             (e) => {
-                        //               "title": e.uiLanguageName,
-                        //               "value": e.uiLanguageId,
-                        //               "icon": e.uiImageLight,
-                        //             },
-                        //           )
-                        //           .toList(),
-                        //   onChanged: (value) async {
-                        //     log(value.toString());
-                        //     await context
-                        //         .read<UiLanguageControllerCubit>()
-                        //         .onChangeEntireUiLanguage(lang: value);
-                        //   },
-                        // ),
-                        CustomDropDown(
-                          sufix:
-                              state is UiLanguageControllerLoadingState
-                                  ? AppLoading()
-                                  : null,
-                          labelText: getUilang.uiText(placeHolder: "INT005"),
-                          selectedValue: state.selectdLang,
-
-                          // selectedValue: state.language['title'],
-                          items:
-                              state.convertedLangsToDropDown
-                                  .map((e) => e)
-                                  .toList(),
-                          onChanged: (value) async {
-                            log(value.toString());
-                            await context
-                                .read<UiLanguageControllerCubit>()
-                                .onChangeEntireUiLanguage(lang: value);
-                          },
-                        ),
-
-                        AppSpacer(hp: .02),
-
-                        AppCustomButton(
-                          title: getUilang.uiText(placeHolder: "INT006"),
-                          onTap: () {
-                            context.go(authScreen);
-                          },
-                        ),
-
-                        AppSpacer(hp: .05),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            case UiLanguageControllerErrorState():
-              {
-                return AppErrorView(error: state.errro);
-              }
-            case UiLanguageControllerLoadingState():
-              {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AppLoading(),
-                    AppSpacer(hp: .02),
-                    Text(
-                      state.loadingFor,
-                      style: AppStyle.mediumStyle(
-                        color: AppColors.kPrimaryColor,
-                      ),
-                    ),
-                  ],
-                );
-              }
-            default:
-              {
-                return SizedBox();
-              }
-          }
-        },
-      ),
+                        );
+                      }
+                    case UiLanguageControllerErrorState():
+                      {
+                        return AppErrorView(error: state.errro);
+                      }
+                    // case UiLanguageControllerLoadingState():
+                    //   {
+                    //     return Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         AppLoading(),
+                    //         AppSpacer(hp: .02),
+                    //         Text(
+                    //           state.loadingFor,
+                    //           style: AppStyle.mediumStyle(
+                    //             color: AppColors.kPrimaryColor,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   }
+                    default:
+                      {
+                        return SizedBox();
+                      }
+                  }
+                },
+              ),
     );
   }
 

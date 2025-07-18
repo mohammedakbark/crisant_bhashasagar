@@ -309,7 +309,7 @@ class AuthApiControllerBloc
       final model = response.data as ProfileModel;
       if (event.storeData) {
         await CurrentUserPref.setUserData(
-          CurrentUserModel(name: model.userinfo.customerName),
+          CurrentUserModel(name: model.customerName),
         );
       }
       emit(AuthApiFetchProfileState(profileModel: model));

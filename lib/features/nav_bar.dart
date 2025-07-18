@@ -10,6 +10,7 @@ import 'package:solar_icons/solar_icons.dart';
 
 class AppNavBar extends StatefulWidget {
   final void Function(int)? onTap;
+
   const AppNavBar({super.key, this.onTap});
 
   @override
@@ -17,128 +18,122 @@ class AppNavBar extends StatefulWidget {
 }
 
 class _AppNavBarState extends State<AppNavBar> {
-  bool initializingUI = true;
-  late GetUiLanguage getUilang;
-  late String homeText;
-  late String profileText;
-  late String settingsText;
-  late String searchText;
+  // bool initializingUI = true;
+  // late GetUiLanguage getUilang;
+  // late String homeText;
+  // late String profileText;
+  // late String settingsText;
+  // late String searchText;
 
-  void initUi() async {
-    getUilang = await GetUiLanguage.create("NAV");
-    homeText = getUilang.uiText(placeHolder: "NAV001");
-    profileText = getUilang.uiText(placeHolder: "NAV004");
-    settingsText = getUilang.uiText(placeHolder: "NAV003");
-    searchText = getUilang.uiText(placeHolder: "NAV002");
-    initializingUI = false;
-    setState(() {});
-  }
+  // void initUi() async {
+  //   getUilang = await GetUiLanguage.create("NAV");
+  //   homeText = getUilang.uiText(placeHolder: "NAV001");
+  //   profileText = getUilang.uiText(placeHolder: "NAV004");
+  //   settingsText = getUilang.uiText(placeHolder: "NAV003");
+  //   searchText = getUilang.uiText(placeHolder: "NAV002");
+  //   initializingUI = false;
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
-    initUi();
+    // initUi();
+    context.read<NavControllerDartCubit>().initNav();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return initializingUI
-        ? SizedBox.shrink()
-        : SlideInUp(
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                // BoxShadow(
-                //   blurRadius: 10,
-                //   color: AppColors.kPrimaryLight.withAlpha(120),
-                // ),
-                BoxShadow(
-                  offset: Offset(0, 0),
-                  blurRadius: 10,
-                  spreadRadius: -5,
-                  color: AppColors.kPrimaryLight.withAlpha(120),
+    return SlideInUp(
+      child: BlocBuilder<NavControllerDartCubit, NavControllerDartState>(
+        builder: (context, navState) {
+          return BlocBuilder<
+            UiLanguageControllerCubit,
+            UiLanguageControllerState
+          >(
+            builder: (context, state) {
+              return Container(
+                decoration: BoxDecoration(
+                  boxShadow:navState.currentIndex==2?null: [
+                    // BoxShadow(
+                    //   blurRadius: 10,
+                    //   color: AppColors.kPrimaryLight.withAlpha(120),
+                    // ),
+                    BoxShadow(
+                      offset: Offset(0, 0),
+                      blurRadius: 10,
+                      spreadRadius: -5,
+                      color: AppColors.kPrimaryLight.withAlpha(120),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: BlocBuilder<NavControllerDartCubit, NavControllerDartState>(
-              builder: (context, navState) {
-                return BlocConsumer<
-                  UiLanguageControllerCubit,
-                  UiLanguageControllerState
-                >(
-                  listener: (context, state) async {
-                    // initUi();
-                  },
-                  builder: (context, state) {
-                    return BottomNavigationBar(
-                      backgroundColor:
-                          AppColors.kWhite, // fixedColor: AppColors.kWhite,
-                      currentIndex: navState.currentIndex,
-                      showSelectedLabels: true,
-                      showUnselectedLabels: false,
-                      selectedIconTheme: IconThemeData(
-                        fill: .5,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(2, 1),
-                            blurRadius: 1,
-                            color: AppColors.kPrimaryColor.withAlpha(120),
-                          ),
-                        ],
+                child: BottomNavigationBar(
+                  backgroundColor:
+                      AppColors.kWhite, // fixedColor: AppColors.kWhite,
+                  currentIndex: navState.currentIndex,
+                  showSelectedLabels: true,
+                  showUnselectedLabels: false,
+                  selectedIconTheme: IconThemeData(
+                    fill: .5,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2, 1),
+                        blurRadius: 1,
+                        color: AppColors.kPrimaryColor.withAlpha(120),
                       ),
-                      selectedItemColor: AppColors.kPrimaryColor,
-                      unselectedItemColor: AppColors.kGrey,
+                    ],
+                  ),
+                  selectedItemColor: AppColors.kPrimaryColor,
+                  unselectedItemColor: AppColors.kGrey,
 
-                      onTap:
-                          widget.onTap == null
-                              ? context
-                                  .read<NavControllerDartCubit>()
-                                  .onChangeNavTab
-                              : (index) {
-                                widget.onTap!(index);
-                                context
-                                    .read<NavControllerDartCubit>()
-                                    .onChangeNavTab(index);
-                              },
-                      items: [
-                        BottomNavigationBarItem(
-                          backgroundColor: AppColors.kWhite,
+                  onTap:
+                      widget.onTap == null
+                          ? context
+                              .read<NavControllerDartCubit>()
+                              .onChangeNavTab
+                          : (index) {
+                            widget.onTap!(index);
+                            context
+                                .read<NavControllerDartCubit>()
+                                .onChangeNavTab(index);
+                          },
+                  items: [
+                    BottomNavigationBarItem(
+                      backgroundColor: AppColors.kWhite,
 
-                          label: homeText,
-                          activeIcon: _buildActiveIcon(
-                            SolarIconsBold.homeAngle_2,
-                          ),
-                          icon: Icon(SolarIconsOutline.homeAngle_2),
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: AppColors.kWhite,
+                      label: navState.homeText,
+                      activeIcon: _buildActiveIcon(SolarIconsBold.homeAngle_2),
+                      icon: Icon(SolarIconsOutline.homeAngle_2),
+                    ),
+                    BottomNavigationBarItem(
+                      backgroundColor: AppColors.kWhite,
 
-                          label: searchText,
-                          activeIcon: _buildActiveIcon(
-                            SolarIconsBold.lightbulbBold,
-                          ),
-                          icon: Icon(SolarIconsOutline.lightbulbBold),
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: AppColors.kWhite,
-                          label: settingsText,
-                          activeIcon: _buildActiveIcon(SolarIconsBold.tuning_4),
-                          icon: Icon(SolarIconsOutline.tuning_4),
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: AppColors.kWhite,
-                          label: profileText,
-                          activeIcon: _buildActiveIcon(SolarIconsBold.user),
-                          icon: Icon(SolarIconsOutline.user),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        );
+                      label: navState.searchText,
+                      activeIcon: _buildActiveIcon(
+                        SolarIconsBold.lightbulbBold,
+                      ),
+                      icon: Icon(SolarIconsOutline.lightbulbBold),
+                    ),
+                    BottomNavigationBarItem(
+                      backgroundColor: AppColors.kWhite,
+                      label: navState.settingsText,
+                      activeIcon: _buildActiveIcon(SolarIconsBold.tuning_4),
+                      icon: Icon(SolarIconsOutline.tuning_4),
+                    ),
+                    BottomNavigationBarItem(
+                      backgroundColor: AppColors.kWhite,
+                      label: navState.profileText,
+                      activeIcon: _buildActiveIcon(SolarIconsBold.user),
+                      icon: Icon(SolarIconsOutline.user),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildActiveIcon(IconData icon) {

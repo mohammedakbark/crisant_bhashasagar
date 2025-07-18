@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_margin.dart';
@@ -30,8 +32,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    initUi();
-    getUserData();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      try {
+        initUi();
+        getUserData();
+      } catch (e) {
+        initializingUI = false;
+        isLoadingProfile = false;
+        setState(() {});
+      }
+    });
   }
 
   late CurrentUserModel userModel;
@@ -60,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         : AppMargin(
           child: Column(
             children: [
-              AppSpacer(hp: .01,),
+              AppSpacer(hp: .01),
               if (!isLoadingProfile)
                 Align(
                   alignment: Alignment.topLeft,
@@ -84,8 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               AppSpacer(hp: .02),
-          
+
               TextFormField(
+                onChanged: (value) async {
+                  await context.read<DashboardControllerCubit>().onSearchData(
+                    value,
+                  );
+                },
                 controller: _searchController,
                 cursorColor: AppColors.kBlack,
                 style: AppStyle.normalStyle(),
@@ -93,7 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   contentPadding: EdgeInsets.symmetric(
                     vertical: ResponsiveHelper.paddingSmall,
                   ),
-                  prefixIcon: Icon(CupertinoIcons.search, color: AppColors.kGrey),
+                  prefixIcon: Icon(
+                    CupertinoIcons.search,
+                    color: AppColors.kGrey,
+                  ),
                   hintText: getUilang.uiText(placeHolder: "DAS004"),
                   hintStyle: AppStyle.normalStyle(color: AppColors.kGrey),
                   border: _searchBorder(),
@@ -104,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   focusedErrorBorder: _searchBorder(),
                 ),
               ),
-          
+
               AppSpacer(hp: .01),
               Expanded(
                 child: BlocBuilder<
@@ -119,20 +138,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       case DashboardControllerSuccessState():
                         {
-                          return ListView.separated(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            shrinkWrap: true,
-                            physics: AlwaysScrollableScrollPhysics(),
-                            itemBuilder:
-                                (context, index) =>
-                                    _buildItem(index, state.languages[index]),
-                            separatorBuilder:
-                                (context, index) => AppSpacer(hp: .01),
-                            itemCount: state.languages.length,
-                          );
+                          List<DashboardLanguageProgressModel> displayLangues =
+                              [];
+                          if (state.searchResult.isEmpty) {
+                            displayLangues = state.languages;
+                          } else {
+                            displayLangues = state.searchResult;
+                          }
+                          return _searchController.text.isNotEmpty &&
+                                  state.searchResult.isEmpty
+                              ? _buildNoLanguageView(
+                                "No language found matching your search.",
+                                Icons.search_off,
+                              )
+                              : displayLangues.isEmpty
+                              ? _buildNoLanguageView(
+                                "No languages available.",
+                                Icons.language,
+                              )
+                              : ListView.separated(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 10,
+                                ),
+                                shrinkWrap: true,
+                                physics: AlwaysScrollableScrollPhysics(),
+                                itemBuilder:
+                                    (context, index) => _buildItem(
+                                      index,
+                                      displayLangues[index],
+                                    ),
+                                separatorBuilder:
+                                    (context, index) => AppSpacer(hp: .01),
+                                itemCount: displayLangues.length,
+                              );
                         }
                       default:
                         {
@@ -157,15 +196,17 @@ class _HomeScreenState extends State<HomeScreen> {
         index.isEven ? AppColors.kSecondary : AppColors.kPrimaryLight;
     return GestureDetector(
       onTap: () {
-        context.push(
-          primaryCategoryScreen,
-          extra: {
-            "langaugeId": model.languageId,
-            "language": model.details.languageName,
-          },
-        ).then((value) async{
-           await GetUiLanguage.create("DASHBOARD");
-        },);
+        context
+            .push(
+              primaryCategoryScreen,
+              extra: {
+                "langaugeId": model.languageId,
+                "language": model.details.languageName,
+              },
+            )
+            .then((value) async {
+              await GetUiLanguage.create("DASHBOARD");
+            });
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -233,9 +274,29 @@ class _HomeScreenState extends State<HomeScreen> {
             AppSpacer(hp: .005),
             Align(
               alignment: Alignment.bottomRight,
-              child: Text("${model.status.totalCompleted}%",style: AppStyle.smallStyle(),)),
+              child: Text(
+                "${model.status.totalCompleted}%",
+                style: AppStyle.smallStyle(),
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildNoLanguageView(String message, IconData icon) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 40),
+          AppSpacer(hp: .03),
+          Text(
+            message,
+            style: AppStyle.normalStyle(fontSize: 12, color: AppColors.kGrey),
+          ),
+        ],
       ),
     );
   }

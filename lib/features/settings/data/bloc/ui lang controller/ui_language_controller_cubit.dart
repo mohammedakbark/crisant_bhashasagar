@@ -33,7 +33,7 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
         emit(
           UiLanguageControllerSuccessState(
             uiDropLanguages: [],
-            instructions: instructions,
+            allInstructions: instructions,
           ),
         );
         emit(
@@ -109,7 +109,7 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
                   }
                   : null,
           uiDropLanguages: uiLangd,
-          instructions: [],
+          allInstructions: [],
         ),
       );
     } else {
@@ -134,12 +134,26 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
 
   //   LANGUAGE CHANGER
 
+  void onSelectLanguage({required Map<String, dynamic> lang}) {
+    final currentState = state;
+    if (currentState is UiLanguageControllerSuccessState) {
+      bool enableButton = false;
+      if (currentState.selectdLang!["value"] != lang['value']) {
+        enableButton = true;
+      }
+      emit(
+        currentState.copyWith(uiLang: lang, enableUpdateButton: enableButton),
+      );
+    }
+  }
+
   Future<void> onChangeEntireUiLanguage({
     required Map<String, dynamic> lang,
   }) async {
     final currentState = state;
     log("My Current Lang Id :${lang['value']}");
     if (currentState is UiLanguageControllerSuccessState) {
+      emit(currentState.copyWith(isLoading: true));
       log("taking the selected lang instruction from all instruction HIVE....");
       final instructions = await getAllInstructionsFromHive;
       final currentLanguageData =
@@ -163,6 +177,7 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
         currentState.copyWith(
           convertedLangsToDropDown: convertedLangFOrDropDown,
           uiLang: lang,
+          isLoading: false,
         ),
       );
     }

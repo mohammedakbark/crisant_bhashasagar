@@ -15,6 +15,10 @@ final class DashboardControllerErrorState extends DashboardControllerState {
 
 final class DashboardControllerSuccessState extends DashboardControllerState {
   final List<DashboardLanguageProgressModel> languages;
+  final List<DashboardLanguageProgressModel> searchResult;
 
-  DashboardControllerSuccessState({required this.languages});
+  DashboardControllerSuccessState({
+    required this.languages,
+    required this.searchResult,
+  });
 }

@@ -7,6 +7,7 @@ import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/components/custom_drop_down.dart';
 import 'package:bashasagar/core/components/custom_network_img.dart';
+import 'package:bashasagar/core/controller/nav%20controller/nav_controller_dart_cubit.dart';
 import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
@@ -48,8 +49,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await initUi();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      try {
+        initUi();
+      } catch (e) {
+        initializingUI = false;
+        setState(() {});
+      }
     });
     super.initState();
   }
@@ -89,63 +95,132 @@ class _SettingsScreenState extends State<SettingsScreen> {
             getUilang = await GetUiLanguage.create("SETTINGS");
           },
           builder: (context, state) {
-            return Stack(
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SingleChildScrollView(
+                Expanded(
                   child: AppMargin(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppSpacer(hp: .01),
                         _buildChangeLangForAppViw(),
                         AppSpacer(hp: .02),
                         _buildLearnLangView(),
-                        AppSpacer(hp: .1),
-
-                        // AppSpacer(hp: .04),
+                        AppSpacer(hp: .01),
                       ],
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 10,
-                  left: 15,
-                  right: 15,
-                  child: BlocBuilder<
-                    LearnLangControllerCubit,
-                    LearnLangControllerState
-                  >(
-                    builder: (context, buttonState) {
-                      return AppCustomButton(
-                        bgColor:
-                            buttonState is LearnLanguageSuccessState &&
-                                    buttonState.enableUpdateButton
-                                ? null
-                                : AppColors.kGrey,
-                        titleColor:
-                            buttonState is LearnLanguageSuccessState &&
-                                    buttonState.enableUpdateButton
-                                ? null
-                                : AppColors.kGreyLight,
-                        isLoading:
-                            buttonState is LearnLanguageSuccessState &&
-                            buttonState.isLoadingButton,
-                        title: getUilang.uiText(placeHolder: "SET005"),
-                        width: ResponsiveHelper.wp,
-                        onTap: () async {
-                          if (buttonState is LearnLanguageSuccessState &&
-                              buttonState.enableUpdateButton) {
-                            await context
-                                .read<LearnLangControllerCubit>()
-                                .onSetLearningLanguages(context);
-                          }
-                        },
-                      );
-                    },
-                  ),
-                ),
+                _buildButton(),
+
+                // AppSpacer(hp: .04),
               ],
             );
+
+            // Stack(
+            //   children: [
+            //     AppMargin(
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           AppSpacer(hp: .01),
+            //           _buildChangeLangForAppViw(),
+            //           AppSpacer(hp: .02),
+            //           _buildLearnLangView(),
+            //           AppSpacer(hp: .01),
+            //           _buildButton(),
+
+            //           // AppSpacer(hp: .04),
+            //         ],
+            //       ),
+            //     ),
+            //     Positioned(
+            //       bottom: 10,
+            //       left: 15,
+            //       right: 15,
+            //       child: BlocBuilder<
+            //         LearnLangControllerCubit,
+            //         LearnLangControllerState
+            //       >(
+            //         builder: (context, learnLangbuttonState) {
+            //           return BlocBuilder<
+            //             UiLanguageControllerCubit,
+            //             UiLanguageControllerState
+            //           >(
+            //             builder: (context, uiLangButtonState) {
+            //               bool isButtonEnabled =
+            //                   (learnLangbuttonState
+            //                           is LearnLanguageSuccessState &&
+            //                       learnLangbuttonState.enableUpdateButton) ||
+            //                   (uiLangButtonState
+            //                           is UiLanguageControllerSuccessState &&
+            //                       uiLangButtonState.enableUpdateButton);
+
+            //               bool isLoadingButton =
+            //                   (learnLangbuttonState
+            //                           is LearnLanguageSuccessState &&
+            //                       learnLangbuttonState.isLoadingButton) ||
+            //                   (uiLangButtonState
+            //                           is UiLanguageControllerSuccessState &&
+            //                       uiLangButtonState.isLoading);
+            //               return AppCustomButton(
+            //                 bgColor: isButtonEnabled ? null : AppColors.kGrey,
+            //                 titleColor:
+            //                     isButtonEnabled ? null : AppColors.kGreyLight,
+            //                 isLoading: isLoadingButton,
+            //                 title: getUilang.uiText(placeHolder: "SET005"),
+            //                 width: ResponsiveHelper.wp,
+            //                 onTap: () async {
+            //                   bool canUpdateSettingsLangues =
+            //                       learnLangbuttonState
+            //                           is LearnLanguageSuccessState &&
+            //                       learnLangbuttonState.enableUpdateButton;
+            //                   bool canUpdateUILanguege =
+            //                       uiLangButtonState
+            //                           is UiLanguageControllerSuccessState &&
+            //                       uiLangButtonState.enableUpdateButton;
+
+            //                   if (canUpdateUILanguege) {
+            //                     log("Updating UI lang");
+            //                     await context
+            //                         .read<UiLanguageControllerCubit>()
+            //                         .onChangeEntireUiLanguage(
+            //                           lang: uiLangButtonState.selectdLang!,
+            //                         );
+
+            //                     await context
+            //                         .read<UiLanguageControllerCubit>()
+            //                         .updateUiLanguageInServer();
+            //                     await context
+            //                         .read<NavControllerDartCubit>()
+            //                         .initNav();
+
+            //                     // await context
+            //                     //     .read<LearnLangControllerCubit>()
+            //                     //     .onGetSettingsLanguages();
+            //                   }
+            //                   if (canUpdateSettingsLangues) {
+            //                     log("Updating Setting lang");
+            //                     await context
+            //                         .read<LearnLangControllerCubit>()
+            //                         .onSetLearningLanguages(context);
+            //                   }
+
+            //                   if (canUpdateUILanguege ||
+            //                       canUpdateSettingsLangues) {
+            //                     context
+            //                         .read<NavControllerDartCubit>()
+            //                         .onChangeNavTab(0);
+            //                   }
+            //                 },
+            //               );
+            //             },
+            //           );
+            //         },
+            //       ),
+            //     ),
+            //   ],
+            // );
           },
         );
   }
@@ -172,17 +247,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // selectedValue: state.language['title'],
               items: state.convertedLangsToDropDown.map((e) => e).toList(),
               onChanged: (value) async {
-                log(value.toString());
-                await context
-                    .read<UiLanguageControllerCubit>()
-                    .onChangeEntireUiLanguage(lang: value);
-                await context
-                    .read<UiLanguageControllerCubit>()
-                    .updateUiLanguageInServer();
+                context.read<UiLanguageControllerCubit>().onSelectLanguage(
+                  lang: value,
+                );
+                // await context
+                //     .read<UiLanguageControllerCubit>()
+                //     .onChangeEntireUiLanguage(lang: value);
 
-                await context
-                    .read<LearnLangControllerCubit>()
-                    .onGetSettingsLanguages();
+                // await context
+                //     .read<UiLanguageControllerCubit>()
+                //     .updateUiLanguageInServer();
+                // context.read<NavControllerDartCubit>().initNav();
+
+                // await context
+                //     .read<LearnLangControllerCubit>()
+                //     .onGetSettingsLanguages();
               },
             ),
           ],
@@ -194,107 +273,213 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildLearnLangView() {
     final controller = context.read<LearnLangControllerCubit>();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          getUilang.uiText(placeHolder: "SET004"),
-          style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
-        ),
-        AppSpacer(hp: .01),
-        BlocBuilder<LearnLangControllerCubit, LearnLangControllerState>(
-          builder: (context, state) {
-            switch (state) {
-              case LearnLanguageSuccessState():
-                {
-                  return GridView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.languages.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemBuilder: (context, index) {
-                      final lang = state.languages[index];
-                      bool isSelected = controller.isLanguageSelected(lang);
-                      return InkWell(
-                        onTap: () => controller.onAddToLanguage(lang),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(
-                            ResponsiveHelper.paddingMedium,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              ResponsiveHelper.borderRadiusMedium,
-                            ),
-                            border: Border.all(
-                              width: .5,
-                              color: AppColors.kPrimaryColor,
-                            ),
-                            color:
-                                isSelected
-                                    ? AppColors.kPrimaryColor
-                                    : AppColors.kWhite,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 10,
-                                ),
-                                width: ResponsiveHelper.wp * .13,
-                                height: ResponsiveHelper.wp * .12,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    ResponsiveHelper.borderRadiusMedium,
-                                  ),
-                                  color:
-                                      isSelected
-                                          ? AppColors.kWhite
-                                          : AppColors.kGreyLight,
-                                ),
-                                child: CustomNetworkImg(
-                                  path: lang.lanuageImageDark,
-                                ),
-                              ),
-                              AppSpacer(hp: .01),
-                              Flexible(
-                                child: Text(
-                                  maxLines: 1,
-                                  lang.languageName,
-                                  style: AppStyle.mediumStyle(
-                                    color:
-                                        isSelected
-                                            ? AppColors.kWhite
-                                            : AppColors.kBlack,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            getUilang.uiText(placeHolder: "SET004"),
+            style: AppStyle.boldStyle(fontSize: ResponsiveHelper.fontMedium),
+          ),
+          AppSpacer(hp: .01),
+          Expanded(
+            child: BlocBuilder<
+              LearnLangControllerCubit,
+              LearnLangControllerState
+            >(
+              builder: (context, state) {
+                switch (state) {
+                  case LearnLanguageSuccessState():
+                    {
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.languages.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
                         ),
+                        itemBuilder: (context, index) {
+                          final lang = state.languages[index];
+                          bool isSelected = controller.isLanguageSelected(lang);
+                          return InkWell(
+                            onTap: () => controller.onAddToLanguage(lang),
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(
+                                ResponsiveHelper.paddingMedium,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  ResponsiveHelper.borderRadiusMedium,
+                                ),
+                                border: Border.all(
+                                  width: .5,
+                                  color: AppColors.kPrimaryColor,
+                                ),
+                                color:
+                                    isSelected
+                                        ? AppColors.kPrimaryColor
+                                        : AppColors.kWhite,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 10,
+                                    ),
+                                    width: ResponsiveHelper.wp * .13,
+                                    height: ResponsiveHelper.wp * .12,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        ResponsiveHelper.borderRadiusMedium,
+                                      ),
+                                      color:
+                                          isSelected
+                                              ? AppColors.kWhite
+                                              : AppColors.kGreyLight,
+                                    ),
+                                    child: CustomNetworkImg(
+                                      path: lang.lanuageImageDark,
+                                    ),
+                                  ),
+                                  AppSpacer(hp: .01),
+                                  Flexible(
+                                    child: Text(
+                                      maxLines: 1,
+                                      lang.languageName,
+                                      style: AppStyle.mediumStyle(
+                                        color:
+                                            isSelected
+                                                ? AppColors.kWhite
+                                                : AppColors.kBlack,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       );
+                    }
+                  case LearnLanguageErrorState():
+                    {
+                      return AppErrorView(error: state.error);
+                    }
+                  default:
+                    {
+                      return AppLoading();
+                    }
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      width: ResponsiveHelper.wp,
+      height: ResponsiveHelper.hp * .09,
+
+      decoration: BoxDecoration(
+        color: AppColors.kWhite,
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(1, -5),
+            spreadRadius: 2,
+            blurRadius: 10,
+            color: AppColors.kGrey.withAlpha(40),
+          ),
+          //  BoxShadow(
+          //             offset: Offset(0, 0),
+          //             blurRadius: 10,
+          //             spreadRadius: -5,
+          //             color: AppColors.kPrimaryLight.withAlpha(120),
+          //           ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BlocBuilder<LearnLangControllerCubit, LearnLangControllerState>(
+            builder: (context, learnLangbuttonState) {
+              return BlocBuilder<
+                UiLanguageControllerCubit,
+                UiLanguageControllerState
+              >(
+                builder: (context, uiLangButtonState) {
+                  bool isButtonEnabled =
+                      (learnLangbuttonState is LearnLanguageSuccessState &&
+                          learnLangbuttonState.enableUpdateButton) ||
+                      (uiLangButtonState is UiLanguageControllerSuccessState &&
+                          uiLangButtonState.enableUpdateButton);
+
+                  bool isLoadingButton =
+                      (learnLangbuttonState is LearnLanguageSuccessState &&
+                          learnLangbuttonState.isLoadingButton) ||
+                      (uiLangButtonState is UiLanguageControllerSuccessState &&
+                          uiLangButtonState.isLoading);
+                  return AppCustomButton(
+                    hideShadow: true,
+                    bgColor: isButtonEnabled ? null : AppColors.kGrey,
+                    titleColor: isButtonEnabled ? null : AppColors.kGreyLight,
+                    isLoading: isLoadingButton,
+                    title: getUilang.uiText(placeHolder: "SET005"),
+                    width: ResponsiveHelper.wp,
+                    onTap: () async {
+                      bool canUpdateSettingsLangues =
+                          learnLangbuttonState is LearnLanguageSuccessState &&
+                          learnLangbuttonState.enableUpdateButton;
+                      bool canUpdateUILanguege =
+                          uiLangButtonState
+                              is UiLanguageControllerSuccessState &&
+                          uiLangButtonState.enableUpdateButton;
+
+                      if (canUpdateUILanguege) {
+                        log("Updating UI lang");
+                        await context
+                            .read<UiLanguageControllerCubit>()
+                            .onChangeEntireUiLanguage(
+                              lang: uiLangButtonState.selectdLang!,
+                            );
+
+                        await context
+                            .read<UiLanguageControllerCubit>()
+                            .updateUiLanguageInServer();
+                        await context.read<NavControllerDartCubit>().initNav();
+
+                        // await context
+                        //     .read<LearnLangControllerCubit>()
+                        //     .onGetSettingsLanguages();
+                      }
+                      if (canUpdateSettingsLangues) {
+                        log("Updating Setting lang");
+                        await context
+                            .read<LearnLangControllerCubit>()
+                            .onSetLearningLanguages(context);
+                      }
+
+                      if (canUpdateUILanguege || canUpdateSettingsLangues) {
+                        context.read<NavControllerDartCubit>().onChangeNavTab(
+                          0,
+                        );
+                      }
                     },
                   );
-                }
-              case LearnLanguageErrorState():
-                {
-                  return AppErrorView(error: state.error);
-                }
-              default:
-                {
-                  return AppLoading();
-                }
-            }
-          },
-        ),
-      ],
+                },
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

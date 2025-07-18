@@ -50,6 +50,12 @@ class _AppLoadingState extends State<AppLoading> {
                 strokeWidth: 2,
                 // trackGap: 5,
                 strokeCap: StrokeCap.round,
+                constraints: BoxConstraints(
+                  maxHeight: 50,
+                  maxWidth: 50,
+                  minHeight: 20,
+                  minWidth: 20,
+                ),
                 backgroundColor:
                     Platform.isAndroid
                         ? AppColors.kWhite

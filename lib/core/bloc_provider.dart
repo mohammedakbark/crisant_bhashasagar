@@ -3,6 +3,7 @@ import 'package:bashasagar/features/auth/data/bloc/auth%20api%20controller/auth_
 import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:bashasagar/features/home/data/bloc/dashboard%20controller/dashboard_controller_cubit.dart';
 import 'package:bashasagar/features/profile/data/bloc/profiel%20state%20controller/profile_state_controller_cubit.dart';
+import 'package:bashasagar/features/search/data/bloc/search%20word%20controller/search_word_controller_cubit.dart';
 import 'package:bashasagar/features/session/data/bloc/content%20controller/content_controller_bloc.dart';
 import 'package:bashasagar/features/session/data/bloc/content%20state%20controller/content_state_controller_bloc.dart';
 import 'package:bashasagar/features/session/data/bloc/primary%20controller/primary_category_controller_cubit.dart';
@@ -58,6 +59,9 @@ class AppBlocProvider extends StatelessWidget {
         ),
         BlocProvider<ProfileStateControllerCubit>(
           create: (context) => ProfileStateControllerCubit(),
+        ),
+         BlocProvider<SearchWordControllerCubit>(
+          create: (context) => SearchWordControllerCubit(),
         ),
       ],
       child: child,

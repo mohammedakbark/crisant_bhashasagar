@@ -33,4 +33,6 @@ class ApiConst {
   static const transliterate = "api/contents/transliterate";
 
   static const markcustomerProgress = "api/profile/customerProgress";
+
+  static const searchWord = "api/contents/search";
 }

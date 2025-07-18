@@ -6,7 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-
 class CustomDropDown extends StatefulWidget {
   final String? title;
   final List<Map<String, dynamic>> items;
@@ -57,7 +56,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
             items:
                 widget.items.map((item) {
                   final value = item['value'];
-                  final title = item['title'].toString(); 
+                  final title = item['title'].toString();
                   final langIcon = item['icon'] as String?;
                   return DropdownMenuItem(
                     value: item,
@@ -73,7 +72,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.kGrey,
+                                color: AppColors.kGrey.withAlpha(150),
                                 borderRadius: BorderRadius.circular(
                                   ResponsiveHelper.borderRadiusXSmall,
                                 ),
@@ -103,10 +102,11 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     : null,
             onChanged: widget.onChanged,
             dropdownStyleData: DropdownStyleData(
+              maxHeight: ResponsiveHelper.hp * .6,
               decoration: BoxDecoration(
-                color: AppColors.kWhite ,
-                borderRadius: BorderRadius.circular(10)
-              )
+                color: AppColors.kWhite,
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             // dropdownColor: AppColors.kWhite,
             // borderRadius: BorderRadius.circular(
