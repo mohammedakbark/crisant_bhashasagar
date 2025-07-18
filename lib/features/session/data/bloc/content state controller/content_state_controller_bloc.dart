@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bashasagar/core/utils/intl_c.dart';
+import 'package:bashasagar/core/utils/show_messages.dart';
 import 'package:bashasagar/features/session/data/bloc/content%20controller/content_controller_bloc.dart';
 import 'package:bashasagar/features/session/data/models/content_json_model.dart';
 import 'package:bashasagar/features/session/data/repo/mark_content_progress_repo.dart';
@@ -226,6 +227,7 @@ class ContentStateControllerBloc
         }
       } catch (e) {
         emit(currentState.copyWith(isAudioPlaying: false));
+        showToast("Audio not available",isError: true);
         log("Audio play error: $e");
       }
     }

@@ -340,6 +340,10 @@ class _ContentScreenState extends State<ContentScreen> {
                                       state.currentFile.contentAudio,
                                     ),
                                     child: Lottie.asset(
+                                      errorBuilder: (context, error, stackTrace) => Icon(
+                                      CupertinoIcons.speaker_3,
+                                      color: AppColors.kWhite,
+                                    ),
                                       "assets/json/paying audio.json",
                                     ),
                                   )

@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Bhashasagar',
+      title: 'Bashasagar',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData(),
       // localizationsDelegates: context.localizationDelegates,

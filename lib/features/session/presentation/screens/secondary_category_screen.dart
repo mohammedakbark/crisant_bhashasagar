@@ -256,6 +256,7 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                                                   // state.secondaryCategoryId ==
                                                   //     category.secondaryCategoryId
                                                   ? Lottie.asset(
+                                                    errorBuilder: (context, error, stackTrace) => AppLoading(),
                                                     height: 50,
                                                     width: 50,
                                                     "assets/json/Downloading.json",
