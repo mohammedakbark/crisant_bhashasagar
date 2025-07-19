@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:bashasagar/core/utils/show_messages.dart';
 import 'package:bashasagar/features/search/data/models/search_word_model.dart';
 import 'package:bashasagar/features/search/data/repo/search_word_Repo.dart';
 import 'package:bloc/bloc.dart';
@@ -120,12 +121,9 @@ class SearchWordControllerCubit extends Cubit<SearchWordControllerState> {
         }
       } catch (e) {
         emit(currentState.coptyWith(isAudioPaying: false));
+        showToast("Audio is missing", isError: true);
         log("Audio play error: $e");
       }
-
-      // emit(currentState.coptyWith(isAudioPaying: true, liveTileIndex: index));
-      // await Future.delayed(Duration(seconds: 1));
-      // emit(currentState.coptyWith(isAudioPaying: false, liveTileIndex: null));
     }
   }
 

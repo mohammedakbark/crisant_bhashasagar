@@ -39,7 +39,7 @@ class LearnLangControllerCubit extends Cubit<LearnLangControllerState> {
       if (currentState.selectedLanguages.isEmpty) {
         showSnackBar(
           context,
-          "You should select atleast one language to proceed",
+          "Please select at least one language you want to learn.",
         );
         return;
       }

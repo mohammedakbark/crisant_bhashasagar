@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/controller/nav%20controller/nav_controller_dart_cubit.dart';
-import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +37,6 @@ class _AppNavBarState extends State<AppNavBar> {
 
   @override
   void initState() {
-    // initUi();
     context.read<NavControllerDartCubit>().initNav();
     super.initState();
   }
@@ -58,10 +55,6 @@ class _AppNavBarState extends State<AppNavBar> {
                 height: Platform.isAndroid?85:null,
                 decoration: BoxDecoration(
                   boxShadow:navState.currentIndex==2?null: [
-                    // BoxShadow(
-                    //   blurRadius: 10,
-                    //   color: AppColors.kPrimaryLight.withAlpha(120),
-                    // ),
                     BoxShadow(
                       offset: Offset(0, 0),
                       blurRadius: 10,

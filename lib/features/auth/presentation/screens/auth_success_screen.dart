@@ -35,14 +35,11 @@ class AuthSuccessScreen extends StatelessWidget {
         child: SafeArea(
           bottom: false,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 39, vertical: 30),
-                  // color: AppColors.kPrimaryLight,
-                  child: Image.asset(ImgConst.success),
-                ),
-              ),
+              SafeArea(child: Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
+                child: Image.asset(ImgConst.success))),
               Container(
                 width: ResponsiveHelper.wp,
                 padding: EdgeInsets.symmetric(vertical: 30),

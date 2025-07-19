@@ -19,70 +19,102 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        reverse: true,
-        child: Container(
-          height: ResponsiveHelper.hp,
-          color: AppColors.kPrimaryColor,
-          child: SafeArea(
-            bottom: false,
-            child: Stack(
-              children: [
-                BlocBuilder<AuthStateControllerCubit, AuthStateControllerState>(
-                  builder: (context, state) {
-                    return Container(
-                      width: ResponsiveHelper.wp,
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 39,
-                        vertical: 30,
-                      ),
+      backgroundColor:  //   height: ResponsiveHelper.hp,
+   AppColors.kPrimaryColor,
+      // body: Container(
+      //   height: ResponsiveHelper.hp,
+      //   color: AppColors.kPrimaryColor,
+      //   child: Stack(
+      //   // fit: StackFit.expand,
+      //   alignment: Alignment.bottomCenter,
+      //     children: [
+      //       Positioned(
+      //         left: 10,
+      //         right: 10,
+      //         top: ResponsiveHelper.hp*.2,
+      //         child: SafeArea(
+      //           child: BlocBuilder<AuthStateControllerCubit, AuthStateControllerState>(
+      //             builder: (context, state) {
+      //               return Container(
+      //                 width: ResponsiveHelper.wp,
+      //                 margin: EdgeInsets.symmetric(
+      //                   horizontal: 39,
+      //                 ),
 
-                      child: Image.asset(
-                        state.authTab == AuthTab.VERIFYOTP
-                            ? ImgConst.verify
-                            : ImgConst.login,
-                      ),
-                    );
-                  },
-                ),
+      //                 child: Image.asset(
+      //                   state.authTab == AuthTab.VERIFYOTP
+      //                       ? ImgConst.verify
+      //                       : ImgConst.login,
+      //                 ),
+      //               );
+      //             },
+      //           ),
+      //         ),
+      //       ),
 
-                // Spacer(),
-                Positioned(
-                  bottom: 0,
-                  child: BlocBuilder<
-                    AuthStateControllerCubit,
-                    AuthStateControllerState
-                  >(
-                    builder: (context, state) {
-                      switch (state.authTab) {
-                        case AuthTab.LOGIN:
-                          {
-                            return Login();
-                          }
-                        case AuthTab.REGISTER:
-                          {
-                            return Register();
-                          }
-                        case AuthTab.VERIFYOTP:
-                          {
-                            return VerifyOtp();
-                          }
-                        case AuthTab.FORGETPASSWORD:
-                          {
-                            return ForgetPassword();
-                          }
-                        case AuthTab.RESETPASSWORD:
-                          {
-                            return ResentPassword();
-                          }
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      //       // Spacer(),
+      //       Column(
+      //         mainAxisSize: MainAxisSize.min,
+      //         children: [
+      //           BlocBuilder<
+      //             AuthStateControllerCubit,
+      //             AuthStateControllerState
+      //           >(
+      //             builder: (context, state) {
+      //               switch (state.authTab) {
+      //                 case AuthTab.LOGIN:
+      //                   {
+      //                     return Login();
+      //                   }
+      //                 case AuthTab.REGISTER:
+      //                   {
+      //                     return Register();
+      //                   }
+      //                 case AuthTab.VERIFYOTP:
+      //                   {
+      //                     return VerifyOtp();
+      //                   }
+      //                 case AuthTab.FORGETPASSWORD:
+      //                   {
+      //                     return ForgetPassword();
+      //                   }
+      //                 case AuthTab.RESETPASSWORD:
+      //                   {
+      //                     return ResentPassword();
+      //                   }
+      //               }
+      //             },
+      //           ),
+      //         ],
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      body: BlocBuilder<AuthStateControllerCubit, AuthStateControllerState>(
+        builder: (context, state) {
+          switch (state.authTab) {
+            case AuthTab.LOGIN:
+              {
+                return Login();
+              }
+            case AuthTab.REGISTER:
+              {
+                return Register();
+              }
+            case AuthTab.VERIFYOTP:
+              {
+                return VerifyOtp();
+              }
+            case AuthTab.FORGETPASSWORD:
+              {
+                return ForgetPassword();
+              }
+            case AuthTab.RESETPASSWORD:
+              {
+                return ResentPassword();
+              }
+          }
+        },
       ),
     );
   }

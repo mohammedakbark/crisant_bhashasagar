@@ -225,9 +225,11 @@ class ContentStateControllerBloc
           player.play();
           emit(currentState.copyWith(isAudioPlaying: true));
         }
-      } catch (e) {
+      } catch (e, st) {
         emit(currentState.copyWith(isAudioPlaying: false));
-        showToast("Audio not available",isError: true);
+        showToast("Audio is missing", isError: true);
+        // showToast("$e : ${st.toString()}", isError: true);
+
         log("Audio play error: $e");
       }
     }

@@ -54,7 +54,7 @@ dependencies:
   fluttertoast: ^8.2.12
   flutter_svg: ^2.2.0
   archive: ^4.0.7
-  just_audio: ^0.10.4
+  just_audio: ^0.9.36
   dropdown_button2: ^2.3.9
   lottie: ^3.3.1
   

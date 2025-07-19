@@ -52,15 +52,6 @@ class ContentControllerBloc
     Emitter<ContentControllerState> emit,
   ) async {
     try {
-      // if (!await AppPermissions.requestStoragePermission()) {
-      //   emit(
-      //     ContentDownloadErrorState(
-      //       secondaryCategoryId: event.secondaryCategoryId,
-      //       error: 'Storage permission denied',
-      //     ),
-      //   );
-      //   return;
-      // }
       List<Map<String, dynamic>> lastDowloadings = [];
       final curretState = state;
       if (curretState is ContentDownloadProgressState) {
@@ -84,7 +75,7 @@ class ContentControllerBloc
         event.primaryCategoryId,
         event.secondaryCategoryId,
       );
-      final zipFilePath = "${extractPath}/$zipPath";
+      final zipFilePath = "$extractPath/$zipPath";
 
       // Download zip
       log('Downloading zip for ${event.secondaryCategoryId}...');

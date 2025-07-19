@@ -468,6 +468,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       }
 
                       if (canUpdateUILanguege || canUpdateSettingsLangues) {
+                        if (learnLangbuttonState.selectedLanguages.isEmpty &&
+                            canUpdateSettingsLangues) {
+                          return;
+                        }
                         context.read<NavControllerDartCubit>().onChangeNavTab(
                           0,
                         );

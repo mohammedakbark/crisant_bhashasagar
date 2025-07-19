@@ -160,7 +160,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   AppBar _app() {
     return AppBar(
-     backgroundColor: AppColors.kPrimaryColor,
+      backgroundColor: AppColors.kPrimaryColor,
       // brightness: Brightness.dark, // Deprecated, use systemOverlayStyle below
       // systemOverlayStyle:
       //     SystemUiOverlayStyle.dark, // For newer Flutter versions
@@ -176,16 +176,28 @@ class _NavigationScreenState extends State<NavigationScreen> {
               String? title;
               switch (navState.currentIndex) {
                 case 0:
-                  title = getUilang.uiText(placeHolder: "DAS001");
+                  title =
+                      getUilang.uiText(placeHolder: "DAS001").isEmpty
+                          ? "Home"
+                          : getUilang.uiText(placeHolder: "DAS001");
                   break;
                 case 1:
-                  title = getUilang.uiText(placeHolder: "GLS001");
+                  title =
+                      getUilang.uiText(placeHolder: "GLS001").isEmpty
+                          ? "Search"
+                          : getUilang.uiText(placeHolder: "GLS001");
                   break;
                 case 2:
-                  title = getUilang.uiText(placeHolder: "SET001");
+                  title =
+                      getUilang.uiText(placeHolder: "SET001").isEmpty
+                          ? "Settings"
+                          : getUilang.uiText(placeHolder: "SET001");
                   break;
                 case 3:
-                  title = getUilang.uiText(placeHolder: "PRO001");
+                  title =
+                      getUilang.uiText(placeHolder: "PRO001").isEmpty
+                          ? "Profile"
+                          : getUilang.uiText(placeHolder: "PRO001");
                   break;
               }
               return Text(
