@@ -95,7 +95,7 @@ class _RegisterState extends State<Register> {
                                   fontSize: ResponsiveHelper.fontLarge,
                                 ),
                               ),
-                              AppSpacer(hp: .2),
+                              AppSpacer(hp: .03),
                               CustomeTextField(
                                 prefix: Icon(SolarIconsOutline.user),
                                 lebelText: getUilang.uiText(
