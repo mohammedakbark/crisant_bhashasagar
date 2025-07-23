@@ -73,97 +73,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
     );
   }
 
-  // dynamic appBar() {
-  //   return PreferredSize(
-  //     preferredSize: Size.fromHeight(50),
-
-  //     child: AnnotatedRegion<SystemUiOverlayStyle>(
-  //       value: SystemUiOverlayStyle.dark.copyWith(
-  //         statusBarColor: AppColors.kPrimaryColor, // Android only
-  //         statusBarIconBrightness: Brightness.dark, // Android icons
-  //         statusBarBrightness: Brightness.light, // iOS: Light => dark icons
-  //       ),
-  //       child: SlideInDown(
-  //         child: SafeArea(
-  //           child: Container(
-  //             height: ResponsiveHelper.hp,
-  //             decoration: BoxDecoration(
-  //               color: AppColors.kWhite,
-  //               boxShadow: [
-  //                 BoxShadow(
-  //                   offset: Offset(0, 5),
-  //                   blurRadius: 5,
-  //                   spreadRadius: -5,
-  //                   color: AppColors.kPrimaryLight.withAlpha(120),
-  //                 ),
-  //               ],
-  //             ),
-  //             child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 // IconButton(
-  //                 //   onPressed: () {},
-  //                 //   icon: Icon(
-  //                 //     SolarIconsOutline.hamburgerMenu,
-  //                 //     color: AppColors.kBlack,
-  //                 //   ),
-  //                 // ),
-  //                 BlocBuilder<NavControllerDartCubit, NavControllerDartState>(
-  //                   builder: (context, navState) {
-  //                     return BlocConsumer<
-  //                       UiLanguageControllerCubit,
-  //                       UiLanguageControllerState
-  //                     >(
-  //                       builder: (context, langState) {
-  //                         String? title;
-  //                         switch (navState.currentIndex) {
-  //                           case 0:
-  //                             title = getUilang.uiText(placeHolder: "DAS001");
-  //                           case 1:
-  //                             title = getUilang.uiText(placeHolder: "GLS001");
-  //                           case 2:
-  //                             title = getUilang.uiText(placeHolder: "SET001");
-  //                           case 3:
-  //                             title = getUilang.uiText(placeHolder: "PRO001");
-  //                         }
-  //                         return Text(
-  //                           title!,
-  //                           style: AppStyle.mediumStyle(
-  //                             color: AppColors.kBlack,
-  //                           ),
-  //                         );
-  //                       },
-  //                       listener: (context, state) async {
-  //                         if (navState.currentIndex == 2) {
-  //                           getUilang = await GetUiLanguage.create("SETTINGS");
-  //                         }
-  //                       },
-  //                     );
-  //                   },
-  //                 ),
-
-  //                 // IconButton(
-  //                 //   onPressed: null,
-  //                 //   icon: Icon(
-  //                 //     SolarIconsOutline.hamburgerMenu,
-  //                 //     color: AppColors.kWhite,
-  //                 //   ),
-  //                 // ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   AppBar _app() {
     return AppBar(
       backgroundColor: AppColors.kPrimaryColor,
-      // brightness: Brightness.dark, // Deprecated, use systemOverlayStyle below
-      // systemOverlayStyle:
-      //     SystemUiOverlayStyle.dark, // For newer Flutter versions
+
       toolbarHeight: 50,
       surfaceTintColor: AppColors.kWhite,
       title: BlocBuilder<NavControllerDartCubit, NavControllerDartState>(

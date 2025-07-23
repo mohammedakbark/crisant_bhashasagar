@@ -61,13 +61,21 @@ class ContentStateControllerBloc
           jsonData: jsonData,
         ),
       );
-      add(InitPlayer());
+            add(InitPlayer());
+
       add(
-        PlayAudio(
+        TransliterateContent(
           primaryCategoryId: event.primaryCategoryId,
-          secondaryCategoryId: event.secondaryCategoryId,
+          tergetLangugae: "Devanagari",
         ),
       );
+
+      // add(
+      //   PlayAudio(
+      //     primaryCategoryId: event.primaryCategoryId,
+      //     secondaryCategoryId: event.secondaryCategoryId,
+      //   ),
+      // );
     } else {
       // add(
       //   DownloadContentById(

@@ -20,9 +20,17 @@ class ProfileRepo {
 
       if (response.status == 200) {
         final data = response.data as Map<String, dynamic>;
-        final user = data['user'] as Map<String, dynamic>;
-        log(user.toString());
-        return ApiDataModel(isError: false, data: ProfileModel.fromJson(user));
+
+        if (data['user'] is Map) {
+          final user = data['user'] as Map<String, dynamic>;
+          log(user.toString());
+          return ApiDataModel(
+            isError: false,
+            data: ProfileModel.fromJson(user),
+          );
+        } else {
+          return ApiDataModel(isError: true, data: "Session is exprired");
+        }
       } else {
         return ApiDataModel(isError: true, data: response.message);
       }

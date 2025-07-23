@@ -256,7 +256,12 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
                                                   // state.secondaryCategoryId ==
                                                   //     category.secondaryCategoryId
                                                   ? Lottie.asset(
-                                                    errorBuilder: (context, error, stackTrace) => AppLoading(),
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) => AppLoading(),
                                                     height: 50,
                                                     width: 50,
                                                     "assets/json/Downloading.json",
@@ -331,70 +336,40 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
     showDialog(
       context: context,
       builder:
-          (context) =>
-              Platform.isIOS
-                  ? CupertinoAlertDialog(
-                    // backgroundColor: AppColors.kWhite,
-                    title: Text("Delete data ?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          context.pop();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: AppStyle.mediumStyle(color: AppColors.kGrey),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          context.read<ContentControllerBloc>().add(
-                            DeleteContentById(
-                              secondaryCategoryId: secondaryCategoryId,
-                              primaryCategoryId: widget.primaryCategoryId,
-                            ),
-                          );
+          (context) => AlertDialog.adaptive(
+            backgroundColor: AppColors.kWhite,
+            title: Text(
+              "Do you want to delete this content ?",
+              style: AppStyle.mediumStyle(color:Platform.isAndroid?AppColors.kBlack: AppColors.kWhite),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: Text(
+                  "No",
+                  style: AppStyle.mediumStyle(color: AppColors.kGrey),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  context.read<ContentControllerBloc>().add(
+                    DeleteContentById(
+                      secondaryCategoryId: secondaryCategoryId,
+                      primaryCategoryId: widget.primaryCategoryId,
+                    ),
+                  );
 
-                          context.pop();
-                        },
-                        child: Text(
-                          "Delete",
-                          style: AppStyle.mediumStyle(color: AppColors.kRed),
-                        ),
-                      ),
-                    ],
-                  )
-                  : AlertDialog(
-                    backgroundColor: AppColors.kWhite,
-                    title: Text("Delete data ?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          context.pop();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: AppStyle.mediumStyle(color: AppColors.kGrey),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          context.read<ContentControllerBloc>().add(
-                            DeleteContentById(
-                              secondaryCategoryId: secondaryCategoryId,
-                              primaryCategoryId: widget.primaryCategoryId,
-                            ),
-                          );
-
-                          context.pop();
-                        },
-                        child: Text(
-                          "Delete",
-                          style: AppStyle.mediumStyle(color: AppColors.kRed),
-                        ),
-                      ),
-                    ],
-                  ),
+                  context.pop();
+                },
+                child: Text(
+                  "Yes",
+                  style: AppStyle.mediumStyle(color: AppColors.kRed),
+                ),
+              ),
+            ],
+          ),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:bashasagar/core/const/api_const.dart';
 import 'package:bashasagar/core/models/response_model.dart';
+import 'package:bashasagar/core/routes/route_provider.dart';
+import 'package:bashasagar/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dio/dio.dart';
 
 class ApiConfig {
@@ -24,6 +26,7 @@ class ApiConfig {
         data: body,
         options: Options(headers: header),
       );
+      _checkTokenExpired(response.data);
 
       return DioResponseModel.fromJson(response.data);
     } on DioException catch (e) {
@@ -88,7 +91,7 @@ class ApiConfig {
 
       // Directly use response.data instead of decoding again
       // log(response.data.toString());
-
+      _checkTokenExpired(response.data);
       return DioResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null && e.response?.data != null) {
@@ -142,9 +145,10 @@ class ApiConfig {
     }
   }
 
-  //  static void _checkTokenExpired(data)async{
-  //      if(data['error']==true && data['message']=="jwt expired"){
-  //        await  ProfilePage.logout(rootNavigatorKey.currentContext!);
-  //       }
-  //   }
+  static void _checkTokenExpired(data) async {
+    // if (data['error'] == true && data['message'] == "token expired") {
+    //   ProfileScreen().onLogout(rootNavigatorKey.currentContext!);
+    //   // await ProfileScreen().on(rootNavigatorKey.currentContext!);
+    // }
+  }
 }

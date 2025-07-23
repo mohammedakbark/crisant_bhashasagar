@@ -204,6 +204,20 @@ class ContentControllerBloc
     }
   }
 
+  static Future<void> deleteEntireContentFromBashasagar() async {
+    // USERD THIS FNCTION WHILE LOGOUTING
+    final dir = await getApplicationDocumentsDirectory();
+
+    final folderPath = '${dir.path}/$extractedContentPath';
+    final folder = Directory(folderPath);
+    if (await folder.exists()) {
+      await folder.delete(recursive: true);
+      log("Deleted Entrire bashasagar content: $folderPath");
+    } else {
+      log("Folder does not exist: $folderPath");
+    }
+  }
+
   ///------------------------
 
   /// Parse contents.json into model list

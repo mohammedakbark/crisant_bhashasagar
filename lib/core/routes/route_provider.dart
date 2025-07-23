@@ -19,77 +19,109 @@ class RouteProvider {
     navigatorKey: rootNavigatorKey,
     initialLocation: initilaScreen,
     routes: [
-      GoRoute(path: initilaScreen, builder: (context, state) => SplashScreen()),
+      GoRoute(
+        path: initilaScreen,
+        pageBuilder: (context, state) => _slideTransitionPage(SplashScreen()),
+      ),
       GoRoute(
         path: getStartScreen,
         builder: (context, state) => GetStartScreen(),
       ),
-      GoRoute(path: authScreen, builder: (context, state) => AuthScreen()),
+      GoRoute(
+        path: authScreen,
+        pageBuilder: (context, state) => _slideTransitionPage(AuthScreen()),
+      ),
 
       GoRoute(
         path: authSuccessScreen,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final params = state.extra as Map<String, dynamic>;
           final String successTitle = params['successTitle'];
           final String successMessage = params['successMessage'];
           final String buttonTitle = params['buttonTitle'];
           final AuthTab nextAuthTab = params['nextAuthTab'];
-          return AuthSuccessScreen(
-            nextAuthTab: nextAuthTab,
-            buttonTitle: buttonTitle,
-            successMessage: successMessage,
-            successTitle: successTitle,
+          return _slideTransitionPage(
+            AuthSuccessScreen(
+              nextAuthTab: nextAuthTab,
+              buttonTitle: buttonTitle,
+              successMessage: successMessage,
+              successTitle: successTitle,
+            ),
           );
         },
       ),
 
       GoRoute(
         path: welcomeScreen,
-        builder: (context, state) => WelcomeScreen(),
+        pageBuilder: (context, state) => _slideTransitionPage(WelcomeScreen()),
       ),
       //---D A S H B O R D
       GoRoute(
         path: routeScreen,
-        builder: (context, state) => NavigationScreen(),
+        pageBuilder:
+            (context, state) => _slideTransitionPage(NavigationScreen()),
       ),
       //--- --- --- ---
       GoRoute(
         path: primaryCategoryScreen,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final body = state.extra as Map<String, dynamic>;
           final language = body['language'];
           final id = body['langaugeId'];
-          return PrimaryCategoryScreen(language: language, languageId: id);
+          return _slideTransitionPage(
+            PrimaryCategoryScreen(language: language, languageId: id),
+          );
         },
       ),
       GoRoute(
         path: secondaryCategoryScreen,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final body = state.extra as Map<String, dynamic>;
           final language = body['language'];
           final langId = body["languageId"];
           final primaryCategoryId = body["primaryCategoryId"];
-          return SecondaryCategoryScreen(
-            language: language,
-            langId: langId,
-            primaryCategoryId: primaryCategoryId,
+          return _slideTransitionPage(
+            SecondaryCategoryScreen(
+              language: language,
+              langId: langId,
+              primaryCategoryId: primaryCategoryId,
+            ),
           );
         },
       ),
       GoRoute(
         path: contentScreen,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final body = state.extra as Map<String, dynamic>;
           final language = body['language'];
           final primaryCategoryId = body["primaryCategoryId"];
           final seocndaryCategoryId = body["secondaryCategoryId"];
-          return ContentScreen(
-            language: language,
-            primaryCategoryId: primaryCategoryId,
-            secondaryCategoryId: seocndaryCategoryId,
+          return _slideTransitionPage(
+            ContentScreen(
+              language: language,
+              primaryCategoryId: primaryCategoryId,
+              secondaryCategoryId: seocndaryCategoryId,
+            ),
           );
         },
       ),
     ],
   );
+  // ==== TRANSITION
+  static CustomTransitionPage<dynamic> _slideTransitionPage(Widget child) {
+    return CustomTransitionPage(
+      child: child,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0); // from right
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        final tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
+        return SlideTransition(position: animation.drive(tween), child: child);
+      },
+    );
+  }
 }

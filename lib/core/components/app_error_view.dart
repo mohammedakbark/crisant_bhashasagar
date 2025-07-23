@@ -1,4 +1,3 @@
-
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
@@ -30,88 +29,73 @@ class AppErrorView extends StatelessWidget {
             children: [
               icon ??
                   Icon(
-                    Icons.smart_toy_outlined,
-                    color: AppColors.kBlack,
+                    error == "No Internet Connection!"
+                        ? Icons.wifi_off
+                        : Icons.error_outline_outlined,
+                    color: AppColors.kGrey,
                     size: 70,
                   ),
-              AppSpacer(hp: .01),
+              AppSpacer(hp: .02),
             ],
           ),
 
           Text(
             textAlign: TextAlign.center,
             isTokenExpire ? "Session is expired." : error,
-            style: AppStyle.largeStyle(
-              
-                color: AppColors.kBlack),
+            style: AppStyle.largeStyle(color: AppColors.kGrey),
           ),
 
           // Subtite
           isTokenExpire
               ? Column(
-                  children: [
-                    AppSpacer(hp: .005),
-                    Text(
-                      textAlign: TextAlign.center,
-                      "Please login again..",
-                      style: AppStyle.smallStyle(
-                       
-                        color: AppColors.kBlack,
-                      ),
-                    ),
-                  ],
-                )
+                children: [
+                  AppSpacer(hp: .005),
+                  Text(
+                    textAlign: TextAlign.center,
+                    "Please login again..",
+                    style: AppStyle.smallStyle(color: AppColors.kGrey),
+                  ),
+                ],
+              )
               : SizedBox(),
 
           // Token - Expired
-
           errorExp != null
               ? Column(
-                  children: [
-                    AppSpacer(hp: .01),
-                    Text(
-                      textAlign: TextAlign.center,
-                      errorExp!,
-                      style: AppStyle.smallStyle(
-                     
-                        color: AppColors.kBlack,
-                      ),
-                    ),
-                  ],
-                )
+                children: [
+                  AppSpacer(hp: .01),
+                  Text(
+                    textAlign: TextAlign.center,
+                    errorExp!,
+                    style: AppStyle.smallStyle(color: AppColors.kGrey),
+                  ),
+                ],
+              )
               : SizedBox(),
           // Refresh
           onRetry != null
               ? Column(
-                  children: [
-                    AppSpacer(hp: .01),
-                    ElevatedButton(
-                      onPressed: isTokenExpire
-                          ? () {}
-                          : onRetry,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        textDirection:
-                            isTokenExpire ? TextDirection.rtl : null,
-                        children: [
-                          Text(
-                            isTokenExpire ? "Logout" : "Try again",
-                            style: AppStyle.boldStyle(
-                              color: AppColors.kPrimaryColor,
-                             
-                            ),
+                children: [
+                  AppSpacer(hp: .01),
+                  ElevatedButton(
+                    onPressed: isTokenExpire ? () {} : onRetry,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      textDirection: isTokenExpire ? TextDirection.rtl : null,
+                      children: [
+                        Text(
+                          isTokenExpire ? "Logout" : "Try again",
+                          style: AppStyle.boldStyle(
+                            color: AppColors.kPrimaryColor,
                           ),
-                          AppSpacer(wp: .01),
-                          Icon(
-                           
-                              isTokenExpire
-                                  ? Icons.logout
-                                  : Icons.refresh),
-                        ],
-                      ),
+                        ),
+                        AppSpacer(wp: .01),
+                        Icon(isTokenExpire ? Icons.logout : Icons.refresh),
+                      ],
                     ),
-                  ],
-                )
+                  ),
+                ],
+              )
               : SizedBox(),
         ],
       ),

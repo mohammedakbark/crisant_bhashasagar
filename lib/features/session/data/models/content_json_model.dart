@@ -14,6 +14,7 @@ class ContentJsonModel {
   final String createdBy;
   final CreatedAt createdAt;
   final DateTime modifiedAt;
+  final String? originalText;
 
   ContentJsonModel({
     required this.contentId,
@@ -29,10 +30,12 @@ class ContentJsonModel {
     required this.createdBy,
     required this.createdAt,
     required this.modifiedAt,
+    required this.originalText,
   });
 
   factory ContentJsonModel.fromJson(Map<String, dynamic> json) =>
       ContentJsonModel(
+        originalText: json['originalText'],
         contentId: json["contentId"],
         contentAlias: json["contentAlias"],
         languageId: json["languageId"],
@@ -49,6 +52,7 @@ class ContentJsonModel {
       );
 
   Map<String, dynamic> toJson() => {
+    "originalText": originalText,
     "contentId": contentId,
     "contentAlias": contentAlias,
     "languageId": languageId,

@@ -57,7 +57,6 @@ class AuthApiControllerBloc
     } else {
       final data = response.data as Map<String, dynamic>;
       emit(AuthApiControllerSuccessState(previouseResponse: data));
-     
 
       await CurrentUserPref.setUserData(
         CurrentUserModel(
@@ -67,7 +66,7 @@ class AuthApiControllerBloc
         ),
       );
 
-       add(OnGetProfileInfo(storeData: true));
+      add(OnGetProfileInfo(storeData: true));
 
       if (event.context.mounted) {
         await event.context
@@ -132,7 +131,7 @@ class AuthApiControllerBloc
             "successTitle":
                 getUilang.uiText(placeHolder: "REGS001").toUpperCase(),
             "successMessage": getUilang.uiText(placeHolder: "REGS002"),
-            "buttonTitle":getUilang.uiText(placeHolder: "REGS003"),
+            "buttonTitle": getUilang.uiText(placeHolder: "REGS003"),
             "nextAuthTab": AuthTab.LOGIN,
             // "nextScreen":authScreen
           },
@@ -304,7 +303,7 @@ class AuthApiControllerBloc
     final response = await ProfileRepo.onGetProfileInfo();
 
     if (response.isError) {
-      await _errorDisposer(emit, response.data.toString());
+      emit(AuthApiControllerErrorState(error: response.data.toString()));
     } else {
       final model = response.data as ProfileModel;
       if (event.storeData) {
