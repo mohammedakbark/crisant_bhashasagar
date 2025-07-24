@@ -34,9 +34,6 @@ class _MyAppState extends State<MyApp> {
       title: 'Bashasagar',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData(),
-      // localizationsDelegates: context.localizationDelegates,
-      // supportedLocales: context.supportedLocales,
-      // locale: context.locale,
       routerConfig: RouteProvider.router,
     );
   }
