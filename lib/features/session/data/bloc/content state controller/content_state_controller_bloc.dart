@@ -61,7 +61,7 @@ class ContentStateControllerBloc
           jsonData: jsonData,
         ),
       );
-            add(InitPlayer());
+      add(InitPlayer());
 
       add(
         TransliterateContent(
@@ -151,7 +151,7 @@ class ContentStateControllerBloc
       if (newIndex + 1 == currentState.jsonData.length) {
         add(
           MarkCustomerProgress(
-            secondaryCategoryId: event.primaryCategoryId,
+            secondaryCategoryId: event.secondaryCategoryId,
             dateTime: IntlC.convertTOApiDateTime(DateTime.now()),
           ),
         );
@@ -222,9 +222,21 @@ class ContentStateControllerBloc
           event.primaryCategoryId,
           event.secondaryCategoryId,
         );
-        await player.setFilePath(
-          path.join(paths, currentState.currentFile.contentAudio),
+
+        final audioFilePath = path.join(
+          paths,
+          currentState.currentFile.contentAudio,
         );
+
+        final file = File(audioFilePath);
+
+        if (!await file.exists()) {
+          showToast("Audio file is missing", isError: true);
+          emit(currentState.copyWith(isAudioPlaying: false));
+          return;
+        }
+
+        await player.setFilePath(audioFilePath);
 
         if (player.playing) {
           player.stop();
@@ -233,7 +245,8 @@ class ContentStateControllerBloc
           player.play();
           emit(currentState.copyWith(isAudioPlaying: true));
         }
-      } catch (e, st) {
+      } catch (e) {
+        player.stop();
         emit(currentState.copyWith(isAudioPlaying: false));
         showToast("Audio is missing", isError: true);
         // showToast("$e : ${st.toString()}", isError: true);
@@ -257,6 +270,7 @@ class ContentStateControllerBloc
     if (resposne.isError) {
       log("Marking progress failed -> ${resposne.data}");
     } else {
+      // showToast(resposne.data.toString());
       log(resposne.data.toString());
     }
   }
@@ -282,10 +296,9 @@ class ContentStateControllerBloc
     }
   }
 
-  @override
-  Future<void> close() {
+  Future<void> closeAudio() async {
     playerSubscription?.cancel();
-    return super.close();
+    player.stop();
   }
 
   Future<List<ContentJsonModel>> _parseContentJson(String extractPath) async {

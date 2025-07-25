@@ -80,8 +80,10 @@ class RouteProvider {
           final language = body['language'];
           final langId = body["languageId"];
           final primaryCategoryId = body["primaryCategoryId"];
+          final primaryCategory = body['primaryCategory'];
           return _slideTransitionPage(
             SecondaryCategoryScreen(
+              primaryCategory: primaryCategory,
               language: language,
               langId: langId,
               primaryCategoryId: primaryCategoryId,
@@ -96,11 +98,15 @@ class RouteProvider {
           final language = body['language'];
           final primaryCategoryId = body["primaryCategoryId"];
           final seocndaryCategoryId = body["secondaryCategoryId"];
+          final primaryCategoryAndSecondaryCategory =
+              body['primaryCategoryAndSecondaryCategory'];
           return _slideTransitionPage(
             ContentScreen(
               language: language,
               primaryCategoryId: primaryCategoryId,
               secondaryCategoryId: seocndaryCategoryId,
+              primaryCategoryAndSecondaryCategory:
+                  primaryCategoryAndSecondaryCategory,
             ),
           );
         },

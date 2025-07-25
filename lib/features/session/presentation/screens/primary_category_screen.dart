@@ -8,6 +8,7 @@ import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/nav_bar.dart';
 import 'package:bashasagar/features/session/data/bloc/primary%20controller/primary_category_controller_cubit.dart';
+import 'package:bashasagar/features/session/presentation/widgets/primary_cat_gird_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -38,12 +39,8 @@ class _PrimaryCategoryScreenState extends State<PrimaryCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-              toolbarHeight: 50,
+        toolbarHeight: 50,
 
-        // bottom: PreferredSize(
-        //   preferredSize: Size.fromHeight(15),
-        //   child: SizedBox.shrink(),
-        // ),
         titleSpacing: 0,
         centerTitle: false,
         backgroundColor: AppColors.kPrimaryColor,
@@ -53,43 +50,12 @@ class _PrimaryCategoryScreenState extends State<PrimaryCategoryScreen> {
           children: [
             Row(
               children: [
-                // AppBackButton(),
                 Text(
                   widget.language,
                   style: AppStyle.boldStyle(color: AppColors.kWhite),
                 ),
               ],
             ),
-
-            // Padding(
-            //   padding: EdgeInsets.symmetric(
-            //     vertical: ResponsiveHelper.paddingSmall,
-            //   ),
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       SizedBox(
-            //         width: ResponsiveHelper.wp / 2,
-            //         child: LinearProgressIndicator(
-            //           borderRadius: BorderRadius.circular(100),
-            //           value: .6,
-            //           color: Colors.amber,
-            //           backgroundColor: AppColors.kWhite,
-            //         ),
-            //       ),
-            //       // AppSpacer(hp: .005),
-
-            //       // Text(
-            //       //   "60%",
-            //       //   style: AppStyle.boldStyle(
-            //       //     color: AppColors.kWhite,
-            //       //     fontSize: ResponsiveHelper.fontExtraSmall,
-            //       //   ),
-            //       // ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -115,39 +81,18 @@ class _PrimaryCategoryScreenState extends State<PrimaryCategoryScreen> {
                   ),
                   itemBuilder: (context, index) {
                     final category = state.primaryCategories[index];
-                    return GestureDetector(
-                      onTap:
-                          () => context.push(
-                            secondaryCategoryScreen,
-                            extra: {
-                              "languageId": widget.languageId,
-                              "primaryCategoryId": category.primaryCategoryId,
-                              "language": widget.language,
-                            },
-                          ),
 
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.kGrey, width: 2),
-                          borderRadius: BorderRadius.circular(
-                            ResponsiveHelper.borderRadiusLarge,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 100,
-                              child: AppNetworkImage(
-                                imageFile: category.primaryCategoryImage,
-                              ),
-                            ),
-                            AppSpacer(hp: .02),
-                            Text(category.primaryCategoryName),
-                          ],
-                        ),
-                      ),
+                    return PrimaryCatGirdTitle(
+                      index: index,
+                      isSelected:
+                          state.currentIndex == null
+                              ? false
+                              : index == state.currentIndex,
+                      language: widget.language,
+                      languageId: widget.languageId,
+                      primaryCategoryId: category.primaryCategoryId,
+                      primaryCategoryImage: category.primaryCategoryImage,
+                      primaryCategoryName: category.primaryCategoryName,
                     );
                   },
                 );

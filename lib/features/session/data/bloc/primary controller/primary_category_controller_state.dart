@@ -19,6 +19,20 @@ final class PrimaryCategoryControllerLoadingState
 final class PrimaryCategoryControllerSuccessState
     extends PrimaryCategoryControllerState {
   final List<PrimaryCategoryModel> primaryCategories;
+  final int? currentIndex;
 
-  PrimaryCategoryControllerSuccessState({required this.primaryCategories});
+  PrimaryCategoryControllerSuccessState({
+    required this.primaryCategories,
+    this.currentIndex,
+  });
+
+  PrimaryCategoryControllerSuccessState copyWith({
+    List<PrimaryCategoryModel>? primaryCategories,
+    int? currentIndex,
+  }) {
+    return PrimaryCategoryControllerSuccessState(
+      primaryCategories: primaryCategories ?? this.primaryCategories,
+      currentIndex: currentIndex ?? this.currentIndex,
+    );
+  }
 }

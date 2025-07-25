@@ -25,4 +25,11 @@ class PrimaryCategoryControllerCubit
       );
     }
   }
+
+  void onChangeTab(int index) {
+    final currentState = state;
+    if (currentState is PrimaryCategoryControllerSuccessState) {
+      emit(currentState.copyWith(currentIndex: index));
+    }
+  }
 }

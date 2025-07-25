@@ -26,7 +26,7 @@ class SearchWordControllerCubit extends Cubit<SearchWordControllerState> {
         final currentState = state;
         if (currentState is SearchDataState) {
           await player.stop();
-          emit(currentState.coptyWith(isAudioPaying: false));
+          emit(currentState.copyWith(isAudioPaying: false));
         }
       }
     });
@@ -84,7 +84,7 @@ class SearchWordControllerCubit extends Cubit<SearchWordControllerState> {
   void onChangeLanguage(Map<String, dynamic> lang) async {
     final currentState = state;
     if (currentState is SearchDataState) {
-      emit(currentState.coptyWith(selectedLang: lang));
+      emit(currentState.copyWith(selectedLang: lang));
       if (currentState.lastquery != null) {
         await onSearchWord(currentState.lastquery!);
       }
@@ -107,22 +107,34 @@ class SearchWordControllerCubit extends Cubit<SearchWordControllerState> {
   Future<void> playAudio(String url, int index) async {
     final currentState = state;
     if (currentState is SearchDataState) {
-      emit(currentState.coptyWith(isAudioPaying: true));
+      emit(currentState.copyWith(isAudioPaying: true));
       try {
+        if (url.isEmpty) {
+          showToast("Audio URL is missing", isError: true);
+          emit(currentState.copyWith(isAudioPaying: false));
+          return;
+        }
         await player.setUrl(url);
         if (player.playing) {
           player.stop();
-          emit(currentState.coptyWith(isAudioPaying: false));
+          emit(currentState.copyWith(isAudioPaying: false));
         } else {
           player.play();
           emit(
-            currentState.coptyWith(isAudioPaying: true, liveTileIndex: index),
+            currentState.copyWith(isAudioPaying: true, liveTileIndex: index),
           );
         }
       } catch (e) {
-        emit(currentState.coptyWith(isAudioPaying: false));
+        player.stop();
+        emit(currentState.copyWith(isAudioPaying: false));
         showToast("Audio is missing", isError: true);
         log("Audio play error: $e");
+
+        if (e is PlayerException) {
+          showToast("Audio playback failed: ${e.message}", isError: true);
+        } else {
+          showToast("Error loading audio", isError: true);
+        }
       }
     }
   }

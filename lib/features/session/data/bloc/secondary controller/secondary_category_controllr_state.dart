@@ -19,6 +19,20 @@ final class SecondaryCategoryControllerLoadingState
 final class SecondaryCategoryControllerSuccessState
     extends SecondaryCategoryControllrState {
   final List<SecondaryCategoryModel> secondaryCategories;
+  final int? currentIndex;
 
-  SecondaryCategoryControllerSuccessState({required this.secondaryCategories});
+  SecondaryCategoryControllerSuccessState({
+    required this.secondaryCategories,
+    this.currentIndex,
+  });
+
+  SecondaryCategoryControllerSuccessState copyWith({
+    List<SecondaryCategoryModel>? secondaryCategories,
+    int? currentIndex,
+  }) {
+    return SecondaryCategoryControllerSuccessState(
+      secondaryCategories: secondaryCategories ?? this.secondaryCategories,
+      currentIndex: currentIndex ?? this.currentIndex,
+    );
+  }
 }

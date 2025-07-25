@@ -38,7 +38,7 @@ final class SearchDataState extends SearchWordControllerState {
     this.isAudioPaying = false,
     this.liveTileIndex,
   });
-  SearchDataState coptyWith({
+  SearchDataState copyWith({
     List<SearchWordModel>? searchReslut,
     Map<String, dynamic>? selectedLang,
     String? lastquery,

@@ -18,22 +18,6 @@ class AppNavBar extends StatefulWidget {
 }
 
 class _AppNavBarState extends State<AppNavBar> {
-  // bool initializingUI = true;
-  // late GetUiLanguage getUilang;
-  // late String homeText;
-  // late String profileText;
-  // late String settingsText;
-  // late String searchText;
-
-  // void initUi() async {
-  //   getUilang = await GetUiLanguage.create("NAV");
-  //   homeText = getUilang.uiText(placeHolder: "NAV001");
-  //   profileText = getUilang.uiText(placeHolder: "NAV004");
-  //   settingsText = getUilang.uiText(placeHolder: "NAV003");
-  //   searchText = getUilang.uiText(placeHolder: "NAV002");
-  //   initializingUI = false;
-  //   setState(() {});
-  // }
 
   @override
   void initState() {

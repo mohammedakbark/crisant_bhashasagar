@@ -16,7 +16,6 @@ class SecondaryCategoryControllrCubit
     String primaryCategoryId,
     String langId,
   ) async {
-   
     emit(SecondaryCategoryControllerLoadingState());
     final response = await GetSecondaryCategoryRepo.onGetSeondaryCategory(
       langId,
@@ -32,6 +31,13 @@ class SecondaryCategoryControllrCubit
           secondaryCategories: response.data as List<SecondaryCategoryModel>,
         ),
       );
+    }
+  }
+
+  void onChangeTab(int index) {
+    final currentState = state;
+    if (currentState is SecondaryCategoryControllerSuccessState) {
+      emit(currentState.copyWith(currentIndex: index));
     }
   }
 }
