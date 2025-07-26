@@ -35,4 +35,6 @@ class ApiConst {
   static const markcustomerProgress = "api/profile/customerProgress";
 
   static const searchWord = "api/contents/search";
+
+  static const  setPushToke="";
 }

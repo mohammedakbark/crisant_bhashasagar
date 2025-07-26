@@ -9,3 +9,4 @@ const routeScreen = "/routeScreen";
 const primaryCategoryScreen = "/primaryCategoryScreen";
 const secondaryCategoryScreen = "/secondaryCategoryScreen";
 const contentScreen = "/contentScreen";
+const notificationScreen = "/notificationScreen";

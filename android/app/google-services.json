@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "240836841430",
+    "project_id": "bhashasagar-demo",
+    "storage_bucket": "bhashasagar-demo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240836841430:android:c9dc2efe1fce4ae6b91e77",
+        "android_client_info": {
+          "package_name": "com.ciil.bhashasagarapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhb1Rq_8kiYlQ_NwppBWsEOlypW4EZbRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

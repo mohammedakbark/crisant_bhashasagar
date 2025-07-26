@@ -4,6 +4,7 @@ import 'package:bashasagar/features/auth/presentation/screens/get_start_screen.d
 import 'package:bashasagar/features/auth/presentation/screens/auth_screen.dart';
 import 'package:bashasagar/features/auth/presentation/screens/auth_success_screen.dart';
 import 'package:bashasagar/features/auth/presentation/screens/welcome_screen.dart';
+import 'package:bashasagar/features/notification/screens/notification_screen.dart';
 import 'package:bashasagar/features/session/presentation/screens/primary_category_screen.dart';
 import 'package:bashasagar/features/session/presentation/screens/secondary_category_screen.dart';
 import 'package:bashasagar/features/session/presentation/screens/visual_learning_screen.dart';
@@ -25,7 +26,7 @@ class RouteProvider {
       ),
       GoRoute(
         path: getStartScreen,
-        builder: (context, state) => GetStartScreen(),
+        pageBuilder: (context, state) => _slideTransitionPage(GetStartScreen()),
       ),
       GoRoute(
         path: authScreen,
@@ -110,6 +111,12 @@ class RouteProvider {
             ),
           );
         },
+      ),
+
+      GoRoute(
+        path: notificationScreen,
+        pageBuilder:
+            (context, state) => _slideTransitionPage(NotificationScreen()),
       ),
     ],
   );

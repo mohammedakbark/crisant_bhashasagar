@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:developer';
 
+import 'package:bashasagar/features/notification/data/notification_service.dart';
 import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
@@ -20,7 +20,6 @@ import 'package:bashasagar/features/profile/data/repo/profile_repo.dart';
 import 'package:bashasagar/features/settings/data/bloc/ui%20lang%20controller/ui_language_controller_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -74,6 +73,7 @@ class AuthApiControllerBloc
             .updateUiLanguageInServer();
       }
       if (event.context.mounted) {
+        await NotificationService().initNotification(event.context);
         event.context.go(routeScreen);
       }
     }
