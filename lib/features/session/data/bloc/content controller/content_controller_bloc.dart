@@ -111,7 +111,12 @@ class ContentControllerBloc
 
       log("upating last updated date");
       final dateFile = File(lastUpdatedDatePath);
-      final data = {'lastModified': DateTime.now().toString()};
+      final data = {
+        'lastModified':
+            event.latestModifiedDate == null
+                ? DateTime.now().toString()
+                : event.latestModifiedDate.toString(),
+      };
       await dateFile.writeAsString(jsonEncode(data));
 
       getLastModified(extractPath);

@@ -1,6 +1,8 @@
 class ApiConst {
   static const baseUrl = "https://bbs.crisant.com/";
+  //bbslive.viil.org
 
+  // static const baseUrl = "https://bbslive.ciil.org/";
   static const login = "api/profile/userLogin";
   static const register = "api/profile/userregister";
   static const regVerifyOTP = "api/profile/userRegisterOTPVerify";

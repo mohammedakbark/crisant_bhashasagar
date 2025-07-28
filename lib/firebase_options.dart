@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBhb1Rq_8kiYlQ_NwppBWsEOlypW4EZbRA',
-    appId: '1:240836841430:android:c9dc2efe1fce4ae6b91e77',
-    messagingSenderId: '240836841430',
-    projectId: 'bhashasagar-demo',
-    storageBucket: 'bhashasagar-demo.firebasestorage.app',
+    apiKey: 'AIzaSyDmHL7Mmi1StzmIwRFLROzrHFGMz_PGHyI',
+    appId: '1:296166961176:android:602e8e2437f9324a27136d',
+    messagingSenderId: '296166961176',
+    projectId: 'bhashasagar-538ba',
+    storageBucket: 'bhashasagar-538ba.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD-fCcWPcz8z2Ztloz8X9fbt9c0089wh-E',
-    appId: '1:240836841430:ios:1cb5655a6f9f81b5b91e77',
-    messagingSenderId: '240836841430',
-    projectId: 'bhashasagar-demo',
-    storageBucket: 'bhashasagar-demo.firebasestorage.app',
-    iosBundleId: 'com.ciil.bhashasagarapp',
+    apiKey: 'AIzaSyDwOonQj0xzmA3UHw0Hjlp9ZsC-4KEa3r8',
+    appId: '1:296166961176:ios:3a3d63edca1ac45b27136d',
+    messagingSenderId: '296166961176',
+    projectId: 'bhashasagar-538ba',
+    storageBucket: 'bhashasagar-538ba.firebasestorage.app',
+    iosBundleId: 'org.ciil.bbs',
   );
 }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bashasagar/core/components/app_loading.dart';
@@ -99,31 +100,30 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
     final controller = context.read<SecondaryCategoryControllrCubit>();
     controller.onChangeTab(widget.index);
     final state = controller.state;
+    if (state is SecondaryCategoryControllerSuccessState) {
+      final extractPath = await ContentControllerBloc.getPath(
+        extractedContentFile,
+        widget.primaryCategoryId,
+        widget.secondaryCategoryId,
+      );
+      final json = await ContentControllerBloc.getLastModified(extractPath);
+      final serverLatestVersion = state.versions.firstWhere(
+        (element) => element.secondaryCategoryId == widget.secondaryCategoryId,
+      );
 
-    final extractPath = await ContentControllerBloc.getPath(
-      extractedContentFile,
-      widget.primaryCategoryId,
-      widget.secondaryCategoryId,
-    );
-    final json = await ContentControllerBloc.getLastModified(extractPath);
+      final isAlreadyDowloaded = await context
+          .read<ContentStateControllerBloc>()
+          .checkAlreadyDowloadedOrNot(
+            widget.primaryCategoryId,
 
-    final isAlreadyDowloaded = await context
-        .read<ContentStateControllerBloc>()
-        .checkAlreadyDowloadedOrNot(
-          widget.primaryCategoryId,
-
-          widget.secondaryCategoryId,
-        );
-    if (isAlreadyDowloaded && json.isNotEmpty) {
-      if (state is SecondaryCategoryControllerSuccessState) {
-        final latestVersion = state.versions.firstWhere(
-          (element) =>
-              element.secondaryCategoryId == widget.secondaryCategoryId,
-        );
-
-        if (latestVersion.modifiedAt.isBefore(
-          DateTime.parse(json['lastModified']),
-        )) {
+            widget.secondaryCategoryId,
+          );
+      log("local date ${json['lastModified']}");
+      log("Server date ${serverLatestVersion.modifiedAt}");
+      if (isAlreadyDowloaded && json.isNotEmpty) {
+        if (DateTime.parse(
+          json['lastModified'],
+        ).isAfter(serverLatestVersion.modifiedAt)) {
           _updateContectDiologue();
         } else {
           context.push(
@@ -137,10 +137,22 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
             },
           );
         }
+      } else {
+        _downLoadContent();
       }
-    } else {
+    }
+  }
+
+  void _downLoadContent() {
+    final state = context.read<SecondaryCategoryControllrCubit>().state;
+    if (state is SecondaryCategoryControllerSuccessState) {
+      final serverVersion = state.versions.firstWhere(
+        (element) => element.secondaryCategoryId == widget.secondaryCategoryId,
+      );
       context.read<ContentControllerBloc>().add(
         DownloadContentById(
+          latestModifiedDate: serverVersion.modifiedAt,
+
           primaryCategoryId: widget.primaryCategoryId,
           secondaryCategoryId: widget.secondaryCategoryId,
         ),
@@ -249,20 +261,7 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
                                             "assets/json/Downloading.json",
                                           )
                                           : InkWell(
-                                            onTap: () {
-                                              context
-                                                  .read<ContentControllerBloc>()
-                                                  .add(
-                                                    DownloadContentById(
-                                                      primaryCategoryId:
-                                                          widget
-                                                              .primaryCategoryId,
-                                                      secondaryCategoryId:
-                                                          widget
-                                                              .secondaryCategoryId,
-                                                    ),
-                                                  );
-                                            },
+                                            onTap: _downLoadContent,
                                             child: Container(
                                               padding: EdgeInsets.all(3),
                                               decoration: BoxDecoration(
@@ -358,18 +357,28 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
             ),
             actions: [
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  final isAlreadyDowloaded = await context
+                      .read<ContentStateControllerBloc>()
+                      .checkAlreadyDowloadedOrNot(
+                        widget.primaryCategoryId,
+
+                        widget.secondaryCategoryId,
+                      );
                   context.pop();
-                  context.push(
-                    contentScreen,
-                    extra: {
-                      "primaryCategoryAndSecondaryCategory":
-                          "${widget.primaryCategory} / ${widget.secondaryCategory}",
-                      "primaryCategoryId": widget.primaryCategoryId,
-                      "secondaryCategoryId": widget.secondaryCategoryId,
-                      "language": widget.language,
-                    },
-                  );
+
+                  if (isAlreadyDowloaded) {
+                    context.push(
+                      contentScreen,
+                      extra: {
+                        "primaryCategoryAndSecondaryCategory":
+                            "${widget.primaryCategory} / ${widget.secondaryCategory}",
+                        "primaryCategoryId": widget.primaryCategoryId,
+                        "secondaryCategoryId": widget.secondaryCategoryId,
+                        "language": widget.language,
+                      },
+                    );
+                  }
                 },
                 child: Text(
                   "No",
@@ -385,13 +394,7 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
                     ),
                   );
                   await Future.delayed(Duration(seconds: 1));
-                  context.read<ContentControllerBloc>().add(
-                    DownloadContentById(
-                      primaryCategoryId: widget.primaryCategoryId,
-                      secondaryCategoryId: widget.secondaryCategoryId,
-                    ),
-                  );
-
+                  _downLoadContent();
                   context.pop();
                 },
                 child: Text(

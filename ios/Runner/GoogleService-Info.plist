@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyD-fCcWPcz8z2Ztloz8X9fbt9c0089wh-E</string>
+	<string>AIzaSyDwOonQj0xzmA3UHw0Hjlp9ZsC-4KEa3r8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>240836841430</string>
+	<string>296166961176</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ciil.bhashasagarapp</string>
+	<string>org.ciil.bbs</string>
 	<key>PROJECT_ID</key>
-	<string>bhashasagar-demo</string>
+	<string>bhashasagar-538ba</string>
 	<key>STORAGE_BUCKET</key>
-	<string>bhashasagar-demo.firebasestorage.app</string>
+	<string>bhashasagar-538ba.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:240836841430:ios:1cb5655a6f9f81b5b91e77</string>
+	<string>1:296166961176:ios:3a3d63edca1ac45b27136d</string>
 </dict>
 </plist>

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "240836841430",
-    "project_id": "bhashasagar-demo",
-    "storage_bucket": "bhashasagar-demo.firebasestorage.app"
+    "project_number": "296166961176",
+    "project_id": "bhashasagar-538ba",
+    "storage_bucket": "bhashasagar-538ba.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:240836841430:android:c9dc2efe1fce4ae6b91e77",
+        "mobilesdk_app_id": "1:296166961176:android:602e8e2437f9324a27136d",
         "android_client_info": {
-          "package_name": "com.ciil.bhashasagarapp"
+          "package_name": "org.ciil.bbs"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBhb1Rq_8kiYlQ_NwppBWsEOlypW4EZbRA"
+          "current_key": "AIzaSyDmHL7Mmi1StzmIwRFLROzrHFGMz_PGHyI"
         }
       ],
       "services": {

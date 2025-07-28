@@ -6,9 +6,11 @@ sealed class ContentControllerEvent {}
 class DownloadContentById extends ContentControllerEvent {
   final String primaryCategoryId;
   final String secondaryCategoryId;
+  final DateTime? latestModifiedDate;
   DownloadContentById({
     required this.primaryCategoryId,
     required this.secondaryCategoryId,
+    required this.latestModifiedDate,
   });
 }
 
