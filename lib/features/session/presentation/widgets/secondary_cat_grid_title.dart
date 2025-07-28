@@ -360,6 +360,16 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
               TextButton(
                 onPressed: () {
                   context.pop();
+                  context.push(
+                    contentScreen,
+                    extra: {
+                      "primaryCategoryAndSecondaryCategory":
+                          "${widget.primaryCategory} / ${widget.secondaryCategory}",
+                      "primaryCategoryId": widget.primaryCategoryId,
+                      "secondaryCategoryId": widget.secondaryCategoryId,
+                      "language": widget.language,
+                    },
+                  );
                 },
                 child: Text(
                   "No",
