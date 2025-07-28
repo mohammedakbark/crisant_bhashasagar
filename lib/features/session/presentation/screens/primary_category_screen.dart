@@ -1,7 +1,5 @@
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
-import 'package:bashasagar/core/components/app_network_image.dart';
-import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';

@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
@@ -38,6 +39,7 @@ class _SecondaryCategoryScreenState extends State<SecondaryCategoryScreen> {
       widget.primaryCategoryId,
       widget.langId,
     );
+    log('Primary Category Id :${widget.primaryCategoryId}');
     super.initState();
   }
 

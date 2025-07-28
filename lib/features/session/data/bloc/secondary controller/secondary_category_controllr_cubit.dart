@@ -28,6 +28,7 @@ class SecondaryCategoryControllrCubit
         SecondaryCategoryControllerErrorState(error: response.data.toString()),
       );
     } else {
+      // log(response.data.toString());
       final currentversion =
           await CheckContentVersionRepo.ongetTheCurrentversionOfContent();
       List<VersionCheckDataModel> versions = [];
