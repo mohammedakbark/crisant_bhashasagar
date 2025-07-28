@@ -46,7 +46,7 @@ class ContentStateControllerBloc
     );
     if (isExist) {
       final extractPath = await getPath(
-        extractedContentPath,
+        extractedContentFile,
         event.primaryCategoryId,
         event.secondaryCategoryId,
       );
@@ -218,7 +218,7 @@ class ContentStateControllerBloc
     if (currentState is ContentLoadFromLocalState) {
       try {
         final paths = await getPath(
-          extractedContentPath,
+          extractedContentFile,
           event.primaryCategoryId,
           event.secondaryCategoryId,
         );
@@ -282,7 +282,7 @@ class ContentStateControllerBloc
     String secondaryCategoryId,
   ) async {
     final path = await getPath(
-      extractedContentPath,
+      extractedContentFile,
       primaryCategoryId,
       secondaryCategoryId,
     );

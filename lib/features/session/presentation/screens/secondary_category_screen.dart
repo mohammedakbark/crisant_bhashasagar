@@ -1,24 +1,16 @@
-import 'dart:io';
 
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
-import 'package:bashasagar/core/components/app_network_image.dart';
-import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:bashasagar/features/nav_bar.dart';
-import 'package:bashasagar/features/session/data/bloc/content%20controller/content_controller_bloc.dart';
-import 'package:bashasagar/features/session/data/bloc/content%20state%20controller/content_state_controller_bloc.dart';
-import 'package:bashasagar/features/session/data/bloc/primary%20controller/primary_category_controller_cubit.dart';
 import 'package:bashasagar/features/session/data/bloc/secondary%20controller/secondary_category_controllr_cubit.dart';
 import 'package:bashasagar/features/session/presentation/widgets/secondary_cat_grid_title.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 
 class SecondaryCategoryScreen extends StatefulWidget {
   final String language;

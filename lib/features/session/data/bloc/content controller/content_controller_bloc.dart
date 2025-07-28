@@ -7,6 +7,7 @@ import 'package:bashasagar/core/const/api_const.dart';
 import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/utils/show_messages.dart';
 import 'package:bashasagar/features/session/data/models/content_json_model.dart';
+import 'package:bashasagar/features/session/data/models/version_check_data_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -17,22 +18,15 @@ import 'package:path_provider/path_provider.dart';
 part 'content_controller_event.dart';
 part 'content_controller_state.dart';
 
-const zipPath = "app_content.zip";
-const extractedContentPath = "bhashasagar";
+const zipFile = "app_content.zip";
+const extractedContentFile = "bhashasagar";
+const lastUpdatedFile = "lastupdated.json";
 
 class ContentControllerBloc
     extends Bloc<ContentControllerEvent, ContentControllerState> {
   ContentControllerBloc() : super(ContentControllerInitialState()) {
     on<DownloadContentById>(_downloadContentById);
     on<DeleteContentById>(_deletContentByIdFromLocal);
-
-    // on<LoadContentById>(_loadContentById);
-    // on<OnChangeContent>(_onChangeIndex);
-    // on<TransliterateContent>(_onTransliterate);
-    // on<InitPlayer>(_initPlayer);
-    // on<AudioCompleted>(_audioCompleted);
-
-    // on<PlayAudio>(_playAudio);
   }
 
   static Dio dio = Dio(
@@ -68,12 +62,12 @@ class ContentControllerBloc
       final getData = await CurrentUserPref.getUserData;
 
       final extractPath = await getPath(
-        extractedContentPath,
+        extractedContentFile,
         event.primaryCategoryId,
         event.secondaryCategoryId,
       );
-      final zipFilePath = "$extractPath/$zipPath";
-
+      final zipFilePath = "$extractPath/$zipFile";
+      final lastUpdatedDatePath = "$extractPath/$lastUpdatedFile";
       // Download zip
       log('Downloading zip for ${event.secondaryCategoryId}...');
       await dio.download(
@@ -114,6 +108,13 @@ class ContentControllerBloc
       }
 
       log('Extraction completed for ${event.secondaryCategoryId}.');
+
+      log("upating last updated date");
+      final dateFile = File(lastUpdatedDatePath);
+      final data = {'lastModified': DateTime.now().toString()};
+      await dateFile.writeAsString(jsonEncode(data));
+
+      getLastModified(extractPath);
 
       // Parse contents.json
       final jsonData = await _parseContentJson(extractPath);
@@ -159,10 +160,11 @@ class ContentControllerBloc
       // final folderPath =
       //     '${dir.path}/$extractedContentPath/${event.primaryCategoryId}/${event.secondaryCategoryId}';
       final folderPath = await getPath(
-        extractedContentPath,
+        extractedContentFile,
         event.primaryCategoryId,
         event.secondaryCategoryId,
       );
+      log('Deleting folders ${folderPath}');
       final folder = Directory(folderPath);
       if (await folder.exists()) {
         await folder.delete(recursive: true);
@@ -179,7 +181,7 @@ class ContentControllerBloc
     // USERD THIS FNCTION WHILE LOGOUTING
     final dir = await getApplicationDocumentsDirectory();
 
-    final folderPath = '${dir.path}/$extractedContentPath';
+    final folderPath = '${dir.path}/$extractedContentFile';
     final folder = Directory(folderPath);
     if (await folder.exists()) {
       await folder.delete(recursive: true);
@@ -198,6 +200,21 @@ class ContentControllerBloc
     final jsonString = await file.readAsString();
     final data = jsonDecode(jsonString) as List;
     return data.map((e) => ContentJsonModel.fromJson(e)).toList();
+  }
+
+  static Future<Map<String, dynamic>> getLastModified(
+    String extractPath,
+  ) async {
+    log('Parsing updatedDate.json at $extractPath');
+    final file = File('$extractPath/$lastUpdatedFile');
+    if (await file.exists()) {
+      final jsonString = await file.readAsString();
+      final data = jsonDecode(jsonString);
+      log("Date retrived $data");
+      return data;
+    } else {
+      return {};
+    }
   }
 
   static Future<String> getPath(
@@ -229,7 +246,7 @@ class ContentControllerBloc
     String secondaryCategoryId,
   ) async {
     final path = await getPath(
-      extractedContentPath,
+      extractedContentFile,
       primaryCategoryId,
       secondaryCategoryId,
     );

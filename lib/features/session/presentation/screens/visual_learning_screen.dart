@@ -54,7 +54,7 @@ class _ContentScreenState extends State<ContentScreen> {
   bool initializing = true;
   void loadContent() async {
     localPath = await ContentStateControllerBloc.getPath(
-      extractedContentPath,
+      extractedContentFile,
       widget.primaryCategoryId,
       widget.secondaryCategoryId,
     );

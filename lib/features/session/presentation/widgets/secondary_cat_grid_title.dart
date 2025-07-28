@@ -71,32 +71,9 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
   void _onTapUp(TapUpDetails details) async {
     setState(() => _isPressed = false);
     _animationController.reverse();
-    context.read<SecondaryCategoryControllrCubit>().onChangeTab(widget.index);
-    if (await context
-        .read<ContentStateControllerBloc>()
-        .checkAlreadyDowloadedOrNot(
-          widget.primaryCategoryId,
+    _onPressGird();
 
-          widget.secondaryCategoryId,
-        )) {
-      context.push(
-        contentScreen,
-        extra: {
-          "primaryCategoryAndSecondaryCategory":
-              "${widget.primaryCategory} / ${widget.secondaryCategory}",
-          "primaryCategoryId": widget.primaryCategoryId,
-          "secondaryCategoryId": widget.secondaryCategoryId,
-          "language": widget.language,
-        },
-      );
-    } else {
-      context.read<ContentControllerBloc>().add(
-        DownloadContentById(
-          primaryCategoryId: widget.primaryCategoryId,
-          secondaryCategoryId: widget.secondaryCategoryId,
-        ),
-      );
-    }
+    // _updateContectDiologue();
   }
 
   void _onTapCancel() {
@@ -115,6 +92,59 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
           widget.secondaryCategoryId,
         )) {
       _showDeleteDiologe();
+    }
+  }
+
+  void _onPressGird() async {
+    final controller = context.read<SecondaryCategoryControllrCubit>();
+    controller.onChangeTab(widget.index);
+    final state = controller.state;
+
+    final extractPath = await ContentControllerBloc.getPath(
+      extractedContentFile,
+      widget.primaryCategoryId,
+      widget.secondaryCategoryId,
+    );
+    final json = await ContentControllerBloc.getLastModified(extractPath);
+
+    final isAlreadyDowloaded = await context
+        .read<ContentStateControllerBloc>()
+        .checkAlreadyDowloadedOrNot(
+          widget.primaryCategoryId,
+
+          widget.secondaryCategoryId,
+        );
+    if (isAlreadyDowloaded && json.isNotEmpty) {
+      if (state is SecondaryCategoryControllerSuccessState) {
+        final latestVersion = state.versions.firstWhere(
+          (element) =>
+              element.secondaryCategoryId == widget.secondaryCategoryId,
+        );
+
+        if (latestVersion.modifiedAt.isBefore(
+          DateTime.parse(json['lastModified']),
+        )) {
+          _updateContectDiologue();
+        } else {
+          context.push(
+            contentScreen,
+            extra: {
+              "primaryCategoryAndSecondaryCategory":
+                  "${widget.primaryCategory} / ${widget.secondaryCategory}",
+              "primaryCategoryId": widget.primaryCategoryId,
+              "secondaryCategoryId": widget.secondaryCategoryId,
+              "language": widget.language,
+            },
+          );
+        }
+      }
+    } else {
+      context.read<ContentControllerBloc>().add(
+        DownloadContentById(
+          primaryCategoryId: widget.primaryCategoryId,
+          secondaryCategoryId: widget.secondaryCategoryId,
+        ),
+      );
     }
   }
 
@@ -141,7 +171,7 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
                             widget.isSelected
                                 ? AppColors.kPrimaryColor
                                 : AppColors.kGrey,
-                        width:widget.isSelected? 2:1,
+                        width: widget.isSelected ? 2 : 1,
                       ),
                       borderRadius: BorderRadius.circular(
                         ResponsiveHelper.borderRadiusLarge,
@@ -292,6 +322,63 @@ class _MyWidgetState extends State<SecondaryCatGridTitle>
                     DeleteContentById(
                       secondaryCategoryId: widget.secondaryCategoryId,
                       primaryCategoryId: widget.primaryCategoryId,
+                    ),
+                  );
+
+                  context.pop();
+                },
+                child: Text(
+                  "Yes",
+                  style: AppStyle.mediumStyle(color: AppColors.kRed),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _updateContectDiologue() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog.adaptive(
+            backgroundColor: AppColors.kWhite,
+
+            title: Text(
+              "Content updated!",
+              style: AppStyle.mediumStyle(
+                color: Platform.isAndroid ? AppColors.kBlack : AppColors.kWhite,
+              ),
+            ),
+            content: Text(
+              'Data has been updated. Do you want to download it again?',
+              style: AppStyle.smallStyle(
+                color: Platform.isAndroid ? AppColors.kBlack : AppColors.kWhite,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: Text(
+                  "No",
+                  style: AppStyle.mediumStyle(color: AppColors.kGrey),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  context.read<ContentControllerBloc>().add(
+                    DeleteContentById(
+                      secondaryCategoryId: widget.secondaryCategoryId,
+                      primaryCategoryId: widget.primaryCategoryId,
+                    ),
+                  );
+                  await Future.delayed(Duration(seconds: 1));
+                  context.read<ContentControllerBloc>().add(
+                    DownloadContentById(
+                      primaryCategoryId: widget.primaryCategoryId,
+                      secondaryCategoryId: widget.secondaryCategoryId,
                     ),
                   );
 

@@ -44,6 +44,7 @@ class ContentLoadFromLocalState extends ContentControllerState {
   final String? tranlatedString;
   final Map<String, dynamic>? selectedLangToTransiliterate;
   final bool? isAudioPlaying;
+  final List<VersionCheckDataModel> versions;
 
   ContentLoadFromLocalState({
     required this.secondaryCategoryId,
@@ -54,6 +55,7 @@ class ContentLoadFromLocalState extends ContentControllerState {
     this.tranlatedString,
     this.selectedLangToTransiliterate,
     this.isAudioPlaying,
+    this.versions = const [],
   });
 
   ContentLoadFromLocalState copyWith({
@@ -63,6 +65,7 @@ class ContentLoadFromLocalState extends ContentControllerState {
     String? tranlatedString,
     Map<String, dynamic>? selectedLangToTransiliterate,
     bool? isAudioPlaying,
+    List<VersionCheckDataModel>? versions,
   }) {
     return ContentLoadFromLocalState(
       currentFile: currentFile ?? this.currentFile,
@@ -75,6 +78,7 @@ class ContentLoadFromLocalState extends ContentControllerState {
       selectedLangToTransiliterate:
           selectedLangToTransiliterate ?? this.selectedLangToTransiliterate,
       isAudioPlaying: isAudioPlaying ?? this.isAudioPlaying,
+      versions: versions ?? this.versions,
     );
   }
 }

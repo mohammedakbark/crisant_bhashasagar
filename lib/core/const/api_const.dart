@@ -36,5 +36,7 @@ class ApiConst {
 
   static const searchWord = "api/contents/search";
 
-  static const  setPushToke="";
+  static const setPushToke = "";
+
+  static const checkContentVersion = 'api/masters/version';
 }
