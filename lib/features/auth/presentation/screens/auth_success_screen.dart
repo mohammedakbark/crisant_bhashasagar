@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:bashasagar/core/components/app_custom_button.dart';
 import 'package:bashasagar/core/components/app_margin.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';

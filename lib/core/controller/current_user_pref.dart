@@ -1,9 +1,5 @@
-import 'dart:developer';
 
 import 'package:bashasagar/core/models/current_user_model.dart';
-import 'package:bashasagar/core/routes/route_path.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentUserPref {

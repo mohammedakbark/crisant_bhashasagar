@@ -8,7 +8,6 @@ import 'package:bashasagar/core/const/img_const.dart';
 import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/enums/auth_tab.dart';
-import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/theme/app_theme.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';

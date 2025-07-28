@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:bashasagar/core/const/api_const.dart';
 import 'package:bashasagar/core/models/response_model.dart';
-import 'package:bashasagar/core/routes/route_provider.dart';
-import 'package:bashasagar/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dio/dio.dart';
 
 class ApiConfig {

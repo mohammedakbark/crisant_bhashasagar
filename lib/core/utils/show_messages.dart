@@ -2,7 +2,6 @@ import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path/path.dart';
 
 void showToast(String message, {bool isError = false}) {
   Fluttertoast.showToast(

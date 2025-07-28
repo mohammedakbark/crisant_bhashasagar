@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';

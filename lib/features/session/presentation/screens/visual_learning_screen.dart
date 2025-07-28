@@ -1,12 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:animate_do/animate_do.dart';
 import 'package:bashasagar/features/session/data/bloc/content%20state%20controller/content_state_controller_bloc.dart';
 import 'package:bashasagar/features/session/presentation/widgets/audio_play_button.dart';
 import 'package:bashasagar/features/session/presentation/widgets/content_action_button.dart';
 import 'package:bashasagar/features/settings/data/get_ui_language.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:lottie/lottie.dart';
 import 'package:path/path.dart' as path;
 import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_margin.dart';

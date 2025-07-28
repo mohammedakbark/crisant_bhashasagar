@@ -1,7 +1,6 @@
 import 'package:bashasagar/core/components/app_back_button.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
-import 'package:bashasagar/core/utils/intl_c.dart';
 import 'package:bashasagar/features/notification/screens/widgets/notification_title.dart';
 import 'package:flutter/material.dart';
 

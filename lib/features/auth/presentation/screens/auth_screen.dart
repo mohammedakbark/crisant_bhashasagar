@@ -1,7 +1,5 @@
 import 'package:bashasagar/core/const/appcolors.dart';
-import 'package:bashasagar/core/const/img_const.dart';
-import 'package:bashasagar/core/enums/auth_tab.dart';
-import 'package:bashasagar/core/utils/responsive_helper.dart';
+ import 'package:bashasagar/core/enums/auth_tab.dart';
 
 import 'package:bashasagar/features/auth/data/bloc/auth%20state%20controller/auth_state_controller_cubit.dart';
 import 'package:bashasagar/features/auth/presentation/screens/tabs/forget_password.dart';

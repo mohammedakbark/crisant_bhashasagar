@@ -1,7 +1,6 @@
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
-import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class AppErrorView extends StatelessWidget {

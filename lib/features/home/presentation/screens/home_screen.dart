@@ -1,9 +1,7 @@
-import 'dart:developer';
 
 import 'package:bashasagar/core/components/app_error_view.dart';
 import 'package:bashasagar/core/components/app_loading.dart';
 import 'package:bashasagar/core/components/app_margin.dart';
-import 'package:bashasagar/core/components/app_network_image.dart';
 import 'package:bashasagar/core/components/app_spacer.dart';
 import 'package:bashasagar/features/home/data/bloc/dashboard%20controller/dashboard_controller_cubit.dart';
 import 'package:bashasagar/features/home/data/models/dashboard_progress_model.dart';
@@ -12,13 +10,11 @@ import 'package:bashasagar/features/settings/data/get_ui_language.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/controller/current_user_pref.dart';
 import 'package:bashasagar/core/models/current_user_model.dart';
-import 'package:bashasagar/core/routes/route_path.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});

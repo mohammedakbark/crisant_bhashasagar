@@ -2,7 +2,6 @@ import 'package:bashasagar/core/components/custom_network_img.dart';
 import 'package:bashasagar/core/const/appcolors.dart';
 import 'package:bashasagar/core/styles/text_styles.dart';
 import 'package:bashasagar/core/utils/responsive_helper.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -55,7 +54,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     : null,
             items:
                 widget.items.map((item) {
-                  final value = item['value'];
+                  // final value = item['value'];
                   final title = item['title'].toString();
                   final langIcon = item['icon'] as String?;
                   return DropdownMenuItem(

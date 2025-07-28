@@ -5,14 +5,11 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:bashasagar/core/const/api_const.dart';
 import 'package:bashasagar/core/controller/current_user_pref.dart';
-import 'package:bashasagar/core/utils/permission_handler.dart';
 import 'package:bashasagar/core/utils/show_messages.dart';
 import 'package:bashasagar/features/session/data/models/content_json_model.dart';
-import 'package:bashasagar/features/session/data/repo/transliterate_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -89,33 +86,7 @@ class ContentControllerBloc
           },
         ),
 
-        onReceiveProgress: (received, total) {
-          // if (total != -1) {
-          //   final percentage =
-          //       "${(received / total * 100).toStringAsFixed(0)}%";
-
-          //   List<Map<String, dynamic>> lastDowloadings = [];
-          //   final curretState = state;
-          //   if (curretState is ContentDownloadProgressState) {
-          //     final lastData = curretState.progressingData;
-          //     lastDowloadings = [
-          //       ...lastData,
-          //       {
-          //         "progress": percentage,
-          //         "secondaryCategoryId": event.secondaryCategoryId,
-          //         "downloading": true,
-          //       },
-          //     ];
-          //   } else {
-          //     lastDowloadings.add({
-          //       "progress": percentage,
-          //       "secondaryCategoryId": event.secondaryCategoryId,
-          //       "downloading": true,
-          //     });
-          //   }
-          //    emit(ContentDownloadProgressState(progressingData: lastDowloadings));
-          // }
-        },
+        onReceiveProgress: (received, total) {},
       );
 
       // Extract zip
@@ -252,4 +223,23 @@ class ContentControllerBloc
   //     log("Folder does not exist: $folderPath");
   //   }
   // }
+  // FUNCRION FOR DELETING OLD VERSION AUTOMAICALLY <WHEN THE NOTIFICATION CAME FROM THE SERVER
+  void deleteTheOldVersion(
+    String primaryCategoryId,
+    String secondaryCategoryId,
+  ) async {
+    final path = await getPath(
+      extractedContentPath,
+      primaryCategoryId,
+      secondaryCategoryId,
+    );
+
+    final folder = Directory(path);
+    if (await folder.exists()) {
+      await folder.delete(recursive: true);
+      log("Deleted folder: $path");
+    } else {
+      log("Folder does not exist: $path");
+    }
+  }
 }

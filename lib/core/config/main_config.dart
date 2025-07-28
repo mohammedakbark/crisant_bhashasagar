@@ -4,7 +4,6 @@ import 'package:bashasagar/features/settings/data/models/ui_instruction_model.da
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:path_provider/path_provider.dart';
 
 class MainConfig {
   static Future<void> initFirebase() async {

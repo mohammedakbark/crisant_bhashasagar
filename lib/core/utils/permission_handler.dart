@@ -1,4 +1,3 @@
-import 'package:permission_handler/permission_handler.dart';
 
 class AppPermissions {
   // static Future<bool> requestStoragePermission() async {

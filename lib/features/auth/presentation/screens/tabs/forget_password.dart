@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:bashasagar/core/components/app_custom_button.dart';
