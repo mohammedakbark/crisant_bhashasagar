@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:296166961176:android:602e8e2437f9324a27136d",
+        "mobilesdk_app_id": "1:296166961176:android:4638986779d8331a27136d",
         "android_client_info": {
-          "package_name": "org.ciil.bbs"
+          "package_name": "com.ciil.bhashasagarapp"
         }
       },
       "oauth_client": [],
