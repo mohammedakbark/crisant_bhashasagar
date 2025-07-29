@@ -60,7 +60,7 @@ class UiLanguageControllerCubit extends Cubit<UiLanguageControllerState> {
         //   );
         // }
       } else {
-        log("Error -> Fetching languges for dropdown...");
+        log("Error -> Fetching languges for dropdown...${insRespo.data}");
         emit(UiLanguageControllerErrorState(errro: insRespo.data as String));
       }
     } catch (e) {
